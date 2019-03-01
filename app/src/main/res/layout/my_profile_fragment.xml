@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.example.testjetpack.ui.main.myprofile.MyProfileFragmentVM" />
+
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="20dp"
+            tools:ignore="ContentDescription">
+
+            <ImageView
+                android:id="@+id/ivTopImage"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:src="@drawable/top_bar_shape"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <ImageView
+                android:id="@+id/ivProfilePicture"
+                android:layout_width="95dp"
+                android:layout_height="95dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/circle"
+                android:focusable="true"
+                android:foreground="@drawable/profile_photo_circle"
+                app:imageUrl='@{viewModel.photoUri}'
+                app:layout_constraintBottom_toBottomOf="@+id/ivTopImage"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/ivTopImage"
+                app:picasso='@{viewModel.picasso}' />
+
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="@dimen/profile_top_margin"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:gravity="center"
+                android:text='@{viewModel.name}'
+                android:textColor="@color/colorBlack"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/ivProfilePicture"
+                tools:text="Name Surname" />
+
+            <TextView
+                android:id="@+id/lDateOfBirth"
+                style="@style/LabelStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/profile_start_margin"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="4dp"
+                android:text="@string/date_of_birth"
+                app:layout_constraintEnd_toStartOf="@id/tvDateOfBirth"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/name" />
+
+            <TextView
+                android:id="@+id/tvDateOfBirth"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginEnd="@dimen/profile_end_margin"
+                android:text="@{viewModel.dateOfBirth}"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/profile_text_size"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/lDateOfBirth"
+                app:layout_constraintTop_toTopOf="@id/lDateOfBirth"
+                tools:text="11.11.1111" />
+
+            <TextView
+                android:id="@+id/lDriverLicense"
+                style="@style/LabelStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/profile_start_margin"
+                android:layout_marginTop="@dimen/profile_top_margin"
+                android:layout_marginEnd="4dp"
+                android:text="@string/driver_license"
+                app:layout_constraintEnd_toStartOf="@id/tvDriverLicense"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/lDateOfBirth" />
+
+            <TextView
+                android:id="@+id/tvDriverLicense"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginEnd="@dimen/profile_end_margin"
+                android:text="@{viewModel.driverLicense}"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/profile_text_size"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/lDriverLicense"
+                app:layout_constraintTop_toTopOf="@id/lDriverLicense"
+                tools:text="MEAAND1234QRT89S" />
+
+
+            <TextView
+                android:id="@+id/lStateOfIssue"
+                style="@style/LabelStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/profile_start_margin"
+                android:layout_marginTop="@dimen/profile_top_margin"
+                android:layout_marginEnd="4dp"
+                android:text="@string/state_of_issue"
+                app:layout_constraintEnd_toStartOf="@id/tvStateOfIssue"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/lDriverLicense" />
+
+            <TextView
+                android:id="@+id/tvStateOfIssue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginEnd="@dimen/profile_end_margin"
+                android:text="@{viewModel.stateOfIssue}"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/profile_text_size"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/lStateOfIssue"
+                app:layout_constraintTop_toTopOf="@id/lStateOfIssue"
+                tools:text="MQQ1234567" />
+
+            <View
+                android:id="@+id/separator01"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/profile_top_margin"
+                android:background="@color/colorSeparator"
+                app:layout_constraintTop_toBottomOf="@id/lStateOfIssue" />
+
+            <RelativeLayout
+                android:id="@+id/lContacts"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#F5F4F6"
+                app:layout_constraintBottom_toTopOf="@id/separator02"
+                app:layout_constraintTop_toBottomOf="@id/separator01">
+
+                <ImageView
+                    android:id="@+id/ivEmailPicture"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="@dimen/profile_start_margin"
+                    android:layout_marginTop="@dimen/profile_top_margin"
+                    android:scaleType="center"
+                    android:src="@drawable/ic_email_48dp" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/input_layout_email"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@id/ivEmailPicture"
+                    android:layout_alignBottom="@id/ivEmailPicture"
+                    android:layout_marginStart="10dp"
+                    android:layout_toStartOf="@id/ibAddEditEmail"
+                    android:layout_toEndOf="@id/ivEmailPicture"
+                    android:hint="@string/hint_email"
+                    app:hintTextAppearance="@style/HintStyle">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etEmailAddress"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@android:color/transparent"
+                        android:clickable="@{viewModel.emailOnEdit}"
+                        android:cursorVisible="@{viewModel.emailOnEdit}"
+                        android:ellipsize="middle"
+                        android:focusable="@{viewModel.emailOnEdit}"
+                        android:focusableInTouchMode="@{viewModel.emailOnEdit}"
+                        android:gravity="start|bottom"
+                        android:imeOptions="actionDone"
+                        android:inputType="textEmailAddress"
+                        android:paddingBottom="2dp"
+                        android:selectAllOnFocus="true"
+                        android:singleLine="true"
+                        android:textSize="@dimen/profile_text_size" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <ImageButton
+                    android:id="@+id/ibAddEditEmail"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_alignTop="@id/input_layout_email"
+                    android:layout_alignBottom="@id/input_layout_email"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="@dimen/profile_end_margin"
+                    android:background="@android:color/transparent"
+                    android:onClick='@{viewModel::onClickedEditEmail}'
+                    android:src='@{viewModel.emailOnEdit ? @drawable/ic_check_36dp : @drawable/ic_edit_36dp }' />
+
+                <ImageView
+                    android:id="@+id/ivPhonePicture"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_below="@id/ivEmailPicture"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="@dimen/profile_start_margin"
+                    android:layout_marginTop="@dimen/profile_top_margin"
+                    android:layout_marginBottom="@dimen/profile_top_margin"
+                    android:scaleType="center"
+                    android:src="@drawable/ic_phone_36dp" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/input_layout_phone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@id/ivPhonePicture"
+                    android:layout_alignBottom="@id/ivPhonePicture"
+                    android:layout_marginStart="10dp"
+                    android:layout_toStartOf="@id/ibAddEditEmail"
+                    android:layout_toEndOf="@id/ivEmailPicture"
+                    android:hint="@string/hint_phone"
+                    app:hintTextAppearance="@style/HintStyle">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etPhoneNumber"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@android:color/transparent"
+                        android:clickable="@{viewModel.phoneOnEdit}"
+                        android:cursorVisible="@{viewModel.phoneOnEdit}"
+                        android:ellipsize="middle"
+                        android:focusable="@{viewModel.phoneOnEdit}"
+                        android:focusableInTouchMode="@{viewModel.phoneOnEdit}"
+                        android:gravity="start|bottom"
+                        android:imeOptions="actionDone"
+                        android:inputType="phone"
+                        android:paddingBottom="2dp"
+                        android:selectAllOnFocus="true"
+                        android:singleLine="true"
+                        android:textSize="@dimen/profile_text_size" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <ImageButton
+                    android:id="@+id/ibPhoneAddEdit"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_alignTop="@id/input_layout_phone"
+                    android:layout_alignBottom="@id/input_layout_phone"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="@dimen/profile_end_margin"
+                    android:background="@android:color/transparent"
+                    android:onClick='@{viewModel::onClickedPhoneEdit}'
+                    android:src='@{viewModel.phoneOnEdit ? @drawable/ic_check_36dp : @drawable/ic_edit_36dp }' />
+
+            </RelativeLayout>
+
+            <View
+                android:id="@+id/separator02"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/colorSeparator"
+                app:layout_constraintTop_toBottomOf="@+id/lContacts" />
+
+            <TextView
+                android:id="@+id/lCardDetails"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/profile_start_margin"
+                android:layout_marginTop="8dp"
+                android:text="@string/credit_card_details"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/bCardAddEdit" />
+
+
+            <TextView
+                android:id="@+id/lNoCard"
+                style="@style/LabelStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/profile_start_margin"
+                android:layout_marginTop="12dp"
+                android:text="@string/you_currently_have_no_credit_card"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/lCardDetails" />
+
+            <RelativeLayout
+                android:id="@+id/rlCardInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/profile_start_margin"
+                android:layout_marginTop="12dp"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/separator02">
+
+                <ImageView
+                    android:id="@+id/myImageView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_credit_card_144dp" />
+
+                <TextView
+                    android:id="@+id/myImageViewText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignStart="@+id/myImageView"
+                    android:layout_alignTop="@+id/myImageView"
+                    android:layout_alignEnd="@+id/myImageView"
+                    android:layout_alignBottom="@+id/myImageView"
+                    android:layout_marginBottom="25dp"
+                    android:gravity="bottom|center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="@dimen/profile_text_size"
+                    tools:text="**** **** **** *111" />
+            </RelativeLayout>
+
+            <Button
+                android:id="@+id/bCardAddEdit"
+                style="@style/ButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="48dp"
+                android:layout_marginEnd="32dp"
+                android:onClick='@{viewModel::onClickedAddCard}'
+                android:text="@string/add"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/separator02" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</layout>

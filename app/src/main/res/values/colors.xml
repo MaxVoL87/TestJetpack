@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#FF9933</color>
+    <color name="colorPrimaryDark">#FF9933</color>
+    <color name="colorAccent">#D81B60</color>
+
+
+    <color name="colorText">#000000</color>
+
+    <color name="colorLabelText">#95989A</color>
+    <color name="colorButton">#FF9933</color>
+    <color name="colorButtonNotActive">#FFCB98</color>
+    <color name="colorButtonText">#FFFFFF</color>
+    <color name="colorSeparator">#DFDFDF</color>
+
+    <color name="black_overlay">#66000000</color>
+    <color name="colorBlack">#000000</color>
+    <color name="colorGrey">#95989A</color>
+</resources>

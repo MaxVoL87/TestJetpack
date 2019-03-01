@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="button_text_size">18dp</dimen>
+
+    <!-- Profile -->
+    <dimen name="profile_start_margin">36dp</dimen>
+    <dimen name="profile_end_margin">36dp</dimen>
+    <dimen name="profile_top_margin">20dp</dimen>
+    <dimen name="profile_label_text_size">11sp</dimen>
+    <dimen name="profile_text_size">14sp</dimen>
+
+</resources>
