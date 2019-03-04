@@ -25,10 +25,10 @@
                 android:id="@+id/ivTopImage"
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
-                android:src="@drawable/top_bar_shape"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/top_bar_shape" />
 
 
             <ImageView
@@ -48,18 +48,15 @@
                 app:picasso='@{viewModel.picasso}' />
 
             <TextView
-                android:id="@+id/name"
+                android:id="@+id/tvName"
+                style="@style/HeaderText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="@dimen/profile_top_margin"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
-                android:gravity="center"
                 android:text='@{viewModel.profile == null ? "" : (String.format("%s%s", viewModel.profile.name == null ? "" : viewModel.profile.name, viewModel.profile.surname == null ? "" : " " + viewModel.profile.surname))}'
-                android:textColor="@color/colorBlack"
-                android:textSize="20sp"
-                android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/ivProfilePicture"
@@ -77,7 +74,7 @@
                 app:layout_constraintEnd_toStartOf="@id/tvDateOfBirth"
                 app:layout_constraintHorizontal_chainStyle="spread_inside"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/name" />
+                app:layout_constraintTop_toBottomOf="@id/tvName" />
 
             <TextView
                 android:id="@+id/tvDateOfBirth"
@@ -218,7 +215,7 @@
                     android:layout_marginEnd="@dimen/profile_end_margin"
                     android:background="@android:color/transparent"
                     android:src='@{viewModel.emailOnEdit ? @drawable/ic_check_36dp : @drawable/ic_edit_36dp }'
-                    app:onClick='@{viewModel::onClickedEditEmail}'
+                    app:onClick='@{viewModel::editEmail}'
                     tools:src="@drawable/ic_edit_36dp" />
 
                 <ImageView
@@ -272,7 +269,7 @@
                     android:layout_marginEnd="@dimen/profile_end_margin"
                     android:background="@android:color/transparent"
                     android:src='@{viewModel.phoneOnEdit ? @drawable/ic_check_36dp : @drawable/ic_edit_36dp }'
-                    app:onClick='@{viewModel::onClickedPhoneEdit}'
+                    app:onClick='@{viewModel::editPhone}'
                     tools:src="@drawable/ic_edit_36dp" />
 
             </RelativeLayout>
@@ -348,9 +345,9 @@
                 android:layout_marginTop="48dp"
                 android:layout_marginEnd="32dp"
                 android:text="@string/add"
-                app:onClick='@{viewModel::onClickedAddCard}'
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/separator02" />
+                app:layout_constraintTop_toBottomOf="@+id/separator02"
+                app:onClick='@{viewModel::addCard}' />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

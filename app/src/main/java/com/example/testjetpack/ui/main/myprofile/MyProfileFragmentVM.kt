@@ -31,6 +31,26 @@ class MyProfileFragmentVM : BaseViewModel() {
 
     val cardNumber: ObservableField<String?> = ObservableField()
 
+    fun editEmail() {
+        val curEditing = emailOnEdit.get()
+        emailOnEdit.set(!curEditing)
+        if(curEditing){
+            //todo: repository save edited value
+        }
+    }
+
+    fun editPhone() {
+        val curEditing = phoneOnEdit.get()
+        phoneOnEdit.set(!curEditing)
+        if(curEditing){
+            //todo: repository save edited value
+        }
+    }
+
+    fun addCard() {
+        //todo: open add card dialog?
+    }
+
     fun getProfile() {
         processAsyncCall(
             call = { repository.getProfileAsync() },
@@ -43,27 +63,6 @@ class MyProfileFragmentVM : BaseViewModel() {
             },
             showProgress = true
         )
-    }
-
-
-    fun onClickedEditEmail() {
-        val curEditing = emailOnEdit.get()
-        emailOnEdit.set(!curEditing)
-        if(curEditing){
-            //todo: repository save edited value
-        }
-    }
-
-    fun onClickedPhoneEdit() {
-        val curEditing = phoneOnEdit.get()
-        phoneOnEdit.set(!curEditing)
-        if(curEditing){
-            //todo: repository save edited value
-        }
-    }
-
-    fun onClickedAddCard() {
-            //todo: open add card dialog?
     }
 
 }

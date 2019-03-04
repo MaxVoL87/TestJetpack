@@ -12,4 +12,11 @@
     <string name="credit_card_details">Credit Card Details</string>
     <string name="you_currently_have_no_credit_card">You currently have no credit card</string>
 
+    // Navigation Menu
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation menu</string>
+
 </resources>

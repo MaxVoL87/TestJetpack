@@ -29,6 +29,7 @@ abstract class BaseFragment<B : ViewDataBinding, T : BaseViewModel> : DaggerFrag
 
     var popupWindow: ListPopupWindow? = null
 
+    abstract val name: String
     protected lateinit var binding: B
     abstract val viewModelClass: Class<T>
     protected val viewModel: T by lazy(LazyThreadSafetyMode.NONE) { ViewModelProviders.of(this).get(viewModelClass) }

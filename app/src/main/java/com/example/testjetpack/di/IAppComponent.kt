@@ -5,7 +5,7 @@ import com.example.testjetpack.di.modules.ActivityModule
 import com.example.testjetpack.di.modules.AppModule
 import com.example.testjetpack.di.modules.FragmentModule
 import com.example.testjetpack.di.modules.NetworkModule
-import com.example.testjetpack.ui.main.MainActivity
+import com.example.testjetpack.ui.main.MainActivityVM
 import com.example.testjetpack.ui.main.myprofile.MyProfileFragmentVM
 import dagger.BindsInstance
 import dagger.Component
@@ -36,5 +36,6 @@ interface IAppComponent : AndroidInjector<MainApplication> {
     }
 
 
+    fun inject(mainActivityVM: MainActivityVM)
     fun inject(myProfileFragmentVM: MyProfileFragmentVM)
 }

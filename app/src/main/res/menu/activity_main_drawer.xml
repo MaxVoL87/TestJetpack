@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group
+        android:id="@+id/nav_gr_main"
+        android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/nav_my_profile"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="My Profile" />
+        <item
+            android:id="@+id/nav_my_history"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="My History" />
+        <item
+            android:id="@+id/nav_manage"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Preferences" />
+
+    </group>
+
+    <item android:title="Communicate">
+        <menu>
+            <group
+                android:id="@+id/nav_gr_communicate"
+                android:checkableBehavior="single">
+
+                <item
+                    android:id="@+id/nav_tutorials"
+                    android:icon="@drawable/ic_menu_slideshow"
+                    android:title="Tutorials" />
+                <item
+                    android:id="@+id/nav_provide_feedback"
+                    android:icon="@drawable/ic_menu_send"
+                    android:title="Provide Feedback" />
+
+            </group>
+        </menu>
+    </item>
+
+    <group
+        android:id="@+id/nav_gr_logout"
+        android:checkableBehavior="none">
+
+        <item
+            android:id="@+id/nav_log_out"
+            android:icon="@drawable/ic_menu_share"
+            android:title="Log Out" />
+
+    </group>
+</menu>

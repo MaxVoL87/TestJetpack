@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.example.testjetpack.R
 import com.example.testjetpack.utils.UiUtils.hideKeyboard
 import dagger.android.support.DaggerAppCompatActivity
 import retrofit2.HttpException
@@ -77,10 +78,11 @@ abstract class BaseActivity<T : BaseViewModel> : DaggerAppCompatActivity() {
      *                             If true fragment will be added to backstack with tag equals
      *                             to it's class name }
      */
-    protected fun <T : Fragment> replaceFragment(fragment: T, needToAddToBackStack: Boolean = true): T {
+    protected fun <T : BaseFragment<*, *>> replaceFragment(fragment: T, needToAddToBackStack: Boolean = true): T {
         currentFocus?.let { hideKeyboard(it) }
         val name = fragment.javaClass.name
         with(supportFragmentManager.beginTransaction()) {
+            setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left)
             replace(containerId, fragment, name)
             if (needToAddToBackStack) {
                 addToBackStack(name)
@@ -88,8 +90,10 @@ abstract class BaseActivity<T : BaseViewModel> : DaggerAppCompatActivity() {
             commit()
         }
         supportFragmentManager.executePendingTransactions()
+        supportActionBar?.let { it.title = fragment.name }
         return fragment
     }
+
     fun showProgress() {
         // nothing
     }

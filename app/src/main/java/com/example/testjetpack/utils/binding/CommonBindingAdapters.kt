@@ -10,12 +10,9 @@ import com.example.testjetpack.utils.picasso.CircleTransform
 import com.example.testjetpack.utils.showKeyboard
 import com.squareup.picasso.Picasso
 
-object CommonBindingAdapters {
-
     /**
      * Load and circle image
      */
-    @JvmStatic
     @BindingAdapter("circleImageUrl", "picasso")
     fun ImageView.setCircleImageUrl(imageUrl: String?, picasso: Picasso?) {
         if (imageUrl == null || picasso == null) return
@@ -28,7 +25,6 @@ object CommonBindingAdapters {
     /**
      * Show/Hide cursor, keyboard, focus
      */
-    @JvmStatic
     @BindingAdapter("requestFocus")
     fun EditText.requestFocus(requestFocus: Boolean) {
         isClickable = requestFocus
@@ -44,15 +40,12 @@ object CommonBindingAdapters {
         }
     }
 
-    @JvmStatic
     @BindingAdapter("visibleOrGone")
     fun View.setVisibleOrGone(show: Boolean) {
         visibility = if (show) View.VISIBLE else View.GONE
     }
 
-    @JvmStatic
     @BindingAdapter("onClick")
     fun View.onClick(function: Runnable) {
         setOnClickListener { function.run() }
     }
-}
