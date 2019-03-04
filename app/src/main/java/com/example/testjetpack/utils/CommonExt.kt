@@ -4,6 +4,9 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Parcelable
+import android.view.View
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -86,4 +89,21 @@ fun FragmentManager.clearBackStack() {
 
 fun Context.showNotImplemented() {
     Toast.makeText(this, "Not Implemented!", Toast.LENGTH_SHORT).show()
+}
+
+
+/**
+ * Hide soft keyboard. Do nothing if keyboard is not opened
+ */
+fun EditText.hideKeyboard(): Boolean {
+    val inputManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    return inputManager.hideSoftInputFromWindow(windowToken, 0)
+}
+
+/**
+ * Force open keyboard for given [EditText]
+ */
+fun EditText.showKeyboard() {
+    val inputManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    inputManager.showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
 }

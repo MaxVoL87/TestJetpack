@@ -197,9 +197,9 @@ object UiUtils {
      *
      * @param editText [EditText] to show keyboard for
      */
-    fun showKeyBoard(editText: View) {
-        val inputManager = editText.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputManager.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
+    fun showKeyBoard(view: EditText) {
+        val inputManager = view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputManager.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
     }
 
     /**

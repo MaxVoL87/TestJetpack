@@ -57,6 +57,7 @@ abstract class BaseViewModel : ViewModel() {
             }
 
             val job = async(Dispatchers.IO) {
+                delay(3333)
                 call()
             }
             with(job.await()) {

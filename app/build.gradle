@@ -88,8 +88,10 @@ dependencies {
     def ok_http_version = '3.8.1'
     implementation "com.squareup.okhttp3:logging-interceptor:$ok_http_version"
 
+    kapt 'com.google.guava:guava:24.1-jre' // add above dagger-compiler
+
     // Dagger
-    def dagger_version = '2.16'
+    def dagger_version = '2.21'
     implementation "com.google.dagger:dagger:$dagger_version"
     implementation "com.google.dagger:dagger-android:$dagger_version"
     implementation "com.google.dagger:dagger-android-support:$dagger_version"
