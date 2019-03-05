@@ -1,12 +1,11 @@
 package com.example.testjetpack.ui.main.myprofile
 
-import androidx.databinding.ObservableBoolean
 import com.example.testjetpack.MainApplication
 import com.example.testjetpack.dataflow.repository.IDataRepository
 import com.example.testjetpack.models.Profile
 import com.example.testjetpack.ui.base.BaseViewModel
 import javax.inject.Inject
-import androidx.databinding.ObservableField
+import androidx.lifecycle.MutableLiveData
 import com.squareup.picasso.Picasso
 
 
@@ -22,26 +21,26 @@ class MyProfileFragmentVM : BaseViewModel() {
         MainApplication.component.inject(this)
     }
 
-    val profile: ObservableField<Profile?> = ObservableField()
+    val profile: MutableLiveData<Profile?> = MutableLiveData()
 
-    val emailOnEdit: ObservableBoolean = ObservableBoolean(false)
-    val phoneOnEdit: ObservableBoolean = ObservableBoolean(false)
-    val emailAddr: ObservableField<String?> = ObservableField()
-    val phoneNumber: ObservableField<String?> = ObservableField()
+    val emailOnEdit: MutableLiveData<Boolean> = MutableLiveData(false)
+    val phoneOnEdit: MutableLiveData<Boolean> = MutableLiveData(false)
+    val emailAddr: MutableLiveData<String?> = MutableLiveData()
+    val phoneNumber: MutableLiveData<String?> = MutableLiveData()
 
-    val cardNumber: ObservableField<String?> = ObservableField()
+    val cardNumber: MutableLiveData<String?> = MutableLiveData()
 
     fun editEmail() {
-        val curEditing = emailOnEdit.get()
-        emailOnEdit.set(!curEditing)
+        val curEditing = emailOnEdit.value!!
+        emailOnEdit.postValue(!curEditing)
         if(curEditing){
             //todo: repository save edited value
         }
     }
 
     fun editPhone() {
-        val curEditing = phoneOnEdit.get()
-        phoneOnEdit.set(!curEditing)
+        val curEditing = phoneOnEdit.value!!
+        phoneOnEdit.postValue(!curEditing)
         if(curEditing){
             //todo: repository save edited value
         }
@@ -55,10 +54,10 @@ class MyProfileFragmentVM : BaseViewModel() {
         processAsyncCall(
             call = { repository.getProfileAsync() },
             onSuccess = { profile ->
-                this.profile.set(profile)
+                this.profile.postValue(profile)
             },
             onError = {
-                this.profile.set(null)
+                this.profile.postValue(null)
                 onError(it)
             },
             showProgress = true

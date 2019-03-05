@@ -1,17 +1,13 @@
 package com.example.testjetpack.ui.main
 
-import androidx.databinding.ObservableField
+import androidx.lifecycle.MutableLiveData
 import com.example.testjetpack.MainApplication
 import com.example.testjetpack.dataflow.repository.IDataRepository
 import com.example.testjetpack.models.Profile
 import com.example.testjetpack.ui.base.BaseViewModel
-import com.squareup.picasso.Picasso
 import javax.inject.Inject
 
 class MainActivityVM : BaseViewModel() {
-
-    @Inject
-    lateinit var picasso: Picasso
 
     @Inject
     lateinit var repository: IDataRepository
@@ -20,16 +16,16 @@ class MainActivityVM : BaseViewModel() {
         MainApplication.component.inject(this)
     }
 
-    val profile: ObservableField<Profile?> = ObservableField()
+    val profile: MutableLiveData<Profile?> = MutableLiveData()
 
     fun getProfile() {
         processAsyncCall(
             call = { repository.getProfileAsync() },
             onSuccess = { profile ->
-                this.profile.set(profile)
+                this.profile.postValue(profile)
             },
             onError = {
-                this.profile.set(null)
+                this.profile.postValue(null)
                 onError(it)
             },
             showProgress = true

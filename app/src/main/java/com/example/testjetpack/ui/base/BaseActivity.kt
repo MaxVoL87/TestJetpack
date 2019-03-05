@@ -3,7 +3,8 @@ package com.example.testjetpack.ui.base
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.widget.Toast
-import androidx.fragment.app.Fragment
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.testjetpack.R
@@ -12,7 +13,8 @@ import dagger.android.support.DaggerAppCompatActivity
 import retrofit2.HttpException
 import timber.log.Timber
 
-abstract class BaseActivity<T : BaseViewModel> : DaggerAppCompatActivity() {
+abstract class BaseActivity<B : ViewDataBinding, T : BaseViewModel> : DaggerAppCompatActivity() {
+    protected lateinit var binding: B
     abstract val viewModelClass: Class<T>
     protected val viewModel: T by lazy(LazyThreadSafetyMode.NONE) { ViewModelProviders.of(this).get(viewModelClass) }
     protected abstract val layoutId: Int
@@ -23,7 +25,10 @@ abstract class BaseActivity<T : BaseViewModel> : DaggerAppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         super.onCreate(savedInstanceState)
-        setContentView(layoutId)
+
+        binding = DataBindingUtil.setContentView(this, layoutId)
+        binding.lifecycleOwner = this
+
         observeBaseLiveData()
     }
 
