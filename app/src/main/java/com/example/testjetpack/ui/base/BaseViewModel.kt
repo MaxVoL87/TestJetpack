@@ -1,15 +1,22 @@
 package com.example.testjetpack.ui.base
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.testjetpack.utils.livedata.Event
 import kotlinx.coroutines.*
 import timber.log.Timber
 
-abstract class BaseViewModel : ViewModel() {
+abstract class BaseViewModel<S: EventStateChange> : ViewModel() {
 
     val showProgressLiveData = MutableLiveData<Boolean>()
     val alertMessageLiveData = MutableLiveData<Throwable?>()
 
+    val events: LiveData<Event<S>>
+        get() = _events
+
+
+    protected val _events = MutableLiveData<Event<S>>()
     protected val tag: String = javaClass.simpleName
     private val coroutines = mutableListOf<Deferred<*>>()
 
@@ -82,3 +89,5 @@ abstract class BaseViewModel : ViewModel() {
         alertMessageLiveData.value = throwable
     }
 }
+
+interface EventStateChange

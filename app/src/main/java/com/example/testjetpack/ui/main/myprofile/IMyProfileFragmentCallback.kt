@@ -1,4 +1,8 @@
 package com.example.testjetpack.ui.main.myprofile
 
-interface IMyProfileFragmentCallback {
+import com.example.testjetpack.ui.base.ICallback
+
+interface IMyProfileFragmentCallback : ICallback {
+
+    fun openCreditCardDetails()
 }

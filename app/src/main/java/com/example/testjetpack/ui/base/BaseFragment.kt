@@ -1,8 +1,6 @@
 package com.example.testjetpack.ui.base
 
-import android.content.Context
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,12 +15,14 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.testjetpack.MainApplicationContract
 import com.example.testjetpack.R
 import com.example.testjetpack.utils.UiUtils.hideKeyboard
+import com.example.testjetpack.utils.livedata.EventObserver
 import dagger.android.support.DaggerFragment
 import kotlinx.coroutines.*
 import retrofit2.HttpException
 import timber.log.Timber
+import kotlin.reflect.KClass
 
-abstract class BaseFragment<B : ViewDataBinding, T : BaseViewModel> : DaggerFragment() {
+abstract class BaseFragment<B : ViewDataBinding, T : BaseViewModel<out EventStateChange>> : DaggerFragment() {
     companion object {
         private const val COROUTINE_DELAY = 1000L
     }
@@ -35,7 +35,6 @@ abstract class BaseFragment<B : ViewDataBinding, T : BaseViewModel> : DaggerFrag
     protected val viewModel: T by lazy(LazyThreadSafetyMode.NONE) { ViewModelProviders.of(this).get(viewModelClass) }
 
     private var canBeClicked = true
-
     private val coroutines = mutableListOf<Deferred<*>>()
 
     @Suppress("MemberVisibilityCanPrivate")
@@ -62,6 +61,8 @@ abstract class BaseFragment<B : ViewDataBinding, T : BaseViewModel> : DaggerFrag
             }
         })
 
+        events.observe(this@BaseFragment, EventObserver(this@BaseFragment::render))
+
         observeLiveData()
     }
 
@@ -76,7 +77,7 @@ abstract class BaseFragment<B : ViewDataBinding, T : BaseViewModel> : DaggerFrag
 //                else -> ServerErrorDialog().showDialog(this)
             }
         } else {
-            Timber.e("Error: ${it}")
+            Timber.e("Error: $it")
 //            ServerErrorDialog().showDialog(this)
         }
     }
@@ -164,6 +165,7 @@ abstract class BaseFragment<B : ViewDataBinding, T : BaseViewModel> : DaggerFrag
         objects.find { it is T }?.let { it as T }
             ?: throw NotImplementedInterfaceException(T::class.java)
 
+
     protected fun invokeIfCanAccepted(withDebounce: Boolean = false, invoke: () -> Unit) {
         if (canBeClicked) {
             if (withDebounce) debounceClick()
@@ -198,10 +200,9 @@ abstract class BaseFragment<B : ViewDataBinding, T : BaseViewModel> : DaggerFrag
 //        }
 //    }
 
-    fun convertDpToPixel(dp: Int, context: Context): Int {
-        val resources = context.resources
-        val metrics = resources.displayMetrics
-        return dp * (metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT)
+    private fun render(stateChangeEvent: EventStateChange) {
+        RENDERERS[stateChangeEvent::class]?.invoke(stateChangeEvent)
     }
 
+    protected abstract val RENDERERS: Map<KClass<out EventStateChange>, Function1<Any, Unit>>
 }

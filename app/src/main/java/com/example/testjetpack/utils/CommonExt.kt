@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Parcelable
+import android.util.DisplayMetrics
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
@@ -91,6 +92,11 @@ fun Context.showNotImplemented() {
     Toast.makeText(this, "Not Implemented!", Toast.LENGTH_SHORT).show()
 }
 
+fun Context.convertDpToPixels(dp: Int): Int {
+    val resources = resources
+    val metrics = resources.displayMetrics
+    return dp * (metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT)
+}
 
 /**
  * Hide soft keyboard. Do nothing if keyboard is not opened

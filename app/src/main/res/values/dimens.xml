@@ -16,7 +16,7 @@
     <dimen name="profile_top_margin">20dp</dimen>
     <dimen name="profile_label_text_size">11sp</dimen>
     <dimen name="profile_text_size">14sp</dimen>
-
+    <dimen name="text_margin">16dp</dimen>
 
 
 </resources>

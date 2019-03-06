@@ -9,11 +9,13 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.testjetpack.R
 import com.example.testjetpack.utils.UiUtils.hideKeyboard
+import com.example.testjetpack.utils.livedata.EventObserver
 import dagger.android.support.DaggerAppCompatActivity
 import retrofit2.HttpException
 import timber.log.Timber
+import kotlin.reflect.KClass
 
-abstract class BaseActivity<B : ViewDataBinding, T : BaseViewModel> : DaggerAppCompatActivity() {
+abstract class BaseActivity<B : ViewDataBinding, T : BaseViewModel<out EventStateChange>> : DaggerAppCompatActivity() {
     protected lateinit var binding: B
     abstract val viewModelClass: Class<T>
     protected val viewModel: T by lazy(LazyThreadSafetyMode.NONE) { ViewModelProviders.of(this).get(viewModelClass) }
@@ -72,6 +74,8 @@ abstract class BaseActivity<B : ViewDataBinding, T : BaseViewModel> : DaggerAppC
             }
         })
 
+        events.observe(this@BaseActivity, EventObserver(this@BaseActivity::render))
+
         observeLiveData()
     }
 
@@ -110,4 +114,10 @@ abstract class BaseActivity<B : ViewDataBinding, T : BaseViewModel> : DaggerAppC
     fun showAlert(text: String) {
         Toast.makeText(this@BaseActivity, text, Toast.LENGTH_SHORT).show()
     }
+
+    private fun render(stateChangeEvent: EventStateChange) {
+        RENDERERS[stateChangeEvent::class]?.invoke(stateChangeEvent)
+    }
+
+    protected abstract val RENDERERS: Map<KClass<out EventStateChange>, Function1<Any, Unit>>
 }

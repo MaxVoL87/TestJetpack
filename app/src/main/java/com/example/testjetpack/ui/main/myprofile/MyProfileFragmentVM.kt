@@ -1,15 +1,18 @@
 package com.example.testjetpack.ui.main.myprofile
 
+import androidx.lifecycle.LiveData
 import com.example.testjetpack.MainApplication
 import com.example.testjetpack.dataflow.repository.IDataRepository
 import com.example.testjetpack.models.Profile
 import com.example.testjetpack.ui.base.BaseViewModel
 import javax.inject.Inject
 import androidx.lifecycle.MutableLiveData
+import com.example.testjetpack.ui.base.EventStateChange
+import com.example.testjetpack.utils.livedata.Event
 import com.squareup.picasso.Picasso
 
 
-class MyProfileFragmentVM : BaseViewModel() {
+class MyProfileFragmentVM : BaseViewModel<MyProfileFragmentVMEventStateChange>() {
 
     @Inject
     lateinit var picasso: Picasso
@@ -21,47 +24,55 @@ class MyProfileFragmentVM : BaseViewModel() {
         MainApplication.component.inject(this)
     }
 
-    val profile: MutableLiveData<Profile?> = MutableLiveData()
-
-    val emailOnEdit: MutableLiveData<Boolean> = MutableLiveData(false)
-    val phoneOnEdit: MutableLiveData<Boolean> = MutableLiveData(false)
+    val profile: LiveData<Profile?>
+        get() = _profile
+    val emailOnEdit: LiveData<Boolean>
+        get() = _emailOnEdit
+    val phoneOnEdit: LiveData<Boolean>
+        get() = _phoneOnEdit
     val emailAddr: MutableLiveData<String?> = MutableLiveData()
     val phoneNumber: MutableLiveData<String?> = MutableLiveData()
-
     val cardNumber: MutableLiveData<String?> = MutableLiveData()
 
+    private val _profile: MutableLiveData<Profile?> = MutableLiveData()
+    private val _emailOnEdit: MutableLiveData<Boolean> = MutableLiveData(false)
+    private val _phoneOnEdit: MutableLiveData<Boolean> = MutableLiveData(false)
+
     fun editEmail() {
-        val curEditing = emailOnEdit.value!!
-        emailOnEdit.postValue(!curEditing)
-        if(curEditing){
+        val curEditing = _emailOnEdit.value!!
+        _emailOnEdit.postValue(!curEditing)
+        if (curEditing) {
             //todo: repository save edited value
         }
     }
 
     fun editPhone() {
-        val curEditing = phoneOnEdit.value!!
-        phoneOnEdit.postValue(!curEditing)
-        if(curEditing){
+        val curEditing = _phoneOnEdit.value!!
+        _phoneOnEdit.postValue(!curEditing)
+        if (curEditing) {
             //todo: repository save edited value
         }
     }
 
     fun addCard() {
-        //todo: open add card dialog?
+        _events.value = Event(MyProfileFragmentVMEventStateChange.OpenCreditCardDetails)
     }
 
     fun getProfile() {
         processAsyncCall(
             call = { repository.getProfileAsync() },
             onSuccess = { profile ->
-                this.profile.postValue(profile)
+                _profile.postValue(profile)
             },
             onError = {
-                this.profile.postValue(null)
+                _profile.postValue(null)
                 onError(it)
             },
             showProgress = true
         )
     }
+}
 
+sealed class MyProfileFragmentVMEventStateChange : EventStateChange {
+    object OpenCreditCardDetails : MyProfileFragmentVMEventStateChange()
 }

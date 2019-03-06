@@ -1,29 +1,33 @@
 package com.example.testjetpack.ui.main
 
 import android.os.Bundle
-import android.view.MenuItem
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.FragmentManager
 import com.example.testjetpack.R
 import com.example.testjetpack.databinding.ActivityMainBinding
 import com.example.testjetpack.databinding.NavHeaderMainBinding
 import com.example.testjetpack.ui.base.BaseActivity
+import com.example.testjetpack.ui.base.EventStateChange
+import com.example.testjetpack.ui.main.myprofile.IMyProfileFragmentCallback
 import com.example.testjetpack.ui.main.myprofile.MyProfileFragment
-import com.google.android.material.navigation.NavigationView
+import com.example.testjetpack.ui.main.notifications.INotificationFragmentCallback
+import com.example.testjetpack.ui.main.notifications.NotificationFragment
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.toolbar_main.*
 import javax.inject.Inject
+import kotlin.reflect.KClass
 
 class MainActivity : BaseActivity<ActivityMainBinding, MainActivityVM>(),
     FragmentManager.OnBackStackChangedListener,
-    NavigationView.OnNavigationItemSelectedListener {
+    INotificationFragmentCallback,
+    IMyProfileFragmentCallback {
+
     override val viewModelClass: Class<MainActivityVM> = MainActivityVM::class.java
     override val layoutId: Int = R.layout.activity_main
     override val containerId: Int = R.id.container
     override val observeLiveData: MainActivityVM.() -> Unit
         get() = {
-
         }
 
     @Inject
@@ -35,7 +39,6 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityVM>(),
         headerBinding.lifecycleOwner = this
 
         binding.viewModel = viewModel
-        binding.navigationItemSelectedListener = this
         headerBinding.profile = viewModel.profile
         headerBinding.picasso = picasso
 
@@ -45,6 +48,8 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityVM>(),
         supportFragmentManager.addOnBackStackChangedListener(this)
         //Handle when activity is recreated like on orientation Change
         shouldDisplayHomeUp()
+
+        openNotifications(true)
     }
 
     override fun onStart() {
@@ -64,43 +69,40 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityVM>(),
         shouldDisplayHomeUp()
     }
 
-    // region OnNavigationItemSelectedListener impl
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        // Handle navigation view item clicks here.
-        when (item.itemId) {
-            R.id.nav_my_profile -> {
-                openMyProfile()
-            }
-            R.id.nav_my_history -> {
-
-            }
-            R.id.nav_manage -> {
-
-            }
-
-            R.id.nav_tutorials -> {
-
-            }
-            R.id.nav_provide_feedback -> {
-
-            }
-
-            R.id.nav_log_out -> {
-
-            }
-        }
-
-        drawer_layout.closeDrawer(GravityCompat.START)
-        return true
-    }
-    // endregion OnNavigationItemSelectedListener impl
 
     private fun shouldDisplayHomeUp() {
         //Enable Up button only  if there are entries in the back stack
-        supportActionBar?.setDisplayHomeAsUpEnabled(supportFragmentManager.backStackEntryCount > 0)
+        supportActionBar?.setDisplayHomeAsUpEnabled(supportFragmentManager.backStackEntryCount > 1)
+    }
+
+    private fun openNotifications(addToBackStack: Boolean) {
+        replaceFragment(NotificationFragment.newInstance(), addToBackStack)
     }
 
     private fun openMyProfile() {
-        replaceFragment(MyProfileFragment.newInstance(), false)
+        replaceFragment(MyProfileFragment.newInstance(), true)
     }
+
+    override fun openCreditCardDetails() {
+        showAlert("Not Implemented")
+    }
+
+    // region VM renderers
+
+    private val closeDrawerRenderer: (Any) -> Unit = { event ->
+        event as MainActivityVMEventStateChange.CloseDrawer
+        drawer_layout.closeDrawer(GravityCompat.START)
+    }
+
+    private val openProfileRenderer: (Any) -> Unit = { event ->
+        event as MainActivityVMEventStateChange.OpenProfile
+        openMyProfile()
+    }
+
+    override val RENDERERS: Map<KClass<out EventStateChange>, Function1<Any, Unit>> = mapOf(
+        MainActivityVMEventStateChange.OpenProfile::class to openProfileRenderer,
+        MainActivityVMEventStateChange.CloseDrawer::class to closeDrawerRenderer
+
+    )
+    // endregion VM renderers
 }

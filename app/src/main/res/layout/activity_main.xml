@@ -9,10 +9,6 @@
             name="viewModel"
             type="com.example.testjetpack.ui.main.MainActivityVM" />
 
-        <variable
-            name="navigationItemSelectedListener"
-            type="com.google.android.material.navigation.NavigationView.OnNavigationItemSelectedListener"/>
-
     </data>
 
     <androidx.drawerlayout.widget.DrawerLayout
@@ -33,7 +29,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="start"
             android:fitsSystemWindows="true"
-            app:navigationItemSelectedListener="@{navigationItemSelectedListener::onNavigationItemSelected}"
+            app:navigationItemSelectedListener="@{viewModel::onNavigationItemSelected}"
             app:headerLayout="@layout/nav_header_main"
             app:menu="@menu/activity_main_drawer" />
 
