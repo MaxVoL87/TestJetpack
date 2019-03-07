@@ -6,16 +6,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.testjetpack.R
-import com.example.testjetpack.databinding.MyProfileFragmentBinding
+import com.example.testjetpack.databinding.FragmentMyProfileBinding
 import com.example.testjetpack.ui.base.BaseFragment
 import com.example.testjetpack.ui.base.EventStateChange
 import kotlin.reflect.KClass
+import com.example.testjetpack.R
 
-class MyProfileFragment : BaseFragment<MyProfileFragmentBinding, MyProfileFragmentVM>() {
+
+class MyProfileFragment : BaseFragment<FragmentMyProfileBinding, MyProfileFragmentVM>() {
     override val name: String = "My Profile"
     override val viewModelClass: Class<MyProfileFragmentVM> = MyProfileFragmentVM::class.java
-    override val layoutId: Int = R.layout.my_profile_fragment
+    override val layoutId: Int = R.layout.fragment_my_profile
     override val observeLiveData: MyProfileFragmentVM.() -> Unit
         get() = {
         }

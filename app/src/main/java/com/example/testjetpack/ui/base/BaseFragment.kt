@@ -2,19 +2,17 @@ package com.example.testjetpack.ui.base
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ListPopupWindow
 import android.widget.Toast
-import androidx.annotation.IdRes
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.testjetpack.MainApplicationContract
 import com.example.testjetpack.R
-import com.example.testjetpack.utils.UiUtils.hideKeyboard
 import com.example.testjetpack.utils.livedata.EventObserver
 import dagger.android.support.DaggerFragment
 import kotlinx.coroutines.*
@@ -97,6 +95,7 @@ abstract class BaseFragment<B : ViewDataBinding, T : BaseViewModel<out EventStat
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
         canBeClicked = true
     }
 
@@ -117,6 +116,15 @@ abstract class BaseFragment<B : ViewDataBinding, T : BaseViewModel<out EventStat
         }
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                onBackPressed()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
 
     fun showAlert(text: String) {
         Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
@@ -142,23 +150,6 @@ abstract class BaseFragment<B : ViewDataBinding, T : BaseViewModel<out EventStat
                 action.invoke()
             }
         })
-    }
-
-    protected fun <T : Fragment> replaceFragment(
-        fragment: T, @IdRes containerId: Int,
-        needToAddToBackStack: Boolean = true
-    ): T {
-        hideKeyboard()
-        val name = fragment.javaClass.name
-        with(childFragmentManager.beginTransaction()) {
-            replace(containerId, fragment, name)
-            if (needToAddToBackStack) {
-                addToBackStack(name)
-            }
-            commit()
-        }
-        childFragmentManager.executePendingTransactions()
-        return fragment
     }
 
     protected inline fun <reified T> bindInterfaceOrThrow(vararg objects: Any?): T =
@@ -191,14 +182,6 @@ abstract class BaseFragment<B : ViewDataBinding, T : BaseViewModel<out EventStat
     open fun onViewPagerSelect() {
         // override it if you want use BaseViewPagerAdapter
     }
-
-//    protected fun tryToOpenUri(uri: String?) {
-//        try {
-//            withNotNull(uri?.toUri()) { inAppCallBack?.checkAndOpenUri(this) }
-//        } catch (exception: Exception) {
-//            Timber.e("parse_uri $exception")
-//        }
-//    }
 
     private fun render(stateChangeEvent: EventStateChange) {
         RENDERERS[stateChangeEvent::class]?.invoke(stateChangeEvent)

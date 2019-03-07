@@ -14,9 +14,10 @@ import com.example.testjetpack.ui.main.notifications.INotificationFragmentCallba
 import com.example.testjetpack.ui.main.notifications.NotificationFragment
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.toolbar_main.*
+import kotlinx.android.synthetic.main.custom_toolbar.*
 import javax.inject.Inject
 import kotlin.reflect.KClass
+
 
 class MainActivity : BaseActivity<ActivityMainBinding, MainActivityVM>(),
     FragmentManager.OnBackStackChangedListener,
@@ -49,7 +50,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityVM>(),
         //Handle when activity is recreated like on orientation Change
         shouldDisplayHomeUp()
 
-        openNotifications(true)
+        openNotifications(false)
     }
 
     override fun onStart() {
@@ -69,10 +70,9 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityVM>(),
         shouldDisplayHomeUp()
     }
 
-
     private fun shouldDisplayHomeUp() {
         //Enable Up button only  if there are entries in the back stack
-        supportActionBar?.setDisplayHomeAsUpEnabled(supportFragmentManager.backStackEntryCount > 1)
+        supportActionBar?.setDisplayHomeAsUpEnabled(supportFragmentManager.backStackEntryCount > 0)
     }
 
     private fun openNotifications(addToBackStack: Boolean) {
@@ -96,7 +96,9 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityVM>(),
 
     private val openProfileRenderer: (Any) -> Unit = { event ->
         event as MainActivityVMEventStateChange.OpenProfile
-        openMyProfile()
+        if (getCurFragment(R.id.container) !is MyProfileFragment) {
+            openMyProfile()
+        }
     }
 
     override val RENDERERS: Map<KClass<out EventStateChange>, Function1<Any, Unit>> = mapOf(
