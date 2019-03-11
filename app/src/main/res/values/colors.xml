@@ -4,7 +4,7 @@
     <color name="colorPrimaryDark">#FF9933</color>
     <color name="colorAccent">#D81B60</color>
     <color name="colorBackgroundPrimary">#FFFFFF</color>
-
+    <color name="colorNotActive">#DFDFDF</color>
 
     <color name="colorText">#000000</color>
 
@@ -13,6 +13,7 @@
     <color name="colorButtonNotActive">#FFCB98</color>
     <color name="colorButtonText">#FFFFFF</color>
     <color name="colorSeparator">#DFDFDF</color>
+
 
     <color name="black_overlay">#66000000</color>
     <color name="colorBlack">#000000</color>

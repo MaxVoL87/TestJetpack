@@ -41,26 +41,23 @@ class NotificationFragment : BaseFragment<FragmentNotificationListBinding, Notif
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = super.onCreateView(inflater, container, savedInstanceState)
         binding.viewModel = viewModel
-
-//        // Set the adapter
-//        if (view is RecyclerView) {
-//            with(view) {
-//                layoutManager = when {
-//                    columnCount <= 1 -> LinearLayoutManager(context)
-//                    else -> GridLayoutManager(context, columnCount)
-//                }
-//                adapter = MyNotificationRecyclerViewAdapter(DummyContent.ITEMS, listener)
-//            }
-//        }
-
         return view
     }
 
+    override fun onStart() {
+        super.onStart()
+        viewModel.getNotifications()
+    }
 
     // region VM renderers
 
-    override val RENDERERS: Map<KClass<out EventStateChange>, Function1<Any, Unit>> = mapOf(
+    private val openNotificationRenderer: (Any) -> Unit = { event ->
+        event as NotificationFragmentVMEventStateChange.OpenNotification
+        callback?.openNotificationDetails(event.notification)
+    }
 
+    override val RENDERERS: Map<KClass<out EventStateChange>, Function1<Any, Unit>> = mapOf(
+        NotificationFragmentVMEventStateChange.OpenNotification::class to openNotificationRenderer
     )
     // endregion VM renderers
 

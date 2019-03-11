@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentManager
 import com.example.testjetpack.R
 import com.example.testjetpack.databinding.ActivityMainBinding
 import com.example.testjetpack.databinding.NavHeaderMainBinding
+import com.example.testjetpack.models.Notification
 import com.example.testjetpack.ui.base.BaseActivity
 import com.example.testjetpack.ui.base.EventStateChange
 import com.example.testjetpack.ui.main.myprofile.IMyProfileFragmentCallback
@@ -81,6 +82,10 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityVM>(),
 
     private fun openMyProfile() {
         replaceFragment(MyProfileFragment.newInstance(), true)
+    }
+
+    override fun openNotificationDetails(notification: Notification) {
+        showAlert("Not Implemented")
     }
 
     override fun openCreditCardDetails() {

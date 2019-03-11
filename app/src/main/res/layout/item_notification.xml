@@ -6,34 +6,39 @@
     <data>
 
         <variable
-            name="item"
-            type="com.example.testjetpack.models.Notification" />
+            name="notificationItemViewModel"
+            type="com.example.testjetpack.ui.main.notifications.NotificationItemViewModel" />
 
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background='@{notificationItemViewModel.notification.dateOfRead == null ? @color/colorNotActive : @color/colorBackgroundPrimary}'
+        tools:ignore="ContentDescription">
 
         <ImageView
             android:id="@+id/ivItemImage"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_margin="@dimen/text_margin"
+            android:layout_marginStart="@dimen/text_margin"
+            android:layout_marginTop="10dp"
             android:layout_marginBottom="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0"
+            app:srcCompat="@drawable/ic_email_48dp" />
 
         <TextView
             android:id="@+id/tvItemTitles"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/text_margin"
-            android:layout_marginEnd="8dp"
-            android:gravity="center"
-            android:text='@{item.title}'
+            android:gravity="start"
+            android:text='@{notificationItemViewModel.notification.title}'
             android:textAppearance="?attr/textAppearanceListItem"
+            android:textSize="14sp"
             app:layout_constraintEnd_toStartOf="@+id/tvItemDate"
             app:layout_constraintStart_toEndOf="@id/ivItemImage"
             app:layout_constraintTop_toTopOf="parent"
@@ -44,29 +49,48 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/text_margin"
-            android:layout_marginEnd="8dp"
-            android:text='@{item.dateOfCreation}'
+            android:text='@{notificationItemViewModel.notification.dateOfCreation}'
             android:textAppearance="?attr/textAppearanceListItem"
+            android:textColor="@color/colorLabelText"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@id/tvItemTitles"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tvItemTitles"
             tools:text="11.23.1999" />
 
         <TextView
             android:id="@+id/tvItemText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/text_margin"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginStart="@dimen/text_margin"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="48dp"
             android:layout_marginBottom="8dp"
+            android:ellipsize="end"
+            android:lineSpacingExtra="6dp"
+            android:lines="2"
             android:singleLine="false"
-            android:text='@{item.text}'
+            android:text='@{notificationItemViewModel.notification.text}'
             android:textAppearance="?attr/textAppearanceListItem"
+            android:textColor="@color/colorLabelText"
+            android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/ivItemImage"
             app:layout_constraintTop_toBottomOf="@id/tvItemTitles"
+            app:layout_constraintVertical_bias="1"
             tools:text="Content lllooooonnggggg  lloojjjjong text text text" />
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="@dimen/text_margin"
+            android:background="@color/colorGrey"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvItemText" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </layout>

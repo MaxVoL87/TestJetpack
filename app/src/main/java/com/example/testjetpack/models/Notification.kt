@@ -6,5 +6,5 @@ data class Notification(
     @SerializedName("title") val title: String,
     @SerializedName("text") val text: String,
     @SerializedName("date_of_creation") val dateOfCreation: String,
-    @SerializedName("date_of_read") val dateOfRead: String
+    @SerializedName("date_of_read") val dateOfRead: String?
 )

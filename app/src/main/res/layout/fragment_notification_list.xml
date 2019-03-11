@@ -11,14 +11,26 @@
 
     </data>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/list"
-        android:name="com.example.testjetpack.ui.main.notifications.NotificationFragment"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        app:layoutManager="LinearLayoutManager"
-        tools:context=".ui.main.notifications.NotificationFragment"
-        tools:listitem="@layout/item_notification" />
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:srcCompat="@color/colorPrimary" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/list"
+            android:name="com.example.testjetpack.ui.main.notifications.NotificationFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:bindingAdapter='@{viewModel.adapter}'
+            app:bindingAdapterClickListener='@{viewModel.onItemClickListener}'
+            app:bindingItemViewModels='@{viewModel.itemViewModels}'
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:context=".ui.main.notifications.NotificationFragment"
+            tools:listitem="@layout/item_notification" />
+    </LinearLayout>
 </layout>
