@@ -59,7 +59,7 @@ class MyProfileFragmentVM : BaseViewModel<MyProfileFragmentVMEventStateChange>()
     }
 
     fun getProfile() {
-        processAsyncCall(
+        processCallAsync(
             call = { repository.getProfileAsync() },
             onSuccess = { profile ->
                 _profile.postValue(profile)

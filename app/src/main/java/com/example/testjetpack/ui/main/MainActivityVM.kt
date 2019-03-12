@@ -1,7 +1,6 @@
 package com.example.testjetpack.ui.main
 
 import android.view.MenuItem
-import androidx.core.view.GravityCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.testjetpack.MainApplication
@@ -12,7 +11,6 @@ import com.example.testjetpack.ui.base.BaseViewModel
 import com.example.testjetpack.ui.base.EventStateChange
 import com.example.testjetpack.utils.livedata.Event
 import com.google.android.material.navigation.NavigationView
-import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
 class MainActivityVM : BaseViewModel<MainActivityVMEventStateChange>(),
@@ -61,7 +59,7 @@ class MainActivityVM : BaseViewModel<MainActivityVMEventStateChange>(),
     // endregion OnNavigationItemSelectedListener impl
 
     fun getProfile() {
-        processAsyncCall(
+        processCallAsync(
             call = { repository.getProfileAsync() },
             onSuccess = { profile ->
                 _profile.postValue(profile)

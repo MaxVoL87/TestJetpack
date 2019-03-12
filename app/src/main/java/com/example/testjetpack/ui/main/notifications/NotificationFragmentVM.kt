@@ -21,21 +21,20 @@ class NotificationFragmentVM : BaseViewModel<NotificationFragmentVMEventStateCha
         MainApplication.component.inject(this)
     }
 
-    val adapter: BaseRecyclerAdapter = NotificationsRecyclerViewAdapter()
-    val onItemClickListener: BaseRecyclerAdapter.OnItemClickListener<BaseRecyclerItemViewModel> =
-        object : BaseRecyclerAdapter.OnItemClickListener<BaseRecyclerItemViewModel> {
-            override fun onItemClick(position: Int, item: BaseRecyclerItemViewModel) {
-                if (item is NotificationItemViewModel)
-                    _events.value = Event(NotificationFragmentVMEventStateChange.OpenNotification(item.notification))
-            }
-        }
-    val itemViewModels: LiveData<List<BaseRecyclerItemViewModel>>
-        get() = _itemViewModels
-
-    private val _itemViewModels: MutableLiveData<List<BaseRecyclerItemViewModel>> = MutableLiveData()
+    val adapter: LiveData<NotificationsRecyclerViewAdapter> = MutableLiveData(
+        NotificationsRecyclerViewAdapter()
+            .apply {
+                setOnItemClickListener(object : BaseRecyclerAdapter.OnItemClickListener<BaseRecyclerItemViewModel> {
+                    override fun onItemClick(position: Int, item: BaseRecyclerItemViewModel) {
+                        if (item is NotificationItemViewModel)
+                            _events.value =
+                                Event(NotificationFragmentVMEventStateChange.OpenNotification(item.notification))
+                    }
+                })
+            })
 
     fun getNotifications() {
-        processAsyncCall(
+        processCallAsync(
             call = { repository.getNotificationsAsync() },
             onSuccess = { notifications ->
                 setItemsList(notifications)
@@ -49,11 +48,9 @@ class NotificationFragmentVM : BaseViewModel<NotificationFragmentVMEventStateCha
     }
 
     private fun setItemsList(notifications: List<Notification>?) {
-        if (notifications.isNullOrEmpty()) {
-            _itemViewModels.postValue(mutableListOf())
-            return
-        }
-        _itemViewModels.postValue(notifications.map { NotificationItemViewModel(it) })
+        adapter.value?.itemViewModels =
+            if (notifications.isNullOrEmpty()) mutableListOf()
+            else notifications.map { NotificationItemViewModel(it) }.toMutableList()
     }
 }
 

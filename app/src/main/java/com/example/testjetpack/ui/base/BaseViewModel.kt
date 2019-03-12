@@ -7,7 +7,7 @@ import com.example.testjetpack.utils.livedata.Event
 import kotlinx.coroutines.*
 import timber.log.Timber
 
-abstract class BaseViewModel<S: EventStateChange> : ViewModel() {
+abstract class BaseViewModel<S : EventStateChange> : ViewModel() {
 
     val showProgressLiveData = MutableLiveData<Boolean>()
     val alertMessageLiveData = MutableLiveData<Throwable?>()
@@ -40,35 +40,25 @@ abstract class BaseViewModel<S: EventStateChange> : ViewModel() {
         showProgressLiveData.postValue(false)
     }
 
-    fun <T : Any?> processAsyncCall(
-        call: () -> Deferred<T>,
-        onSuccess: (T) -> Unit = { /* nothing by default*/ },
-        onError: (E: Throwable?) -> Unit = { /* nothing by default*/ },
-        showProgress: Boolean = false
-    ) {
-        processAsyncCallWithFullResult(call, { onSuccess(it) }, onError, showProgress)
-    }
-
-
-    private fun <T : Any?> processAsyncCallWithFullResult(
+    fun <T : Any?> processCallAsync(
         call: () -> Deferred<T>,
         onSuccess: (T) -> Unit = { /* nothing by default*/ },
         onError: (E: Throwable?) -> Unit = { /* nothing by default*/ },
         showProgress: Boolean = false
     ): Deferred<*> {
 
-        return addCoroutine(GlobalScope.async(Dispatchers.Default) {
-            Timber.e("1. I'm on ${Thread.currentThread().name}")
+        return addCoroutine(GlobalScope.async(Dispatchers.Main) {
             if (showProgress) {
                 showProgress()
             }
 
-            val job = async(Dispatchers.IO) {
+            val jobResult = withContext(Dispatchers.IO) {
                 call()
             }
-            with(job.await()) {
+
+            if (isActive) {
                 try {
-                    onSuccess(await())
+                    onSuccess(jobResult.await())
                 } catch (t: Throwable) {
                     onError(t)
                 }

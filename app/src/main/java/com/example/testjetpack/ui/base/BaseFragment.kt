@@ -107,6 +107,7 @@ abstract class BaseFragment<B : ViewDataBinding, T : BaseViewModel<out EventStat
 
     override fun onResume() {
         super.onResume()
+        getActionBar()?.let { it.title = name }
         with(viewModel.alertMessageLiveData) {
             value?.let { throwable ->
                 parseError(throwable)
@@ -143,9 +144,9 @@ abstract class BaseFragment<B : ViewDataBinding, T : BaseViewModel<out EventStat
         action: () -> Unit
     ) {
         addCoroutine(GlobalScope.async(Dispatchers.Main) {
-            async(Dispatchers.IO) {
+            withContext(Dispatchers.IO) {
                 delay(delay)
-            }.await()
+            }
             if (isActive) {
                 action.invoke()
             }
@@ -176,6 +177,8 @@ abstract class BaseFragment<B : ViewDataBinding, T : BaseViewModel<out EventStat
             }
         })
     }
+
+    protected fun getActionBar() = (activity as? BaseActivity<*, *>)?.supportActionBar
 
     protected fun onBackPressed() = invokeIfCanAccepted { activity?.onBackPressed() }
 

@@ -101,7 +101,6 @@ abstract class BaseActivity<B : ViewDataBinding, T : BaseViewModel<out EventStat
             commit()
         }
         supportFragmentManager.executePendingTransactions()
-        supportActionBar?.let { it.title = fragment.name }
         return fragment
     }
 
