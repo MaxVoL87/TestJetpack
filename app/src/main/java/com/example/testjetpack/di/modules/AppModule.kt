@@ -2,8 +2,12 @@ package com.example.testjetpack.di.modules
 
 import com.example.testjetpack.BuildConfig
 import com.example.testjetpack.MainApplication
+import com.example.testjetpack.dataflow.local.AppDatabase
+import com.example.testjetpack.dataflow.network.IGitApi
 import com.example.testjetpack.dataflow.repository.DataRepository
 import com.example.testjetpack.dataflow.repository.IDataRepository
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.jakewharton.picasso.OkHttp3Downloader
 import com.squareup.picasso.Picasso
 import dagger.Module
@@ -15,10 +19,17 @@ import javax.inject.Singleton
 @Module
 class AppModule {
 
+    @Singleton
+    @Provides
+    fun provideGson(): Gson = GsonBuilder()
+        .serializeNulls()
+        .create()
+
     @Provides
     @Singleton
-    fun provideDataRepository(): IDataRepository {
-        return DataRepository()
+    fun provideDataRepository(gitApi: IGitApi,
+                              appDatabase: AppDatabase): IDataRepository {
+        return DataRepository(gitApi, appDatabase)
     }
 
     @Provides

@@ -1,10 +1,7 @@
 package com.example.testjetpack.di
 
 import com.example.testjetpack.MainApplication
-import com.example.testjetpack.di.modules.ActivityModule
-import com.example.testjetpack.di.modules.AppModule
-import com.example.testjetpack.di.modules.FragmentModule
-import com.example.testjetpack.di.modules.NetworkModule
+import com.example.testjetpack.di.modules.*
 import com.example.testjetpack.ui.main.MainActivityVM
 import com.example.testjetpack.ui.main.myprofile.MyProfileFragmentVM
 import com.example.testjetpack.ui.main.notifications.NotificationFragmentVM
@@ -17,7 +14,7 @@ import javax.inject.Singleton
 @Singleton
 @Component(
     modules = [AndroidSupportInjectionModule::class, ActivityModule::class, FragmentModule::class,
-        AppModule::class, NetworkModule::class]
+        AppModule::class, NetworkModule::class, DatabaseModule::class]
 )
 interface IAppComponent : AndroidInjector<MainApplication> {
     override fun inject(application: MainApplication)
@@ -32,6 +29,9 @@ interface IAppComponent : AndroidInjector<MainApplication> {
 
         @BindsInstance
         fun netModule(netModule: NetworkModule): Builder
+
+        @BindsInstance
+        fun dbModule(dbModule: DatabaseModule): Builder
 
         fun build(): IAppComponent
     }

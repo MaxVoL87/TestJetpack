@@ -9,5 +9,4 @@ interface IDataRepository {
     fun getProfileAsync() : Deferred<Profile>
 
     fun getNotificationsAsync() : Deferred<List<Notification>>
-
 }
