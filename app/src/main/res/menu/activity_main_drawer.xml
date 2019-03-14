@@ -29,9 +29,9 @@
                 android:checkableBehavior="single">
 
                 <item
-                    android:id="@+id/nav_tutorials"
+                    android:id="@+id/nav_notifications"
                     android:icon="@drawable/ic_menu_slideshow"
-                    android:title="Tutorials" />
+                    android:title="Notifications" />
                 <item
                     android:id="@+id/nav_provide_feedback"
                     android:icon="@drawable/ic_menu_send"

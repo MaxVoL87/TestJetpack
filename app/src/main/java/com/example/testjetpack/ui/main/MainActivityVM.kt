@@ -32,9 +32,10 @@ class MainActivityVM : BaseViewModel<MainActivityVMEventStateChange>(),
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         _events.value = Event(MainActivityVMEventStateChange.CloseDrawer)
 
+        var event: MainActivityVMEventStateChange? = null
         when (item.itemId) {
             R.id.nav_my_profile -> {
-                _events.value = Event(MainActivityVMEventStateChange.OpenProfile)
+                event = MainActivityVMEventStateChange.OpenProfile
             }
             R.id.nav_my_history -> {
 
@@ -43,8 +44,8 @@ class MainActivityVM : BaseViewModel<MainActivityVMEventStateChange>(),
 
             }
 
-            R.id.nav_tutorials -> {
-
+            R.id.nav_notifications -> {
+                event = MainActivityVMEventStateChange.OpenNotifications
             }
             R.id.nav_provide_feedback -> {
 
@@ -54,6 +55,10 @@ class MainActivityVM : BaseViewModel<MainActivityVMEventStateChange>(),
 
             }
         }
+
+        if(event == null) return false
+
+        _events.value = Event(event)
         return true
     }
     // endregion OnNavigationItemSelectedListener impl
@@ -76,4 +81,5 @@ class MainActivityVM : BaseViewModel<MainActivityVMEventStateChange>(),
 sealed class MainActivityVMEventStateChange : EventStateChange {
     object CloseDrawer : MainActivityVMEventStateChange()
     object OpenProfile : MainActivityVMEventStateChange()
+    object OpenNotifications : MainActivityVMEventStateChange()
 }

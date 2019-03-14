@@ -9,6 +9,8 @@ import com.example.testjetpack.databinding.NavHeaderMainBinding
 import com.example.testjetpack.models.Notification
 import com.example.testjetpack.ui.base.BaseActivity
 import com.example.testjetpack.ui.base.EventStateChange
+import com.example.testjetpack.ui.main.gitreposearch.GitRepoSearchFragment
+import com.example.testjetpack.ui.main.gitreposearch.IGitRepoSearchFragmentCallback
 import com.example.testjetpack.ui.main.myprofile.IMyProfileFragmentCallback
 import com.example.testjetpack.ui.main.myprofile.MyProfileFragment
 import com.example.testjetpack.ui.main.notifications.INotificationFragmentCallback
@@ -22,8 +24,9 @@ import kotlin.reflect.KClass
 
 class MainActivity : BaseActivity<ActivityMainBinding, MainActivityVM>(),
     FragmentManager.OnBackStackChangedListener,
-    INotificationFragmentCallback,
-    IMyProfileFragmentCallback {
+    IGitRepoSearchFragmentCallback,
+    IMyProfileFragmentCallback,
+    INotificationFragmentCallback {
 
     override val viewModelClass: Class<MainActivityVM> = MainActivityVM::class.java
     override val layoutId: Int = R.layout.activity_main
@@ -51,7 +54,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityVM>(),
         //Handle when activity is recreated like on orientation Change
         shouldDisplayHomeUp()
 
-        openNotifications(false)
+        openGitRepoSearch(false)
     }
 
     override fun onStart() {
@@ -76,8 +79,12 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityVM>(),
         supportActionBar?.setDisplayHomeAsUpEnabled(supportFragmentManager.backStackEntryCount > 0)
     }
 
-    private fun openNotifications(addToBackStack: Boolean) {
-        replaceFragment(NotificationFragment.newInstance(), addToBackStack)
+    private fun openGitRepoSearch(addToBackStack: Boolean) {
+        replaceFragment(GitRepoSearchFragment.newInstance(), addToBackStack)
+    }
+
+    private fun openNotifications() {
+        replaceFragment(NotificationFragment.newInstance(), true)
     }
 
     private fun openMyProfile() {
@@ -106,8 +113,16 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityVM>(),
         }
     }
 
+    private val openNotificationsRenderer: (Any) -> Unit = { event ->
+        event as MainActivityVMEventStateChange.OpenNotifications
+        if (getCurFragment(R.id.container) !is NotificationFragment) {
+            openNotifications()
+        }
+    }
+
     override val RENDERERS: Map<KClass<out EventStateChange>, Function1<Any, Unit>> = mapOf(
         MainActivityVMEventStateChange.OpenProfile::class to openProfileRenderer,
+        MainActivityVMEventStateChange.OpenNotifications::class to openNotificationsRenderer,
         MainActivityVMEventStateChange.CloseDrawer::class to closeDrawerRenderer
 
     )

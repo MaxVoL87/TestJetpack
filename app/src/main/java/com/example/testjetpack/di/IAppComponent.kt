@@ -3,6 +3,7 @@ package com.example.testjetpack.di
 import com.example.testjetpack.MainApplication
 import com.example.testjetpack.di.modules.*
 import com.example.testjetpack.ui.main.MainActivityVM
+import com.example.testjetpack.ui.main.gitreposearch.GitRepoSearchFragmentVM
 import com.example.testjetpack.ui.main.myprofile.MyProfileFragmentVM
 import com.example.testjetpack.ui.main.notifications.NotificationFragmentVM
 import dagger.BindsInstance
@@ -38,6 +39,7 @@ interface IAppComponent : AndroidInjector<MainApplication> {
 
 
     fun inject(mainActivityVM: MainActivityVM)
+    fun inject(gitRepoSearchFragmentVM: GitRepoSearchFragmentVM)
     fun inject(notificationFragmentVM: NotificationFragmentVM)
     fun inject(myProfileFragmentVM: MyProfileFragmentVM)
 }

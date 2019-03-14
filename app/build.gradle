@@ -74,7 +74,6 @@ dependencies {
     def paging_version = "2.1.0"
     implementation "androidx.paging:paging-runtime-ktx:$paging_version"
 
-
     // Retrofit
     def retrofit_version = '2.2.0'
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
