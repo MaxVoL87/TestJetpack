@@ -3,6 +3,7 @@ package com.example.testjetpack
 import com.example.testjetpack.di.DaggerIAppComponent
 import com.example.testjetpack.di.IAppComponent
 import com.example.testjetpack.di.modules.AppModule
+import com.example.testjetpack.di.modules.DatabaseModule
 import com.example.testjetpack.di.modules.NetworkModule
 import dagger.android.support.DaggerApplication
 import timber.log.Timber
@@ -11,8 +12,9 @@ class MainApplication : DaggerApplication() {
 
     private val applicationInjector = DaggerIAppComponent.builder()
         .application(this)
-        .appModule( AppModule())
-        .netModule( NetworkModule())
+        .appModule(AppModule())
+        .netModule(NetworkModule())
+        .dbModule(DatabaseModule())
         .build()
 
     override fun applicationInjector() = applicationInjector

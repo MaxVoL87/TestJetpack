@@ -1,5 +1,6 @@
 package com.example.testjetpack.dataflow.local
 
+import androidx.paging.DataSource
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -10,11 +11,17 @@ import com.example.testjetpack.models.git.GitRepository
 interface IGitRepositoryDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(vararg repo: GitRepository)
+    fun insert(vararg repo: GitRepository)
 
     @Query("DELETE FROM repository_table")
     fun clearAll()
 
     @Query("SELECT * FROM repository_table")
-    fun getAll(): Array<GitRepository>
+    fun getAll(): DataSource.Factory<Int, GitRepository>
+
+    @Query("SELECT * FROM repository_table ORDER BY indexInResponse ASC")
+    fun getAllSortedByRespIndex() : DataSource.Factory<Int, GitRepository>
+
+    @Query("SELECT MAX(indexInResponse) + 1 FROM repository_table")
+    fun getNextIndex() : Int
 }
