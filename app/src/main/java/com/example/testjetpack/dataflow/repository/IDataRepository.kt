@@ -14,4 +14,8 @@ interface IDataRepository {
     fun getNotificationsAsync(): Deferred<List<Notification>>
 
     fun getGitRepositories(page: GitPage): Listing<GitRepository>
+
+    companion object {
+        public const val DEFAULT_NETWORK_PAGE_SIZE = 10
+    }
 }

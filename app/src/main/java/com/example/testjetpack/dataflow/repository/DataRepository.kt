@@ -168,6 +168,5 @@ class DataRepository @Inject constructor(
 
     companion object {
         private val fiveTPoolFixedExecutor = Executors.newFixedThreadPool(5)
-        public const val DEFAULT_NETWORK_PAGE_SIZE = 10
     }
 }

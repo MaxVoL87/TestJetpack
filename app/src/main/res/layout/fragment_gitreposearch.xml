@@ -11,14 +11,46 @@
 
     </data>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/list"
-        android:name="com.example.testjetpack.ui.main.gitreposearch.GitRepoSearchFragment"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        app:layoutManager="LinearLayoutManager"
-        tools:context=".ui.main.gitreposearch.GitRepoSearchFragment"
-        tools:listitem="@layout/item_gitreposearch" />
+        tools:context=".ui.main.gitreposearch.GitRepoSearchFragment">
+
+        <ImageView
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:srcCompat="@color/colorPrimary" />
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/etTextToSearch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/list"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="@dimen/min_text_margin"
+            android:layout_toStartOf="@+id/bSearch"
+            android:text='@={viewModel.searchText}'/>
+
+        <Button
+            android:id="@+id/bSearch"
+            style="@style/ButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/toolbar"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="@dimen/text_margin"
+            android:onClick='@{(v) -> viewModel.searchRepos()}'
+            android:text="@string/search" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/list"
+            android:name="com.example.testjetpack.ui.main.gitreposearch.GitRepoSearchFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/bSearch"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_gitreposearch" />
+    </RelativeLayout>
+
 </layout>

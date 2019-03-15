@@ -6,8 +6,8 @@ data class GitPage(
     val perPage: Int,
 
     // from header
-    val next: String?,
-    val last: String?,
-    val first: String?,
-    val previous: String?
+    val next: String? = null,
+    val last: String? = null,
+    val first: String? = null,
+    val previous: String? = null
 )

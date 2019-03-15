@@ -1,20 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:layout_marginBottom="@dimen/min_text_margin"
+    android:layout_marginTop="@dimen/min_text_margin">
 
     <TextView
-        android:id="@+id/item_number"
-        android:layout_width="wrap_content"
+        android:id="@+id/tvUserName"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:textAppearance="?attr/textAppearanceListItem" />
+        android:layout_marginEnd="@dimen/min_text_margin"
+        android:layout_marginStart="@dimen/min_text_margin"
+        android:layout_marginTop="@dimen/min_text_margin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="User Name"/>
 
     <TextView
-        android:id="@+id/content"
+        android:id="@+id/tvRepoName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/min_text_margin"
+        android:layout_marginStart="@dimen/min_text_margin"
+        android:layout_marginTop="@dimen/min_text_margin"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvUserName"
+        tools:text="Repo Name" />
+
+    <TextView
+        android:id="@+id/tvRepoUrl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/min_text_margin"
+        android:layout_marginStart="@dimen/min_text_margin"
+        android:layout_marginTop="@dimen/min_text_margin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvRepoName"
+        tools:text="Url:\\" />
+
+    <TextView
+        android:id="@+id/tvNumber"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:textAppearance="?attr/textAppearanceListItem" />
-</LinearLayout>
+        android:layout_marginEnd="@dimen/min_text_margin"
+        android:layout_marginTop="@dimen/min_text_margin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvRepoUrl"
+        tools:text="1." />
+</androidx.constraintlayout.widget.ConstraintLayout>

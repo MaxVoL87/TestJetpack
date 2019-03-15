@@ -10,6 +10,8 @@
 
     <dimen name="button_text_size">18dp</dimen>
 
+    <dimen name="min_text_margin">7dp</dimen>
+
     <!-- Profile -->
     <dimen name="profile_start_margin">36dp</dimen>
     <dimen name="profile_end_margin">36dp</dimen>
