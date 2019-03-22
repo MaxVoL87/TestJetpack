@@ -30,7 +30,7 @@
             android:layout_alignParentStart="true"
             android:layout_marginBottom="@dimen/min_text_margin"
             android:layout_toStartOf="@+id/bSearch"
-            android:text='@={viewModel.searchText}'/>
+            android:text='@={viewModel.searchText}' />
 
         <Button
             android:id="@+id/bSearch"
@@ -40,7 +40,7 @@
             android:layout_below="@id/toolbar"
             android:layout_alignParentEnd="true"
             android:layout_marginTop="@dimen/text_margin"
-            android:onClick='@{(v) -> viewModel.searchRepos()}'
+            android:onClick='@{viewModel::searchRepos}'
             android:text="@string/search" />
 
         <androidx.recyclerview.widget.RecyclerView
@@ -49,7 +49,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/bSearch"
+            android:adapter='@{viewModel.adapter}'
+            app:items='@{viewModel.repos}'
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:networkState='@{viewModel.networkState}'
             tools:listitem="@layout/item_gitreposearch" />
     </RelativeLayout>
 

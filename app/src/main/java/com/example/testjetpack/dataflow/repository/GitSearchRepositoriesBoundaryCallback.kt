@@ -5,6 +5,7 @@ import androidx.paging.PagedList
 import com.example.testjetpack.dataflow.network.IGitApi
 import com.example.testjetpack.models.git.GitRepository
 import com.example.testjetpack.models.git.network.GitPage
+import com.example.testjetpack.models.git.network.SearchRepositoriesResponse
 import com.example.testjetpack.models.git.network.ServerResponse
 import com.example.testjetpack.utils.paging.PagingRequestHelper
 import com.example.testjetpack.utils.paging.createStatusLiveData
@@ -46,6 +47,7 @@ class GitSearchRepositoriesBoundaryCallback(
     @MainThread
     override fun onItemAtEndLoaded(itemAtEnd: GitRepository) {
         helper.runIfNotRunning(PagingRequestHelper.RequestType.AFTER) {
+            curPage.number++
             webservice.searchRepos(curPage.q, curPage.number,  curPage.perPage).enqueue(createWebserviceCallback(it))
         }
     }
@@ -55,7 +57,7 @@ class GitSearchRepositoriesBoundaryCallback(
      * paging library takes care of refreshing the list if necessary.
      */
     private fun insertItemsIntoDb(
-        response: Response<ServerResponse>,
+        response: Response<SearchRepositoriesResponse>,
         it: PagingRequestHelper.Request.Callback
     ) {
         ioExecutor.execute {
@@ -68,14 +70,14 @@ class GitSearchRepositoriesBoundaryCallback(
         // ignored, since we only ever append to what's in the DB
     }
 
-    private fun createWebserviceCallback(it: PagingRequestHelper.Request.Callback): Callback<ServerResponse> {
+    private fun createWebserviceCallback(it: PagingRequestHelper.Request.Callback): Callback<SearchRepositoriesResponse> {
 
-        return object : Callback<ServerResponse> {
-            override fun onFailure(call: Call<ServerResponse>, t: Throwable) {
+        return object : Callback<SearchRepositoriesResponse> {
+            override fun onFailure(call: Call<SearchRepositoriesResponse>, t: Throwable) {
                 it.recordFailure(t)
             }
 
-            override fun onResponse(call: Call<ServerResponse>, response: Response<ServerResponse>) {
+            override fun onResponse(call: Call<SearchRepositoriesResponse>, response: Response<SearchRepositoriesResponse>) {
                 insertItemsIntoDb(response, it)
             }
         }

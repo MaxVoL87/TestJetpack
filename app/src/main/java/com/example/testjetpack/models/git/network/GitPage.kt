@@ -1,7 +1,7 @@
 package com.example.testjetpack.models.git.network
 
 data class GitPage(
-    val number: Int,
+    var number: Int,
     val q: String,
     val perPage: Int,
 

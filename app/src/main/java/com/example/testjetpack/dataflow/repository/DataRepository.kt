@@ -105,13 +105,16 @@ class DataRepository @Inject constructor(
         val networkState = MutableLiveData<NetworkState>()
         networkState.value = NetworkState.LOADING
         gitApi.searchRepos(page.q, page.number, page.perPage).enqueue(
-            object : Callback<ServerResponse> {
-                override fun onFailure(call: Call<ServerResponse>, t: Throwable) {
+            object : Callback<SearchRepositoriesResponse> {
+                override fun onFailure(call: Call<SearchRepositoriesResponse>, t: Throwable) {
                     // retrofit calls this on main thread so safe to call set value
                     networkState.value = NetworkState.error(t.message)
                 }
 
-                override fun onResponse(call: Call<ServerResponse>, response: Response<ServerResponse>) {
+                override fun onResponse(
+                    call: Call<SearchRepositoriesResponse>,
+                    response: Response<SearchRepositoriesResponse>
+                ) {
                     GlobalScope.launch(Dispatchers.IO) {
                         appDatabase.runInTransaction {
                             appDatabase.gitRepositoryDao().clearAll()
@@ -130,6 +133,11 @@ class DataRepository @Inject constructor(
      * Returns a Listing for the given page.
      */
     override fun getGitRepositories(page: GitPage): Listing<GitRepository> {
+
+        appDatabase.runInTransaction {
+            appDatabase.gitRepositoryDao().clearAll()
+        }
+
         // create a boundary callback which will observe when the user reaches to the edges of
         // the list and update the database with extra data.
         val boundaryCallback = GitSearchRepositoriesBoundaryCallback(

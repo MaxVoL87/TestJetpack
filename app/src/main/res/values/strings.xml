@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Test Jetpack</string>
     <string name="loadingWithThreeDots">Loading…</string>
+    <string name="retryWithThreeDots">Retry…</string>
+
 
     // GitRepoSearch
     <string name="search">Search</string>

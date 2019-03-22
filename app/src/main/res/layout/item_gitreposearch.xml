@@ -1,57 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="@dimen/min_text_margin"
-    android:layout_marginTop="@dimen/min_text_margin">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
-        android:id="@+id/tvUserName"
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.example.testjetpack.ui.main.gitreposearch.GitRepoSearchItemViewModel" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/min_text_margin"
-        android:layout_marginStart="@dimen/min_text_margin"
         android:layout_marginTop="@dimen/min_text_margin"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="User Name"/>
+        android:layout_marginBottom="@dimen/min_text_margin">
 
-    <TextView
-        android:id="@+id/tvRepoName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/min_text_margin"
-        android:layout_marginStart="@dimen/min_text_margin"
-        android:layout_marginTop="@dimen/min_text_margin"
-        android:gravity="center"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvUserName"
-        tools:text="Repo Name" />
+        <TextView
+            android:id="@+id/tvUserName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/min_text_margin"
+            android:layout_marginTop="@dimen/min_text_margin"
+            android:layout_marginEnd="@dimen/min_text_margin"
+            android:drawableStart="@drawable/ic_check_36dp"
+            android:drawablePadding="@dimen/min_text_margin"
+            android:gravity="center_vertical"
+            android:text='@{viewModel.repo.owner.login}'
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="User Name" />
 
-    <TextView
-        android:id="@+id/tvRepoUrl"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/min_text_margin"
-        android:layout_marginStart="@dimen/min_text_margin"
-        android:layout_marginTop="@dimen/min_text_margin"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvRepoName"
-        tools:text="Url:\\" />
+        <TextView
+            android:id="@+id/tvRepoName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/min_text_margin"
+            android:layout_marginTop="@dimen/min_text_margin"
+            android:layout_marginEnd="@dimen/min_text_margin"
+            android:gravity="center"
+            android:text='@{viewModel.repo.name}'
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvUserName"
+            tools:text="Repo Name" />
 
-    <TextView
-        android:id="@+id/tvNumber"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/min_text_margin"
-        android:layout_marginTop="@dimen/min_text_margin"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvRepoUrl"
-        tools:text="1." />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/tvRepoUrl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/min_text_margin"
+            android:layout_marginTop="@dimen/min_text_margin"
+            android:layout_marginEnd="@dimen/min_text_margin"
+            android:text='@{viewModel.repo.url}'
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvRepoName"
+            tools:text="Url:\\" />
+
+        <TextView
+            android:id="@+id/tvNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/min_text_margin"
+            android:layout_marginEnd="@dimen/min_text_margin"
+            android:text='@{String.format("%d.", viewModel.repo.indexInResponse)}'
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvRepoUrl"
+            tools:text="1." />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="@dimen/min_text_margin"
+            android:background="@color/colorGrey"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvNumber" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

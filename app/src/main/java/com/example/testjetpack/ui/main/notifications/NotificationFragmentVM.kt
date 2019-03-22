@@ -1,7 +1,5 @@
 package com.example.testjetpack.ui.main.notifications
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.example.testjetpack.MainApplication
 import com.example.testjetpack.dataflow.repository.IDataRepository
 import com.example.testjetpack.models.Notification
@@ -21,17 +19,15 @@ class NotificationFragmentVM : BaseViewModel<NotificationFragmentVMEventStateCha
         MainApplication.component.inject(this)
     }
 
-    val adapter: LiveData<NotificationsRecyclerViewAdapter> = MutableLiveData(
-        NotificationsRecyclerViewAdapter()
-            .apply {
-                setOnItemClickListener(object : BaseRecyclerAdapter.OnItemClickListener<BaseRecyclerItemViewModel> {
-                    override fun onItemClick(position: Int, item: BaseRecyclerItemViewModel) {
-                        if (item is NotificationItemViewModel)
-                            _events.value =
-                                Event(NotificationFragmentVMEventStateChange.OpenNotification(item.notification))
-                    }
-                })
+    val adapter = NotificationsRecyclerViewAdapter()
+        .apply {
+            setOnItemClickListener(object : BaseRecyclerAdapter.OnItemClickListener<BaseRecyclerItemViewModel> {
+                override fun onItemClick(position: Int, item: BaseRecyclerItemViewModel) {
+                    if (item is NotificationItemViewModel)
+                        _events.value = Event(NotificationFragmentVMEventStateChange.OpenNotification(item.notification))
+                }
             })
+        }
 
     fun getNotifications() {
         processCallAsync(
@@ -48,7 +44,7 @@ class NotificationFragmentVM : BaseViewModel<NotificationFragmentVMEventStateCha
     }
 
     private fun setItemsList(notifications: List<Notification>?) {
-        adapter.value?.itemViewModels =
+        adapter.itemViewModels =
             if (notifications.isNullOrEmpty()) mutableListOf()
             else notifications.map { NotificationItemViewModel(it) }.toMutableList()
     }
