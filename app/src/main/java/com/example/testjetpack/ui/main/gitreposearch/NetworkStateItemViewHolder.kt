@@ -3,50 +3,40 @@ package com.example.testjetpack.ui.main.gitreposearch
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ProgressBar
-import android.widget.TextView
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.testjetpack.R
+import com.example.testjetpack.databinding.ItemNetworkStateBinding
 import com.example.testjetpack.models.git.network.NetworkState
-import com.example.testjetpack.models.git.network.Status
+import com.example.testjetpack.ui.base.BaseRecyclerItemViewModel
 
 /**
  * A View Holder that can display a loading or have click action.
  * It is used to show the network state of paging.
  */
-//todo: change
-class NetworkStateItemViewHolder(view: View,
-                                 private val retryCallback: () -> Unit)
-    : RecyclerView.ViewHolder(view) {
-    private val progressBar = view.findViewById<ProgressBar>(R.id.progress_bar)
-    private val retry = view.findViewById<Button>(R.id.retry_button)
-    private val errorMsg = view.findViewById<TextView>(R.id.error_msg)
-    init {
-        retry.setOnClickListener {
-            retryCallback()
-        }
-    }
-    fun bindTo(networkState: NetworkState?) {
-        progressBar.visibility = toVisibility(networkState?.status == Status.RUNNING)
-        retry.visibility = toVisibility(networkState?.status == Status.FAILED)
-        errorMsg.visibility = toVisibility(networkState?.msg != null)
-        errorMsg.text = networkState?.msg
+class NetworkStateItemVH(view: View) : RecyclerView.ViewHolder(view) {
+    private val binding: ItemNetworkStateBinding? = DataBindingUtil.bind(view)
+    private var viewModel: NetworkStateItemVM? = null
+
+    fun bind(networkState: NetworkState?, retryCallback: () -> Unit) {
+        viewModel = if (networkState != null) NetworkStateItemVM(networkState, retryCallback) else null
+        binding?.let { it.viewModel = viewModel }
     }
 
     companion object {
-        fun create(parent: ViewGroup, retryCallback: () -> Unit): NetworkStateItemViewHolder {
+        fun create(parent: ViewGroup): NetworkStateItemVH {
             val view = LayoutInflater.from(parent.context)
                 .inflate(R.layout.item_network_state, parent, false)
-            return NetworkStateItemViewHolder(view, retryCallback)
-        }
-
-        fun toVisibility(constraint : Boolean): Int {
-            return if (constraint) {
-                View.VISIBLE
-            } else {
-                View.GONE
-            }
+            return NetworkStateItemVH(view)
         }
     }
 }
+
+class NetworkStateItemVM(
+    val networkState: NetworkState,
+    val retryCallback: () -> Unit
+) : BaseRecyclerItemViewModel() {
+    override val itemViewType: Int = VIEW_TYPE_NETWORK_STATE_ITEM
+}
+
+const val VIEW_TYPE_NETWORK_STATE_ITEM = 2000

@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.example.testjetpack.ui.main.gitreposearch.GitRepoSearchItemViewModel" />
+            type="com.example.testjetpack.ui.main.gitreposearch.GitRepoSearchItemVM" />
 
     </data>
 
