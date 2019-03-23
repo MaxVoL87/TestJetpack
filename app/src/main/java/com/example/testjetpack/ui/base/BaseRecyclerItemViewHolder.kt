@@ -7,9 +7,9 @@ import androidx.databinding.ViewDataBinding
 
 
 abstract class BaseRecyclerItemViewHolder<B: ViewDataBinding, M : BaseRecyclerItemViewModel>(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    abstract var viewModel: M
+    var viewModel: M? = null
 
-    fun bind(viewModel: M): B? {
+    fun bind(viewModel: M?): B? {
         this.viewModel = viewModel
         val binding: B? = DataBindingUtil.bind(itemView)
         bindModel(binding)

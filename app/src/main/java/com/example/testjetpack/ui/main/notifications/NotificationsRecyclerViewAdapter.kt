@@ -25,7 +25,6 @@ class NotificationsRecyclerViewAdapter : BaseRecyclerAdapter() {
 }
 
 class NotificationItemHolder(itemView: View) : BaseRecyclerItemViewHolder<ItemNotificationBinding, NotificationItemViewModel>(itemView) {
-    override lateinit var viewModel: NotificationItemViewModel
 
     override fun bindModel(binding: ItemNotificationBinding?) {
         binding?.let { it.notificationItemViewModel = viewModel }

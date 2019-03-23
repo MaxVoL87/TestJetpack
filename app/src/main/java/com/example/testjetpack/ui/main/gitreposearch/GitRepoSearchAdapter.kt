@@ -3,34 +3,48 @@ package com.example.testjetpack.ui.main.gitreposearch
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.RecyclerView
 import com.example.testjetpack.R
 import com.example.testjetpack.databinding.ItemGitreposearchBinding
 import com.example.testjetpack.models.git.GitRepository
 import com.example.testjetpack.models.git.network.NetworkState
+import com.example.testjetpack.ui.base.BaseRecyclerItemViewHolder
 import com.example.testjetpack.ui.base.BaseRecyclerItemViewModel
+import com.example.testjetpack.ui.base.CastExeption
+import com.example.testjetpack.ui.custom.NetworkStateItemVH
+import com.example.testjetpack.ui.custom.NetworkStateItemVM
+import com.example.testjetpack.ui.custom.VIEW_TYPE_NETWORK_STATE_ITEM
 
 
-//todo: change
-class GitRepoSearchAdapter  (private val retryCallback: () -> Unit)
-: PagedListAdapter<GitRepository, RecyclerView.ViewHolder>(POST_COMPARATOR) {
+//todo: change, save VMs
+class GitRepoSearchAdapter(
+    private val retryCallback: () -> Unit
+) : PagedListAdapter<GitRepository, BaseRecyclerItemViewHolder<ViewDataBinding, BaseRecyclerItemViewModel>>(
+    POST_COMPARATOR
+) {
 
     private var networkState: NetworkState? = null
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+    override fun onBindViewHolder(
+        holder: BaseRecyclerItemViewHolder<ViewDataBinding, BaseRecyclerItemViewModel>,
+        position: Int
+    ) {
+        var vm: BaseRecyclerItemViewModel? = null
         when (getItemViewType(position)) {
-            R.layout.item_gitreposearch -> (holder as GitRepoSearchItemVH).bind(getItem(position))
-            R.layout.item_network_state -> (holder as NetworkStateItemVH).bind(networkState, retryCallback)
+            R.layout.item_gitreposearch -> getItem(position)?.let { vm = GitRepoSearchItemVM(it) }
+            VIEW_TYPE_NETWORK_STATE_ITEM -> networkState?.let { vm = NetworkStateItemVM(it, retryCallback) }
         }
+
+        holder.bind(vm)
     }
 
     override fun onBindViewHolder(
-        holder: RecyclerView.ViewHolder,
+        holder: BaseRecyclerItemViewHolder<ViewDataBinding, BaseRecyclerItemViewModel>,
         position: Int,
-        payloads: MutableList<Any>) {
+        payloads: MutableList<Any>
+    ) {
         if (payloads.isNotEmpty()) {
             //todo: change
 //            val item = getItem(position)
@@ -40,19 +54,25 @@ class GitRepoSearchAdapter  (private val retryCallback: () -> Unit)
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return when (viewType) {
-            R.layout.item_gitreposearch -> GitRepoSearchItemVH.create(parent)
-            R.layout.item_network_state -> NetworkStateItemVH.create(parent)
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): BaseRecyclerItemViewHolder<ViewDataBinding, BaseRecyclerItemViewModel> {
+        val view = LayoutInflater.from(parent.context).inflate(viewType, parent, false)
+        val holder = when (viewType) {
+            R.layout.item_gitreposearch -> GitRepoSearchItemVH(view)
+            VIEW_TYPE_NETWORK_STATE_ITEM -> NetworkStateItemVH(view)
             else -> throw IllegalArgumentException("unknown view type $viewType")
         }
+        return BaseRecyclerItemViewHolder.castToBaseSafe(holder)
+            ?: throw CastExeption(BaseRecyclerItemViewModel::class.java)
     }
 
     private fun hasExtraRow() = networkState != null && networkState != NetworkState.LOADED
 
     override fun getItemViewType(position: Int): Int {
         return if (hasExtraRow() && position == itemCount - 1) {
-            R.layout.item_network_state
+            VIEW_TYPE_NETWORK_STATE_ITEM
         } else {
             R.layout.item_gitreposearch
         }
@@ -90,21 +110,14 @@ class GitRepoSearchAdapter  (private val retryCallback: () -> Unit)
     }
 }
 
-class GitRepoSearchItemVH(view: View) : RecyclerView.ViewHolder(view) {
-    private val binding: ItemGitreposearchBinding? = DataBindingUtil.bind(view)
-    private var viewModel: GitRepoSearchItemVM? = null
+class GitRepoSearchItemVH(view: View) :
+    BaseRecyclerItemViewHolder<ItemGitreposearchBinding, GitRepoSearchItemVM>(view) {
 
-    fun bind(repo: GitRepository?) {
-        viewModel = if (repo != null) GitRepoSearchItemVM(repo) else null
+    override fun bindModel(binding: ItemGitreposearchBinding?) {
         binding?.let { it.viewModel = viewModel }
     }
 
-    companion object {
-        fun create(parent: ViewGroup): GitRepoSearchItemVH {
-            val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_gitreposearch, parent, false)
-            return GitRepoSearchItemVH(view)
-        }
+    override fun unbind() {
     }
 }
 
