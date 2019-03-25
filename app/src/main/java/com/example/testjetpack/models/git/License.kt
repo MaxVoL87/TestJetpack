@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
-@Entity
+@Entity(tableName = "license_table")
 data class License(
         @SerializedName("name") @PrimaryKey(autoGenerate = false) val name: String,
         @SerializedName("spdx_id") val spdxId: String,

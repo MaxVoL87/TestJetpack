@@ -3,7 +3,7 @@ package com.example.testjetpack.models.git
 import androidx.room.*
 import com.google.gson.annotations.SerializedName
 
-@Entity(tableName = "repository_table", indices = [Index(value = arrayOf("id"))])
+@Entity(tableName = "repository_table", indices = [Index(value = arrayOf("indexInResponse"))])
 @SuppressWarnings(RoomWarnings.PRIMARY_KEY_FROM_EMBEDDED_IS_DROPPED) // because of prefix =
 data class GitRepository(
     @SerializedName("stargazers_count") val stargazersCount: Int,
@@ -17,7 +17,7 @@ data class GitRepository(
     @SerializedName("subscribers_url") val subscribersUrl: String?,
     @SerializedName("releases_url") val releasesUrl: String?,
     @SerializedName("svn_url") val svnUrl: String,
-    @SerializedName("id") @PrimaryKey(autoGenerate = false) val id: Long,
+    @SerializedName("id") val id: Long,
     @SerializedName("forks") val forks: Int,
     @SerializedName("archive_url") val archiveUrl: String?,
     @SerializedName("git_refs_url") val gitRefsUrl: String?,
@@ -81,5 +81,5 @@ data class GitRepository(
     @SerializedName("forks_count") val forksCount: Int
 ) {
     // to be consistent w/ changing backend order, we need to keep a data like this
-    var indexInResponse: Int = -1
+    @SerializedName("_id") @PrimaryKey(autoGenerate = false) var indexInResponse: Int = -1
 }

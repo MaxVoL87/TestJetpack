@@ -37,7 +37,7 @@ class GitSearchRepositoriesBoundaryCallback(
     @MainThread
     override fun onZeroItemsLoaded() {
         helper.runIfNotRunning(PagingRequestHelper.RequestType.INITIAL) {
-            webservice.searchRepos(curPage.q, curPage.number,  curPage.perPage).enqueue(createWebserviceCallback(it))
+            webservice.searchRepos(curPage.q, curPage.number.get(),  curPage.perPage).enqueue(createWebserviceCallback(it))
         }
     }
 
@@ -47,22 +47,7 @@ class GitSearchRepositoriesBoundaryCallback(
     @MainThread
     override fun onItemAtEndLoaded(itemAtEnd: GitRepository) {
         helper.runIfNotRunning(PagingRequestHelper.RequestType.AFTER) {
-            curPage.number++
-            webservice.searchRepos(curPage.q, curPage.number,  curPage.perPage).enqueue(createWebserviceCallback(it))
-        }
-    }
-
-    /**
-     * every time it gets new items, boundary callback simply inserts them into the database and
-     * paging library takes care of refreshing the list if necessary.
-     */
-    private fun insertItemsIntoDb(
-        response: Response<SearchRepositoriesResponse>,
-        it: PagingRequestHelper.Request.Callback
-    ) {
-        ioExecutor.execute {
-            handleResponse(curPage, response.body())
-            it.recordSuccess()
+            webservice.searchRepos(curPage.q, curPage.number.incrementAndGet(),  curPage.perPage).enqueue(createWebserviceCallback(it))
         }
     }
 
@@ -77,8 +62,15 @@ class GitSearchRepositoriesBoundaryCallback(
                 it.recordFailure(t)
             }
 
+            /**
+             * every time it gets new items, boundary callback simply inserts them into the database and
+             * paging library takes care of refreshing the list if necessary.
+             */
             override fun onResponse(call: Call<SearchRepositoriesResponse>, response: Response<SearchRepositoriesResponse>) {
-                insertItemsIntoDb(response, it)
+                ioExecutor.execute {
+                    handleResponse(curPage, response.body())
+                    it.recordSuccess()
+                }
             }
         }
 

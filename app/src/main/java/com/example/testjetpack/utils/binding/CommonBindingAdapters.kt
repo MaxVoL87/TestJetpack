@@ -5,10 +5,14 @@ import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.testjetpack.utils.hideKeyboard
 import com.example.testjetpack.utils.picasso.CircleTransform
 import com.example.testjetpack.utils.showKeyboard
 import com.squareup.picasso.Picasso
+
 
 /**
  * Load and circle image
@@ -20,6 +24,20 @@ fun ImageView.setCircleImageUrl(imageUrl: String?, picasso: Picasso?) {
         .fit()
         .transform(CircleTransform())
         .into(this)
+}
+
+/**
+ * Invoke RecyclerView.scrollToPosition(position: Int) action
+ */
+@BindingAdapter("position")
+fun RecyclerView.setPosition(position: Int) {
+    val offset = 10
+    val mLayoutManager = layoutManager
+    when(mLayoutManager){
+        is LinearLayoutManager -> mLayoutManager.scrollToPositionWithOffset(position, offset)
+        is StaggeredGridLayoutManager -> mLayoutManager.scrollToPositionWithOffset(position, offset)
+        else -> scrollToPosition(position)
+    }
 }
 
 /**

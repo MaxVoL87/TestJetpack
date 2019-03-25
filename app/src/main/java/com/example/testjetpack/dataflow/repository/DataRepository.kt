@@ -104,7 +104,7 @@ class DataRepository @Inject constructor(
     private fun refresh(page: GitPage): LiveData<NetworkState> {
         val networkState = MutableLiveData<NetworkState>()
         networkState.value = NetworkState.LOADING
-        gitApi.searchRepos(page.q, page.number, page.perPage).enqueue(
+        gitApi.searchRepos(page.q, page.number.get(), page.perPage).enqueue(
             object : Callback<SearchRepositoriesResponse> {
                 override fun onFailure(call: Call<SearchRepositoriesResponse>, t: Throwable) {
                     // retrofit calls this on main thread so safe to call set value

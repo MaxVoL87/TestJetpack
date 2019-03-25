@@ -1,7 +1,9 @@
 package com.example.testjetpack.models.git.network
 
+import java.util.concurrent.atomic.AtomicInteger
+
 data class GitPage(
-    var number: Int,
+    val number: AtomicInteger,
     val q: String,
     val perPage: Int,
 

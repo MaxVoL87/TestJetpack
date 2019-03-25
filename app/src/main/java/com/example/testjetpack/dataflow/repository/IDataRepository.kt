@@ -16,6 +16,6 @@ interface IDataRepository {
     fun getGitRepositories(page: GitPage): Listing<GitRepository>
 
     companion object {
-        public const val DEFAULT_NETWORK_PAGE_SIZE = 10
+        const val DEFAULT_NETWORK_PAGE_SIZE = 10
     }
 }

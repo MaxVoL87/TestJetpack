@@ -12,14 +12,23 @@ import com.example.testjetpack.utils.withNotNull
 /**
  * Set PagedListAdapter data
  */
-@BindingAdapter("items", "networkState", requireAll = false)
+@BindingAdapter("items")
 fun RecyclerView.setPagedListAdapterData(
-    items: PagedList<GitRepository>?,
+    items: PagedList<GitRepository>?
+) {
+    withNotNull(adapter as GitRepoSearchAdapter) {
+        items?.let { submitList(it) }
+    }
+}
+
+/**
+ * Set PagedListAdapter networkState
+ */
+@BindingAdapter("networkState")
+fun RecyclerView.setPagedListAdapterNetworkState(
     networkState: NetworkState?
 ) {
-    withNotNull(adapter as GitRepoSearchAdapter){
-        items?.let { submitList(it) }
+    withNotNull(adapter as GitRepoSearchAdapter) {
         networkState?.let { setNetworkState(it) }
-        null
     }
 }

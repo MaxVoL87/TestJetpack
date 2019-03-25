@@ -1,6 +1,7 @@
 package com.example.testjetpack.ui.main.gitreposearch
 
 import android.view.View
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations.switchMap
 import com.example.testjetpack.MainApplication
@@ -11,8 +12,10 @@ import com.example.testjetpack.models.git.network.Listing
 import com.example.testjetpack.ui.base.BaseViewModel
 import com.example.testjetpack.ui.base.EventStateChange
 import com.example.testjetpack.utils.UiUtils.hideKeyboard
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
+import java.util.concurrent.atomic.AtomicInteger
 import javax.inject.Inject
 
 class GitRepoSearchFragmentVM : BaseViewModel<GitRepoSearchFragmentVMEventStateChange>() {
@@ -24,39 +27,47 @@ class GitRepoSearchFragmentVM : BaseViewModel<GitRepoSearchFragmentVMEventStateC
         MainApplication.component.inject(this)
     }
 
-    private val page: MutableLiveData<GitPage> =
-        MutableLiveData(GitPage(number = 1, q = "", perPage = IDataRepository.DEFAULT_NETWORK_PAGE_SIZE))
-    private val repoResult: MutableLiveData<Listing<GitRepository>> = MutableLiveData()
+    private val _page: MutableLiveData<GitPage> =
+        MutableLiveData(GitPage(number = AtomicInteger(1), q = "", perPage = IDataRepository.DEFAULT_NETWORK_PAGE_SIZE))
+    private val _repoResult: MutableLiveData<Listing<GitRepository>> = MutableLiveData()
+    private val _scrollToPosition: MutableLiveData<Int> = MutableLiveData(0)
 
     val searchText: MutableLiveData<String?> = MutableLiveData<String?>().apply {
         observeForever { text ->
             if (text != null) {
-                page.value?.let {
+                _page.value?.let {
                     if (it.q != text)
-                        page.value = it.copy(q = text)
+                        _page.value = it.copy(q = text)
                 }
             }
         }
     }
     val adapter = GitRepoSearchAdapter { retry() }
-    val repos = switchMap(repoResult) { it.pagedList }
-    val networkState = switchMap(repoResult) { it.networkState }
-    val refreshState = switchMap(repoResult) { it.refreshState }
+    val repos = switchMap(_repoResult) { it.pagedList }
+    val networkState = switchMap(_repoResult) { it.networkState }
+    val refreshState = switchMap(_repoResult) { it.refreshState }
+
+    val scrollToPosition: LiveData<Int>
+        get() = _scrollToPosition
 
     fun searchRepos(view: View?) {
         view?.let { hideKeyboard(it) }
 
-        val mPage = page.value ?: return
+        _scrollToPosition.value = 0
         adapter.submitList(null)
+
+        val mPage = _page.value ?: return
+        mPage.number.set(1)
+
 
         processCallAsync(
             call = {
-                GlobalScope.async {
+                GlobalScope.async(Dispatchers.Unconfined) {
                     repository.getGitRepositories(page = mPage)
                 }
             },
             onSuccess = { listing ->
-                repoResult.value = listing
+                _repoResult.value = listing
             },
             onError = {
                 onError(it)
@@ -67,11 +78,11 @@ class GitRepoSearchFragmentVM : BaseViewModel<GitRepoSearchFragmentVMEventStateC
 
 
     fun refresh() {
-        repoResult.value?.refresh?.invoke()
+        _repoResult.value?.refresh?.invoke()
     }
 
     fun retry() {
-        val listing = repoResult.value
+        val listing = _repoResult.value
         listing?.retry?.invoke()
     }
 }
