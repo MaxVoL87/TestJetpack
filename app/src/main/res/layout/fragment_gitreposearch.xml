@@ -24,7 +24,7 @@
             android:layout_height="?attr/actionBarSize"
             app:srcCompat="@color/colorPrimary" />
 
-        <androidx.appcompat.widget.AppCompatEditText
+        <EditText
             android:id="@+id/etTextToSearch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -32,6 +32,7 @@
             android:layout_alignParentStart="true"
             android:layout_marginBottom="@dimen/min_text_margin"
             android:layout_toStartOf="@+id/bSearch"
+            android:lines="1"
             android:text='@={viewModel.searchText}' />
 
         <Button

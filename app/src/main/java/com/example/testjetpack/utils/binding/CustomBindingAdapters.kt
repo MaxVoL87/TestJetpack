@@ -17,7 +17,7 @@ fun RecyclerView.setPagedListAdapterData(
     items: PagedList<GitRepository>?
 ) {
     withNotNull(adapter as GitRepoSearchAdapter) {
-        items?.let { submitList(it) }
+        submitList(items)
     }
 }
 
@@ -29,6 +29,6 @@ fun RecyclerView.setPagedListAdapterNetworkState(
     networkState: NetworkState?
 ) {
     withNotNull(adapter as GitRepoSearchAdapter) {
-        networkState?.let { setNetworkState(it) }
+        setNetworkState(networkState)
     }
 }

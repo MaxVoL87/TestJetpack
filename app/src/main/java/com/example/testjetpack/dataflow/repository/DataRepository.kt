@@ -10,6 +10,7 @@ import com.example.testjetpack.models.Notification
 import com.example.testjetpack.models.Profile
 import com.example.testjetpack.models.git.GitRepository
 import com.example.testjetpack.models.git.network.*
+import com.example.testjetpack.utils.getPartOfOrCurrent
 import kotlinx.coroutines.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -154,7 +155,7 @@ class DataRepository @Inject constructor(
 
         // We use toLiveData Kotlin extension function here, you could also use LivePagedListBuilder
         val livePagedList = appDatabase.gitRepositoryDao().getAllSortedByRespIndex().toLiveData(
-            pageSize = page.perPage,
+            pageSize = page.perPage.getPartOfOrCurrent(0.6),
             boundaryCallback = boundaryCallback
         )
 

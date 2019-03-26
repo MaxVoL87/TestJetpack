@@ -31,13 +31,14 @@ fun ImageView.setCircleImageUrl(imageUrl: String?, picasso: Picasso?) {
  */
 @BindingAdapter("position")
 fun RecyclerView.setPosition(position: Int) {
-    val offset = 10
-    val mLayoutManager = layoutManager
-    when(mLayoutManager){
-        is LinearLayoutManager -> mLayoutManager.scrollToPositionWithOffset(position, offset)
-        is StaggeredGridLayoutManager -> mLayoutManager.scrollToPositionWithOffset(position, offset)
-        else -> scrollToPosition(position)
-    }
+    scrollToPosition(position)
+//    val offset = 10
+//    val mLayoutManager = layoutManager
+//    when(mLayoutManager){
+//        is LinearLayoutManager -> mLayoutManager.scrollToPositionWithOffset(position, offset)
+//        is StaggeredGridLayoutManager -> mLayoutManager.scrollToPositionWithOffset(position, offset)
+//        else -> scrollToPosition(position)
+//    }
 }
 
 /**
