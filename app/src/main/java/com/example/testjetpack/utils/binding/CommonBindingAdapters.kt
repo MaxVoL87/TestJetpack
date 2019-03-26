@@ -4,10 +4,9 @@ import android.net.Uri
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.databinding.BindingAdapter
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.testjetpack.utils.hideKeyboard
 import com.example.testjetpack.utils.picasso.CircleTransform
 import com.example.testjetpack.utils.showKeyboard
@@ -24,6 +23,11 @@ fun ImageView.setCircleImageUrl(imageUrl: String?, picasso: Picasso?) {
         .fit()
         .transform(CircleTransform())
         .into(this)
+}
+
+@BindingAdapter("onEditorActionListener")
+fun TextView.onEditorActionListener(listener: TextView.OnEditorActionListener) {
+    setOnEditorActionListener(listener)
 }
 
 /**

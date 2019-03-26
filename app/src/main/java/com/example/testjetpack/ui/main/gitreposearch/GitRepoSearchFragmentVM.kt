@@ -11,6 +11,7 @@ import com.example.testjetpack.models.git.network.GitPage
 import com.example.testjetpack.models.git.network.Listing
 import com.example.testjetpack.ui.base.BaseViewModel
 import com.example.testjetpack.ui.base.EventStateChange
+import com.example.testjetpack.utils.OnEditorOk
 import com.example.testjetpack.utils.UiUtils.hideKeyboard
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -42,6 +43,12 @@ class GitRepoSearchFragmentVM : BaseViewModel<GitRepoSearchFragmentVMEventStateC
             }
         }
     }
+    val onOk = object : OnEditorOk() {
+        override fun onOk(view: View?) {
+            searchRepos(view)
+        }
+    }
+
     val adapter = GitRepoSearchAdapter { retry() }
     val repos = switchMap(_repoResult) { it.pagedList }
     val networkState = switchMap(_repoResult) { it.networkState }
