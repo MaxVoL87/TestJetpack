@@ -1,6 +1,7 @@
 package com.example.testjetpack.di
 
 import com.example.testjetpack.MainApplication
+import com.example.testjetpack.dataflow.repository.GitSearchRepositoriesBoundaryCallback
 import com.example.testjetpack.di.modules.*
 import com.example.testjetpack.ui.main.MainActivityVM
 import com.example.testjetpack.ui.main.gitreposearch.GitRepoSearchFragmentVM
@@ -42,4 +43,7 @@ interface IAppComponent : AndroidInjector<MainApplication> {
     fun inject(gitRepoSearchFragmentVM: GitRepoSearchFragmentVM)
     fun inject(notificationFragmentVM: NotificationFragmentVM)
     fun inject(myProfileFragmentVM: MyProfileFragmentVM)
+
+
+    fun inject(gitSearchRepositoriesBoundaryCallback: GitSearchRepositoriesBoundaryCallback)
 }

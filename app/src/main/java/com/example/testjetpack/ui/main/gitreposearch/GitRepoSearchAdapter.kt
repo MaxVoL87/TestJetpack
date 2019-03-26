@@ -16,14 +16,17 @@ import com.example.testjetpack.ui.base.CastExeption
 import com.example.testjetpack.ui.custom.NetworkStateItemVH
 import com.example.testjetpack.ui.custom.NetworkStateItemVM
 import com.example.testjetpack.ui.custom.VIEW_TYPE_NETWORK_STATE_ITEM
+import com.example.testjetpack.utils.LRUIndexedCache
+import com.example.testjetpack.utils.withNotNull
 
 
-//todo: change, save VMs
+//todo: change
 class GitRepoSearchAdapter(
     private val retryCallback: () -> Unit
 ) : PagedListAdapter<GitRepository, BaseRecyclerItemViewHolder<ViewDataBinding, BaseRecyclerItemViewModel>>(
     POST_COMPARATOR
 ) {
+    private val vmCache = LRUIndexedCache<BaseRecyclerItemViewModel>(30)
 
     private var networkState: NetworkState? = null
 
@@ -32,9 +35,10 @@ class GitRepoSearchAdapter(
         position: Int
     ) {
         var vm: BaseRecyclerItemViewModel? = null
-        when (getItemViewType(position)) {
-            R.layout.item_gitreposearch -> getItem(position)?.let { vm = GitRepoSearchItemVM(it) }
-            VIEW_TYPE_NETWORK_STATE_ITEM -> networkState?.let { vm = NetworkStateItemVM(it, retryCallback) }
+        with(getItemViewType(position)) {
+            if (this == VIEW_TYPE_NETWORK_STATE_ITEM) networkState?.let { vm = NetworkStateItemVM(it, retryCallback) }
+            else vm = getItemViewModel(this, position)
+            return@with
         }
 
         holder.bind(vm)
@@ -96,6 +100,36 @@ class GitRepoSearchAdapter(
         } else if (hasExtraRow && previousState != newNetworkState) {
             notifyItemChanged(itemCount - 1)
         }
+    }
+
+    /**
+     * create VM or get from cache
+     */
+    private fun getItemViewModel(itemViewType: Int, position: Int): BaseRecyclerItemViewModel? {
+        var vm: BaseRecyclerItemViewModel? = null
+
+        val item = getItem(position)
+        var vmCached = vmCache[position]
+
+        when (itemViewType) {
+            R.layout.item_gitreposearch -> {
+                if (vmCached is GitRepoSearchItemVM && vmCached.repo == item) {
+                    vm = vmCached
+                } else {
+                    vmCached = null
+                    withNotNull(item) {
+                        vm = GitRepoSearchItemVM(this)
+                    }
+                }
+            }
+            else -> NotImplementedError("Unknown ItemViewType")
+        }
+
+        withNotNull(vm) {
+            if (vmCached == null) vmCache.put(position, this)
+        }
+
+        return vm
     }
 
     companion object {
