@@ -4,7 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.example.testjetpack.models.git.db.User
+import com.example.testjetpack.models.git.User
 
 @Dao
 interface IGitUserDao {

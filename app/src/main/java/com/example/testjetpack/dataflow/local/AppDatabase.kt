@@ -3,9 +3,9 @@ package com.example.testjetpack.dataflow.local
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.example.testjetpack.models.git.db.GitRepository
-import com.example.testjetpack.models.git.db.License
+import com.example.testjetpack.models.git.License
 import com.example.testjetpack.models.own.Notification
-import com.example.testjetpack.models.git.db.User
+import com.example.testjetpack.models.git.User
 
 @Database(
     version = 1,

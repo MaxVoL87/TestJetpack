@@ -1,4 +1,4 @@
-package com.example.testjetpack.models.git.db
+package com.example.testjetpack.models.git
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

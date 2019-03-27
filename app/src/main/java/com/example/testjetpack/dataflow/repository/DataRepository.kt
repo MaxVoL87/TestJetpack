@@ -9,8 +9,8 @@ import com.example.testjetpack.dataflow.network.IGitApi
 import com.example.testjetpack.models.GitRepositoryView
 import com.example.testjetpack.models.own.Notification
 import com.example.testjetpack.models.own.Profile
-import com.example.testjetpack.models.git.db.License
-import com.example.testjetpack.models.git.db.User
+import com.example.testjetpack.models.git.License
+import com.example.testjetpack.models.git.User
 import com.example.testjetpack.models.git.network.*
 import com.example.testjetpack.utils.getPartOfOrCurrent
 import com.example.testjetpack.utils.toDB
@@ -126,7 +126,6 @@ class DataRepository @Inject constructor(
                 ) {
                     GlobalScope.launch(Dispatchers.IO) {
                         appDatabase.runInTransaction {
-                            appDatabase.clearAllGitData()
                             insertResultIntoDb(response.body())
                         }
                         // since we are in bg thread now, post the result.
@@ -152,7 +151,7 @@ class DataRepository @Inject constructor(
         val boundaryCallback = GitSearchRepositoriesBoundaryCallback(
             curPage = page,
             webservice = gitApi,
-            handleResponse = { p: GitPage, r: ServerResponse? -> this.insertResultIntoDb(r) },
+            handleResponse = { curPage: GitPage, response: ServerResponse? -> this.insertResultIntoDb(response) },
             ioExecutor = fiveTPoolFixedExecutor,
             skipIfFail = false
         )

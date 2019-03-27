@@ -1,7 +1,7 @@
 package com.example.testjetpack.utils
 
-import com.example.testjetpack.models.git.db.License
-import com.example.testjetpack.models.git.db.User
+import com.example.testjetpack.models.git.License
+import com.example.testjetpack.models.git.User
 import com.example.testjetpack.models.git.network.GitRepository
 
 fun GitRepository.toDB(license: License?, owner: User, indexInResponse: Int) = com.example.testjetpack.models.git.db.GitRepository(

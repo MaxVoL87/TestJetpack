@@ -3,8 +3,8 @@ package com.example.testjetpack.models
 import androidx.room.Embedded
 import androidx.room.Relation
 import com.example.testjetpack.models.git.db.GitRepository
-import com.example.testjetpack.models.git.db.License
-import com.example.testjetpack.models.git.db.User
+import com.example.testjetpack.models.git.License
+import com.example.testjetpack.models.git.User
 
 class GitRepositoryView(
     @Embedded val gitRepository: GitRepository,
