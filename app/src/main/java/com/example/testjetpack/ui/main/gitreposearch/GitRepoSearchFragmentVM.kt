@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations.switchMap
 import com.example.testjetpack.MainApplication
 import com.example.testjetpack.dataflow.repository.IDataRepository
-import com.example.testjetpack.models.git.GitRepository
+import com.example.testjetpack.models.GitRepositoryView
 import com.example.testjetpack.models.git.network.GitPage
 import com.example.testjetpack.models.git.network.Listing
 import com.example.testjetpack.ui.base.BaseViewModel
@@ -30,8 +30,8 @@ class GitRepoSearchFragmentVM : BaseViewModel<GitRepoSearchFragmentVMEventStateC
 
     private val _page: MutableLiveData<GitPage> =
         MutableLiveData(GitPage(number = AtomicInteger(1), q = "", perPage = IDataRepository.DEFAULT_NETWORK_PAGE_SIZE))
-    private val _repoResult: MutableLiveData<Listing<GitRepository>> = MutableLiveData()
-    private val _scrollToPosition: MutableLiveData<Int> = MutableLiveData(0)
+    private val _repoResult: MutableLiveData<Listing<GitRepositoryView>> = MutableLiveData()
+    private val _scrollToPosition: MutableLiveData<Int> = MutableLiveData(-1)
 
     val searchText: MutableLiveData<String?> = MutableLiveData<String?>().apply {
         observeForever { text ->
@@ -74,6 +74,7 @@ class GitRepoSearchFragmentVM : BaseViewModel<GitRepoSearchFragmentVMEventStateC
                 }
             },
             onSuccess = { listing ->
+                _scrollToPosition.value = -1
                 _repoResult.value = listing
             },
             onError = {

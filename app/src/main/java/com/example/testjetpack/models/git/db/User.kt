@@ -1,10 +1,11 @@
-package com.example.testjetpack.models.git
+package com.example.testjetpack.models.git.db
 
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
-@Entity(tableName = "user_table")
+@Entity(tableName = "user_table", indices = [Index(value = ["id"])])
 data class User(
         @SerializedName("gists_url") val gistsUrl: String?,
         @SerializedName("repos_url") val reposUrl: String?,

@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import com.example.testjetpack.MainApplication
 import com.example.testjetpack.R
 import com.example.testjetpack.dataflow.repository.IDataRepository
-import com.example.testjetpack.models.Profile
+import com.example.testjetpack.models.own.Profile
 import com.example.testjetpack.ui.base.BaseViewModel
 import com.example.testjetpack.ui.base.EventStateChange
 import com.example.testjetpack.utils.livedata.Event

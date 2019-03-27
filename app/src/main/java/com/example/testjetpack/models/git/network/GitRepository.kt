@@ -1,10 +1,9 @@
-package com.example.testjetpack.models.git
+package com.example.testjetpack.models.git.network
 
-import androidx.room.*
+import com.example.testjetpack.models.git.db.License
+import com.example.testjetpack.models.git.db.User
 import com.google.gson.annotations.SerializedName
 
-@Entity(tableName = "repository_table", indices = [Index(value = arrayOf("indexInResponse"))])
-@SuppressWarnings(RoomWarnings.PRIMARY_KEY_FROM_EMBEDDED_IS_DROPPED) // because of prefix =
 data class GitRepository(
     @SerializedName("stargazers_count") val stargazersCount: Int,
     @SerializedName("pushed_at") val pushedAt: String,
@@ -24,7 +23,7 @@ data class GitRepository(
     @SerializedName("forks_url") val forksUrl: String?,
     @SerializedName("statuses_url") val statusesUrl: String?,
     @SerializedName("ssh_url") val sshUrl: String?,
-    @SerializedName("license") @Embedded(prefix = "license_") val license: License?,
+    @SerializedName("license") val license: License?,
     @SerializedName("full_name") val fullName: String?,
     @SerializedName("size") val size: Int,
     @SerializedName("languages_url") val languagesUrl: String?,
@@ -55,7 +54,7 @@ data class GitRepository(
     @SerializedName("stargazers_url") val stargazersUrl: String?,
     @SerializedName("git_url") val gitUrl: String?,
     @SerializedName("has_pages") val hasPages: Boolean,
-    @SerializedName("owner") @Embedded(prefix = "owner_") val owner: User,
+    @SerializedName("owner") val owner: User,
     @SerializedName("commits_url") val commitsUrl: String?,
     @SerializedName("compare_url") val compareUrl: String?,
     @SerializedName("git_commits_url") val gitCommitsUrl: String?,
@@ -79,7 +78,4 @@ data class GitRepository(
     @SerializedName("node_id") val nodeId: String?,
     @SerializedName("homepage") val homepage: String?,
     @SerializedName("forks_count") val forksCount: Int
-) {
-    // to be consistent w/ changing backend order, we need to keep a data like this
-    @SerializedName("_id") @PrimaryKey(autoGenerate = false) var indexInResponse: Int = -1
-}
+)

@@ -6,7 +6,7 @@ import androidx.fragment.app.FragmentManager
 import com.example.testjetpack.R
 import com.example.testjetpack.databinding.ActivityMainBinding
 import com.example.testjetpack.databinding.NavHeaderMainBinding
-import com.example.testjetpack.models.Notification
+import com.example.testjetpack.models.own.Notification
 import com.example.testjetpack.ui.base.BaseActivity
 import com.example.testjetpack.ui.base.EventStateChange
 import com.example.testjetpack.ui.main.gitreposearch.GitRepoSearchFragment

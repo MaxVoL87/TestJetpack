@@ -7,7 +7,7 @@
 
         <variable
             name="profile"
-            type="androidx.lifecycle.LiveData&lt;com.example.testjetpack.models.Profile&gt;" />
+            type="androidx.lifecycle.LiveData&lt;com.example.testjetpack.models.own.Profile&gt;" />
 
         <variable
             name="picasso"

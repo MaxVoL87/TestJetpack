@@ -2,7 +2,7 @@ package com.example.testjetpack.ui.main.notifications
 
 import com.example.testjetpack.MainApplication
 import com.example.testjetpack.dataflow.repository.IDataRepository
-import com.example.testjetpack.models.Notification
+import com.example.testjetpack.models.own.Notification
 import com.example.testjetpack.ui.base.BaseRecyclerItemViewModel
 import com.example.testjetpack.ui.base.BaseRecyclerAdapter
 import com.example.testjetpack.ui.base.BaseViewModel

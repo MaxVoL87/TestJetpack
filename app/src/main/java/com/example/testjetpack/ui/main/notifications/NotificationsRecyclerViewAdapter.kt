@@ -4,7 +4,7 @@ import android.view.View
 import androidx.databinding.ViewDataBinding
 import com.example.testjetpack.R
 import com.example.testjetpack.databinding.ItemNotificationBinding
-import com.example.testjetpack.models.Notification
+import com.example.testjetpack.models.own.Notification
 import com.example.testjetpack.ui.base.BaseRecyclerItemViewModel
 import com.example.testjetpack.ui.base.BaseRecyclerAdapter
 import com.example.testjetpack.ui.base.BaseRecyclerItemViewHolder

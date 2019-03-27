@@ -35,6 +35,8 @@ fun TextView.onEditorActionListener(listener: TextView.OnEditorActionListener) {
  */
 @BindingAdapter("position")
 fun RecyclerView.setPosition(position: Int) {
+    if (position < 0) return
+
     scrollToPosition(position)
 //    val offset = 10
 //    val mLayoutManager = layoutManager

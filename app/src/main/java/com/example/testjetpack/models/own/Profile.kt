@@ -1,4 +1,4 @@
-package com.example.testjetpack.models
+package com.example.testjetpack.models.own
 
 import com.google.gson.annotations.SerializedName
 

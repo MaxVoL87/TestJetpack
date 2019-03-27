@@ -3,7 +3,7 @@ package com.example.testjetpack.ui.main.myprofile
 import androidx.lifecycle.LiveData
 import com.example.testjetpack.MainApplication
 import com.example.testjetpack.dataflow.repository.IDataRepository
-import com.example.testjetpack.models.Profile
+import com.example.testjetpack.models.own.Profile
 import com.example.testjetpack.ui.base.BaseViewModel
 import javax.inject.Inject
 import androidx.lifecycle.MutableLiveData

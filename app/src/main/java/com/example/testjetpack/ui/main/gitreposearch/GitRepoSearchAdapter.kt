@@ -8,7 +8,7 @@ import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import com.example.testjetpack.R
 import com.example.testjetpack.databinding.ItemGitreposearchBinding
-import com.example.testjetpack.models.git.GitRepository
+import com.example.testjetpack.models.GitRepositoryView
 import com.example.testjetpack.models.git.network.NetworkState
 import com.example.testjetpack.ui.base.BaseRecyclerItemViewHolder
 import com.example.testjetpack.ui.base.BaseRecyclerItemViewModel
@@ -23,7 +23,7 @@ import com.example.testjetpack.utils.withNotNull
 //todo: change
 class GitRepoSearchAdapter(
     private val retryCallback: () -> Unit
-) : PagedListAdapter<GitRepository, BaseRecyclerItemViewHolder<ViewDataBinding, BaseRecyclerItemViewModel>>(
+) : PagedListAdapter<GitRepositoryView, BaseRecyclerItemViewHolder<ViewDataBinding, BaseRecyclerItemViewModel>>(
     POST_COMPARATOR
 ) {
     private val vmCache = LRUIndexedCache<BaseRecyclerItemViewModel>(30)
@@ -133,12 +133,12 @@ class GitRepoSearchAdapter(
     }
 
     companion object {
-        val POST_COMPARATOR = object : DiffUtil.ItemCallback<GitRepository>() {
-            override fun areContentsTheSame(oldItem: GitRepository, newItem: GitRepository): Boolean =
+        val POST_COMPARATOR = object : DiffUtil.ItemCallback<GitRepositoryView>() {
+            override fun areContentsTheSame(oldItem: GitRepositoryView, newItem: GitRepositoryView): Boolean =
                 oldItem == newItem
 
-            override fun areItemsTheSame(oldItem: GitRepository, newItem: GitRepository): Boolean =
-                oldItem.name == newItem.name
+            override fun areItemsTheSame(oldItem: GitRepositoryView, newItem: GitRepositoryView): Boolean =
+                oldItem.gitRepository.indexInResponse == newItem.gitRepository.indexInResponse
 
         }
     }
@@ -156,7 +156,7 @@ class GitRepoSearchItemVH(view: View) :
 }
 
 class GitRepoSearchItemVM(
-    val repo: GitRepository
+    val repo: GitRepositoryView
 ) : BaseRecyclerItemViewModel() {
     override val itemViewType: Int = -1 //temp todo: change
 }

@@ -6,11 +6,14 @@ import androidx.lifecycle.Transformations
 import androidx.paging.toLiveData
 import com.example.testjetpack.dataflow.local.AppDatabase
 import com.example.testjetpack.dataflow.network.IGitApi
-import com.example.testjetpack.models.Notification
-import com.example.testjetpack.models.Profile
-import com.example.testjetpack.models.git.GitRepository
+import com.example.testjetpack.models.GitRepositoryView
+import com.example.testjetpack.models.own.Notification
+import com.example.testjetpack.models.own.Profile
+import com.example.testjetpack.models.git.db.License
+import com.example.testjetpack.models.git.db.User
 import com.example.testjetpack.models.git.network.*
 import com.example.testjetpack.utils.getPartOfOrCurrent
+import com.example.testjetpack.utils.toDB
 import kotlinx.coroutines.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -84,12 +87,17 @@ class DataRepository @Inject constructor(
         if (resp is SearchRepositoriesResponse) {
             resp.items.let { repos ->
                 appDatabase.runInTransaction {
-                    val start = appDatabase.gitRepositoryDao().getNextIndex()
+                    val start = appDatabase.getGitRepositoryDao().getNextIndex()
+                    val licenses = mutableListOf<License>()
+                    val owners = mutableListOf<User>()
                     val items = repos.mapIndexed { index, child ->
-                        child.indexInResponse = start + index
-                        return@mapIndexed child
+                        child.license?.let { license -> licenses.add(license) }
+                        owners.add(child.owner)
+                        return@mapIndexed child.toDB(child.license, child.owner, start + index)
                     }
-                    appDatabase.gitRepositoryDao().insert(*items.toTypedArray())
+                    appDatabase.getGitRepositoryDao().insert(*items.toTypedArray())
+                    appDatabase.getGitLicenseDao().insert(*licenses.toTypedArray())
+                    appDatabase.getGitUserDao().insert(*owners.toTypedArray())
                 }
             }
         }
@@ -118,7 +126,7 @@ class DataRepository @Inject constructor(
                 ) {
                     GlobalScope.launch(Dispatchers.IO) {
                         appDatabase.runInTransaction {
-                            appDatabase.gitRepositoryDao().clearAll()
+                            appDatabase.clearAllGitData()
                             insertResultIntoDb(response.body())
                         }
                         // since we are in bg thread now, post the result.
@@ -133,10 +141,10 @@ class DataRepository @Inject constructor(
     /**
      * Returns a Listing for the given page.
      */
-    override fun getGitRepositories(page: GitPage): Listing<GitRepository> {
+    override fun getGitRepositories(page: GitPage): Listing<GitRepositoryView> {
 
         appDatabase.runInTransaction {
-            appDatabase.gitRepositoryDao().clearAll()
+            appDatabase.clearAllGitData()
         }
 
         // create a boundary callback which will observe when the user reaches to the edges of
@@ -154,7 +162,7 @@ class DataRepository @Inject constructor(
         val refreshState = Transformations.switchMap(refreshTrigger) { refresh(page) }
 
         // We use toLiveData Kotlin extension function here, you could also use LivePagedListBuilder
-        val livePagedList = appDatabase.gitRepositoryDao().getAllSortedByRespIndex().toLiveData(
+        val livePagedList = appDatabase.getGitDao().getAllGitRepositoriesSortedByRespIndex().toLiveData(
             pageSize = page.perPage.getPartOfOrCurrent(0.6),
             boundaryCallback = boundaryCallback
         )

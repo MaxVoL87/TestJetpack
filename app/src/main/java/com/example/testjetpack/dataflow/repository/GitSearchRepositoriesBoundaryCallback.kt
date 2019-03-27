@@ -4,7 +4,7 @@ import androidx.annotation.MainThread
 import androidx.paging.PagedList
 import com.example.testjetpack.MainApplication
 import com.example.testjetpack.dataflow.network.IGitApi
-import com.example.testjetpack.models.git.GitRepository
+import com.example.testjetpack.models.GitRepositoryView
 import com.example.testjetpack.models.git.network.ErrorInvalidFieldsWithDocsResponse
 import com.example.testjetpack.models.git.network.GitPage
 import com.example.testjetpack.models.git.network.SearchRepositoriesResponse
@@ -30,7 +30,7 @@ class GitSearchRepositoriesBoundaryCallback(
     private val webservice: IGitApi,
     private val handleResponse: (GitPage, ServerResponse?) -> Unit,
     private val ioExecutor: Executor
-) : PagedList.BoundaryCallback<GitRepository>() {
+) : PagedList.BoundaryCallback<GitRepositoryView>() {
 
     @Inject
     lateinit var gson: Gson
@@ -57,14 +57,14 @@ class GitSearchRepositoriesBoundaryCallback(
      * User reached to the end of the list.
      */
     @MainThread
-    override fun onItemAtEndLoaded(itemAtEnd: GitRepository) {
+    override fun onItemAtEndLoaded(itemAtEnd: GitRepositoryView) {
         helper.runIfNotRunning(PagingRequestHelper.RequestType.AFTER) {
             webservice.searchRepos(curPage.q, curPage.number.incrementAndGet(), curPage.perPage)
                 .enqueue(createWebserviceCallback(it))
         }
     }
 
-    override fun onItemAtFrontLoaded(itemAtFront: GitRepository) {
+    override fun onItemAtFrontLoaded(itemAtFront: GitRepositoryView) {
         // ignored, since we only ever append to what's in the DB
     }
 

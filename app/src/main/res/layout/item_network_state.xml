@@ -23,6 +23,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            android:drawableStart="@drawable/ic_error_24dp"
             android:text='@{viewModel.networkState.msg}'
             app:visibleOrGone='@{viewModel.networkState.msg != null}'/>
 

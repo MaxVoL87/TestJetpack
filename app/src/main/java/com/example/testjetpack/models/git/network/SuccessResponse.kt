@@ -1,6 +1,5 @@
 package com.example.testjetpack.models.git.network
 
-import com.example.testjetpack.models.git.GitRepository
 import com.google.gson.annotations.SerializedName
 
 sealed class SuccessResponse : ServerResponse()
