@@ -16,6 +16,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.util.concurrent.Executor
+import java.util.concurrent.atomic.AtomicInteger
 import javax.inject.Inject
 
 /**
@@ -29,7 +30,8 @@ class GitSearchRepositoriesBoundaryCallback(
     private val curPage: GitPage,
     private val webservice: IGitApi,
     private val handleResponse: (GitPage, ServerResponse?) -> Unit,
-    private val ioExecutor: Executor
+    private val ioExecutor: Executor,
+    private val skipIfFail: Boolean
 ) : PagedList.BoundaryCallback<GitRepositoryView>() {
 
     @Inject
@@ -38,8 +40,19 @@ class GitSearchRepositoriesBoundaryCallback(
     val helper = PagingRequestHelper(ioExecutor)
     val networkState = helper.createStatusLiveData()
 
+    val lastSuccessPageNum = AtomicInteger(-1)
+
     init {
         MainApplication.component.inject(this)
+    }
+
+    @Synchronized
+    fun getPageNum(): Int {
+        return if (lastSuccessPageNum.get() != curPage.number.get() && !skipIfFail) {
+            lastSuccessPageNum.get()
+        } else {
+            curPage.number.get()
+        }
     }
 
     /**
@@ -48,7 +61,8 @@ class GitSearchRepositoriesBoundaryCallback(
     @MainThread
     override fun onZeroItemsLoaded() {
         helper.runIfNotRunning(PagingRequestHelper.RequestType.INITIAL) {
-            webservice.searchRepos(curPage.q, curPage.number.get(), curPage.perPage)
+            webservice
+                .searchRepos(curPage.q, getPageNum(), curPage.perPage)
                 .enqueue(createWebserviceCallback(it))
         }
     }
@@ -59,7 +73,8 @@ class GitSearchRepositoriesBoundaryCallback(
     @MainThread
     override fun onItemAtEndLoaded(itemAtEnd: GitRepositoryView) {
         helper.runIfNotRunning(PagingRequestHelper.RequestType.AFTER) {
-            webservice.searchRepos(curPage.q, curPage.number.incrementAndGet(), curPage.perPage)
+            curPage.number.set(getPageNum() + 1)
+            webservice.searchRepos(curPage.q, curPage.number.get(), curPage.perPage)
                 .enqueue(createWebserviceCallback(it))
         }
     }
@@ -93,6 +108,7 @@ class GitSearchRepositoriesBoundaryCallback(
                     return
                 }
 
+                lastSuccessPageNum.set(curPage.number.get())
                 ioExecutor.execute {
                     handleResponse(curPage, response.body())
                     it.recordSuccess()

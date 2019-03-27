@@ -153,7 +153,8 @@ class DataRepository @Inject constructor(
             curPage = page,
             webservice = gitApi,
             handleResponse = { p: GitPage, r: ServerResponse? -> this.insertResultIntoDb(r) },
-            ioExecutor = fiveTPoolFixedExecutor
+            ioExecutor = fiveTPoolFixedExecutor,
+            skipIfFail = false
         )
         // we are using a mutable live data to trigger refresh requests which eventually calls
         // refresh method and gets a new live data. Each refresh request by the user becomes a newly
