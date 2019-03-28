@@ -4,7 +4,7 @@ import androidx.annotation.MainThread
 import androidx.paging.PagedList
 import com.example.testjetpack.MainApplication
 import com.example.testjetpack.dataflow.network.IGitApi
-import com.example.testjetpack.models.GitRepositoryComplexView
+import com.example.testjetpack.models.git.db.GitRepositoryView
 import com.example.testjetpack.models.git.network.request.GitPage
 import com.example.testjetpack.models.git.network.response.*
 import com.example.testjetpack.utils.fromJson
@@ -33,7 +33,7 @@ class SearchGitReposPListBoundaryCallback(
     private val handleResponse: (GitPage, GitResponse<*>?) -> Unit,
     private val ioExecutor: Executor,
     private val skipIfFail: Boolean = false
-) : PagedList.BoundaryCallback<GitRepositoryComplexView>() {
+) : PagedList.BoundaryCallback<GitRepositoryView>() {
 
     val helper = PagingRequestHelper(ioExecutor)
     val networkState = helper.createStatusLiveData()
@@ -82,7 +82,7 @@ class SearchGitReposPListBoundaryCallback(
      * User reached to the end of the list.
      */
     @MainThread
-    override fun onItemAtEndLoaded(itemAtEnd: GitRepositoryComplexView) {
+    override fun onItemAtEndLoaded(itemAtEnd: GitRepositoryView) {
         helper.runIfNotRunning(PagingRequestHelper.RequestType.AFTER) {
             setPageNum(getPageNum() + 1)
             webservice
@@ -92,7 +92,7 @@ class SearchGitReposPListBoundaryCallback(
     }
 
     @MainThread
-    override fun onItemAtFrontLoaded(itemAtFront: GitRepositoryComplexView) {
+    override fun onItemAtFrontLoaded(itemAtFront: GitRepositoryView) {
         // ignored, since we only ever append to what's in the DB
     }
 

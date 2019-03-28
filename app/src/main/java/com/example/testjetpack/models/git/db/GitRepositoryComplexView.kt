@@ -1,10 +1,9 @@
-package com.example.testjetpack.models
+package com.example.testjetpack.models.git.db
 
 import androidx.room.Embedded
 import androidx.room.Relation
 import com.example.testjetpack.models.git.License
 import com.example.testjetpack.models.git.User
-import com.example.testjetpack.models.git.db.GitRepository
 
 data class GitRepositoryComplexView(
     @Embedded val gitRepository: GitRepository,

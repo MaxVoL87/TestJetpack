@@ -5,13 +5,13 @@ import androidx.paging.toLiveData
 import com.example.testjetpack.dataflow.SearchGitReposPListBoundaryCallback
 import com.example.testjetpack.dataflow.local.AppDatabase
 import com.example.testjetpack.dataflow.network.IGitApi
-import com.example.testjetpack.models.GitRepositoryComplexView
 import com.example.testjetpack.models.Listing
 import com.example.testjetpack.models.NetworkState
 import com.example.testjetpack.models.own.Notification
 import com.example.testjetpack.models.own.Profile
 import com.example.testjetpack.models.git.License
 import com.example.testjetpack.models.git.User
+import com.example.testjetpack.models.git.db.GitRepositoryView
 import com.example.testjetpack.models.git.network.request.GitPage
 import com.example.testjetpack.models.git.network.response.GitRepository
 import com.example.testjetpack.models.git.network.response.GitResponse
@@ -115,7 +115,7 @@ class DataRepository @Inject constructor(
     /**
      * Returns a Listing for the given page.
      */
-    override fun searchGitRepositories(page: GitPage): Listing<GitRepositoryComplexView> {
+    override fun searchGitRepositories(page: GitPage): Listing<GitRepositoryView> {
 
         appDatabase.runInTransaction {
             appDatabase.clearAllGitData()
@@ -151,7 +151,7 @@ class DataRepository @Inject constructor(
         }
 
         // We use toLiveData Kotlin extension function here, you could also use LivePagedListBuilder
-        val livePagedList = appDatabase.getGitDao().getAllComplexGitRepositoriesSortedByRespIndex().toLiveData(
+        val livePagedList = appDatabase.getGitDao().getAllGitRepositoriesSortedByRespIndex().toLiveData(
             pageSize = page.perPage.getPartOfOrCurrent(0.6),
             boundaryCallback = boundaryCallback
         )

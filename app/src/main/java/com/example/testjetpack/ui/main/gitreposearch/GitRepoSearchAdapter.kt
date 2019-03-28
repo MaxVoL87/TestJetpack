@@ -8,8 +8,8 @@ import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import com.example.testjetpack.R
 import com.example.testjetpack.databinding.ItemGitreposearchBinding
-import com.example.testjetpack.models.GitRepositoryComplexView
 import com.example.testjetpack.models.NetworkState
+import com.example.testjetpack.models.git.db.GitRepositoryView
 import com.example.testjetpack.ui.base.BaseRecyclerItemViewHolder
 import com.example.testjetpack.ui.base.BaseRecyclerItemViewModel
 import com.example.testjetpack.ui.base.CastExeption
@@ -23,7 +23,7 @@ import com.example.testjetpack.utils.withNotNull
 //todo: change
 class GitRepoSearchAdapter(
     private val retryCallback: () -> Unit
-) : PagedListAdapter<GitRepositoryComplexView, BaseRecyclerItemViewHolder<ViewDataBinding, BaseRecyclerItemViewModel>>(
+) : PagedListAdapter<GitRepositoryView, BaseRecyclerItemViewHolder<ViewDataBinding, BaseRecyclerItemViewModel>>(
     POST_COMPARATOR
 ) {
     private val vmCache = LRUIndexedCache<BaseRecyclerItemViewModel>(30)
@@ -133,11 +133,11 @@ class GitRepoSearchAdapter(
     }
 
     companion object {
-        val POST_COMPARATOR = object : DiffUtil.ItemCallback<GitRepositoryComplexView>() {
-            override fun areContentsTheSame(oldItem: GitRepositoryComplexView, newItem: GitRepositoryComplexView): Boolean =
+        val POST_COMPARATOR = object : DiffUtil.ItemCallback<GitRepositoryView>() {
+            override fun areContentsTheSame(oldItem: GitRepositoryView, newItem: GitRepositoryView): Boolean =
                 oldItem == newItem
 
-            override fun areItemsTheSame(oldItem: GitRepositoryComplexView, newItem: GitRepositoryComplexView): Boolean =
+            override fun areItemsTheSame(oldItem: GitRepositoryView, newItem: GitRepositoryView): Boolean =
                 oldItem.index == newItem.index
 
         }
@@ -156,7 +156,7 @@ class GitRepoSearchItemVH(view: View) :
 }
 
 class GitRepoSearchItemVM(
-    val repo: GitRepositoryComplexView
+    val repo: GitRepositoryView
 ) : BaseRecyclerItemViewModel() {
     override val itemViewType: Int = -1 //temp todo: change
 }
