@@ -12,11 +12,14 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.example.testjetpack.R
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 
 internal const val NO_FLAGS = 0
 internal const val FAKE_URL = "http://google.com"
 
 inline fun <T, R> withNotNull(receiver: T?, block: T.() -> R): R? = receiver?.block()
+inline fun <T: List<*>, R> withNotNullOrEmpty(receiver: T?, block: T.() -> R): R? = if (receiver.isNullOrEmpty()) null else receiver.block()
 
 fun Context.browseWithoutCurrentApp(url: String, newTask: Boolean = false): Boolean {
     val uri = Uri.parse(url)

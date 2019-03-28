@@ -3,9 +3,9 @@ package com.example.testjetpack.utils.binding
 import androidx.databinding.BindingAdapter
 import androidx.paging.PagedList
 import androidx.recyclerview.widget.RecyclerView
+import com.example.testjetpack.models.GitRepositoryComplexView
 import com.example.testjetpack.models.GitRepositoryView
-import com.example.testjetpack.models.git.db.GitRepository
-import com.example.testjetpack.models.git.network.NetworkState
+import com.example.testjetpack.models.NetworkState
 import com.example.testjetpack.ui.main.gitreposearch.GitRepoSearchAdapter
 import com.example.testjetpack.utils.withNotNull
 
@@ -15,7 +15,7 @@ import com.example.testjetpack.utils.withNotNull
  */
 @BindingAdapter("items")
 fun RecyclerView.setPagedListAdapterData(
-    items: PagedList<GitRepositoryView>?
+    items: PagedList<GitRepositoryComplexView>?
 ) {
     withNotNull(adapter as GitRepoSearchAdapter) {
         submitList(items)

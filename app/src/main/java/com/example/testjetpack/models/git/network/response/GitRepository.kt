@@ -1,4 +1,4 @@
-package com.example.testjetpack.models.git.network
+package com.example.testjetpack.models.git.network.response
 
 import com.example.testjetpack.models.git.License
 import com.example.testjetpack.models.git.User

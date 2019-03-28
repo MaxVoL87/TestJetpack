@@ -3,7 +3,7 @@ package com.example.testjetpack.ui.custom
 import android.view.View
 import com.example.testjetpack.R
 import com.example.testjetpack.databinding.ItemNetworkStateBinding
-import com.example.testjetpack.models.git.network.NetworkState
+import com.example.testjetpack.models.NetworkState
 import com.example.testjetpack.ui.base.BaseRecyclerItemViewHolder
 import com.example.testjetpack.ui.base.BaseRecyclerItemViewModel
 

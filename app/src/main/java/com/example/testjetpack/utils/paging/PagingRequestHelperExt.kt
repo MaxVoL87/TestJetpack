@@ -2,7 +2,7 @@ package com.example.testjetpack.utils.paging
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.testjetpack.models.git.network.NetworkState
+import com.example.testjetpack.models.NetworkState
 
 private fun getErrorMessage(report: PagingRequestHelper.StatusReport): String {
     return PagingRequestHelper.RequestType.values().mapNotNull {

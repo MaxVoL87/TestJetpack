@@ -1,4 +1,4 @@
-package com.example.testjetpack.models.git.network
+package com.example.testjetpack.models
 
 enum class Status {
     RUNNING,
@@ -9,13 +9,16 @@ enum class Status {
 @Suppress("DataClassPrivateConstructor")
 data class NetworkState private constructor(
     val status: Status,
-    val msg: String? = null) {
+    val msg: String? = null
+) {
     companion object {
         @JvmStatic
         val LOADED = NetworkState(Status.SUCCESS)
         @JvmStatic
         val LOADING = NetworkState(Status.RUNNING)
+
         @JvmStatic
-        fun error(msg: String?) = NetworkState(Status.FAILED, msg)
+        fun error(msg: String?) =
+            NetworkState(Status.FAILED, msg)
     }
 }

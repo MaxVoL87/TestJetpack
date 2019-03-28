@@ -27,10 +27,8 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideDataRepository(gitApi: IGitApi,
-                              appDatabase: AppDatabase): IDataRepository {
-        return DataRepository(gitApi, appDatabase)
-    }
+    fun provideDataRepository(gitApi: IGitApi, appDatabase: AppDatabase): IDataRepository =
+        DataRepository(gitApi, appDatabase)
 
     @Provides
     @Singleton

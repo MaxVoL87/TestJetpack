@@ -2,9 +2,12 @@ package com.example.testjetpack.utils
 
 import com.example.testjetpack.models.git.License
 import com.example.testjetpack.models.git.User
-import com.example.testjetpack.models.git.network.GitRepository
+import com.example.testjetpack.models.git.network.request.GitPage
+import com.example.testjetpack.models.git.network.response.GitRepository
 
-fun GitRepository.toDB(license: License?, owner: User, indexInResponse: Int) = com.example.testjetpack.models.git.db.GitRepository(
+fun GitPage.reset(page: Int = 1) = this.copy(page = page, previous = null, next = null, last = null, first = null)
+
+fun GitRepository.toDBEntity(license: License?, owner: User, indexInResponse: Int) = com.example.testjetpack.models.git.db.GitRepository(
     stargazersCount,
     pushedAt,
     subscriptionUrl,

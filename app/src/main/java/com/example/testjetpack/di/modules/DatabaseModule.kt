@@ -18,7 +18,8 @@ class DatabaseModule {
             context,
             AppDatabase::class.java,
             databaseName
-        ).fallbackToDestructiveMigration()
+        )
+            .fallbackToDestructiveMigration()
             .build()
     }
 

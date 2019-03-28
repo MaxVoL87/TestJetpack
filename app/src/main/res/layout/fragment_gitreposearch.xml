@@ -5,7 +5,7 @@
 
     <data>
 
-        <import type="com.example.testjetpack.models.git.network.NetworkState" />
+        <import type="com.example.testjetpack.models.NetworkState" />
 
         <variable
             name="viewModel"

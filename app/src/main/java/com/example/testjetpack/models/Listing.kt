@@ -1,4 +1,4 @@
-package com.example.testjetpack.models.git.network
+package com.example.testjetpack.models
 
 import androidx.lifecycle.LiveData
 import androidx.paging.PagedList

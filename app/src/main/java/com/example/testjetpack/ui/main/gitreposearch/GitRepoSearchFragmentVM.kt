@@ -6,17 +6,17 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations.switchMap
 import com.example.testjetpack.MainApplication
 import com.example.testjetpack.dataflow.repository.IDataRepository
-import com.example.testjetpack.models.GitRepositoryView
-import com.example.testjetpack.models.git.network.GitPage
-import com.example.testjetpack.models.git.network.Listing
+import com.example.testjetpack.models.GitRepositoryComplexView
+import com.example.testjetpack.models.git.network.request.GitPage
+import com.example.testjetpack.models.Listing
 import com.example.testjetpack.ui.base.BaseViewModel
 import com.example.testjetpack.ui.base.EventStateChange
 import com.example.testjetpack.utils.OnEditorOk
 import com.example.testjetpack.utils.UiUtils.hideKeyboard
+import com.example.testjetpack.utils.reset
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
-import java.util.concurrent.atomic.AtomicInteger
 import javax.inject.Inject
 
 class GitRepoSearchFragmentVM : BaseViewModel<GitRepoSearchFragmentVMEventStateChange>() {
@@ -29,8 +29,14 @@ class GitRepoSearchFragmentVM : BaseViewModel<GitRepoSearchFragmentVMEventStateC
     }
 
     private val _page: MutableLiveData<GitPage> =
-        MutableLiveData(GitPage(number = AtomicInteger(1), q = "", perPage = IDataRepository.DEFAULT_NETWORK_PAGE_SIZE))
-    private val _repoResult: MutableLiveData<Listing<GitRepositoryView>> = MutableLiveData()
+        MutableLiveData(
+            GitPage(
+                page = 1,
+                q = "",
+                perPage = IDataRepository.DEFAULT_NETWORK_PAGE_SIZE
+            )
+        )
+    private val _repoResult: MutableLiveData<Listing<GitRepositoryComplexView>> = MutableLiveData()
     private val _scrollToPosition: MutableLiveData<Int> = MutableLiveData(-1)
 
     val searchText: MutableLiveData<String?> = MutableLiveData<String?>().apply {
@@ -63,14 +69,14 @@ class GitRepoSearchFragmentVM : BaseViewModel<GitRepoSearchFragmentVMEventStateC
         _scrollToPosition.value = 0
         adapter.submitList(null)
 
-        val mPage = _page.value ?: return
-        mPage.number.set(1)
-
+        var mPage = _page.value ?: return
+        mPage = mPage.reset()
+        _page.value = mPage
 
         processCallAsync(
             call = {
                 GlobalScope.async(Dispatchers.Unconfined) {
-                    repository.getGitRepositories(page = mPage)
+                    repository.searchGitRepositories(page = mPage)
                 }
             },
             onSuccess = { listing ->

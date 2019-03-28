@@ -1,24 +1,27 @@
 package com.example.testjetpack.dataflow.repository
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
 import androidx.paging.toLiveData
+import com.example.testjetpack.dataflow.SearchGitReposPListBoundaryCallback
 import com.example.testjetpack.dataflow.local.AppDatabase
 import com.example.testjetpack.dataflow.network.IGitApi
-import com.example.testjetpack.models.GitRepositoryView
+import com.example.testjetpack.models.GitRepositoryComplexView
+import com.example.testjetpack.models.Listing
+import com.example.testjetpack.models.NetworkState
 import com.example.testjetpack.models.own.Notification
 import com.example.testjetpack.models.own.Profile
 import com.example.testjetpack.models.git.License
 import com.example.testjetpack.models.git.User
-import com.example.testjetpack.models.git.network.*
+import com.example.testjetpack.models.git.network.request.GitPage
+import com.example.testjetpack.models.git.network.response.GitRepository
+import com.example.testjetpack.models.git.network.response.GitResponse
+import com.example.testjetpack.models.git.network.response.PagedGitResponse
 import com.example.testjetpack.utils.getPartOfOrCurrent
-import com.example.testjetpack.utils.toDB
+import com.example.testjetpack.utils.toDBEntity
+import com.example.testjetpack.utils.withNotNullOrEmpty
 import kotlinx.coroutines.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import java.util.concurrent.Executors
+import java.util.concurrent.atomic.AtomicReference
 import javax.inject.Inject
 
 class DataRepository @Inject constructor(
@@ -83,86 +86,72 @@ class DataRepository @Inject constructor(
     /**
      * Inserts the response into the database while also assigning position indices to items.
      */
-    private fun insertResultIntoDb(resp: ServerResponse?) {
-        if (resp is SearchRepositoriesResponse) {
-            resp.items.let { repos ->
-                appDatabase.runInTransaction {
+    private fun insertGitResultIntoDb(resp: GitResponse<*>?) {
+        if (resp is PagedGitResponse<*>) {
+            val rRepos = resp.items.mapNotNull { it as? GitRepository }
+            val licenses = mutableListOf<License>()
+            val owners = mutableListOf<User>()
+
+            appDatabase.runInTransaction {
+                withNotNullOrEmpty(rRepos) {
                     val start = appDatabase.getGitRepositoryDao().getNextIndex()
-                    val licenses = mutableListOf<License>()
-                    val owners = mutableListOf<User>()
-                    val items = repos.mapIndexed { index, child ->
+                    val repos = mapIndexed { index, child ->
                         child.license?.let { license -> licenses.add(license) }
                         owners.add(child.owner)
-                        return@mapIndexed child.toDB(child.license, child.owner, start + index)
+                        return@mapIndexed child.toDBEntity(child.license, child.owner, start + index)
                     }
-                    appDatabase.getGitRepositoryDao().insert(*items.toTypedArray())
-                    appDatabase.getGitLicenseDao().insert(*licenses.toTypedArray())
-                    appDatabase.getGitUserDao().insert(*owners.toTypedArray())
+                    appDatabase.getGitRepositoryDao().insert(*repos.toTypedArray())
+                }
+                withNotNullOrEmpty(licenses) {
+                    appDatabase.getGitLicenseDao().insert(*toTypedArray())
+                }
+                withNotNullOrEmpty(owners) {
+                    appDatabase.getGitUserDao().insert(*toTypedArray())
                 }
             }
         }
-    }
-
-    /**
-     * When refresh is called, we simply run a fresh network request and when it arrives, clear
-     * the database table and insert all new items in a transaction.
-     * <p>
-     * Since the PagedList already uses a database bound data source, it will automatically be
-     * updated after the database transaction is finished.
-     */
-    private fun refresh(page: GitPage): LiveData<NetworkState> {
-        val networkState = MutableLiveData<NetworkState>()
-        networkState.value = NetworkState.LOADING
-        gitApi.searchRepos(page.q, page.number.get(), page.perPage).enqueue(
-            object : Callback<SearchRepositoriesResponse> {
-                override fun onFailure(call: Call<SearchRepositoriesResponse>, t: Throwable) {
-                    // retrofit calls this on main thread so safe to call set value
-                    networkState.value = NetworkState.error(t.message)
-                }
-
-                override fun onResponse(
-                    call: Call<SearchRepositoriesResponse>,
-                    response: Response<SearchRepositoriesResponse>
-                ) {
-                    GlobalScope.launch(Dispatchers.IO) {
-                        appDatabase.runInTransaction {
-                            insertResultIntoDb(response.body())
-                        }
-                        // since we are in bg thread now, post the result.
-                        networkState.postValue(NetworkState.LOADED)
-                    }
-                }
-            }
-        )
-        return networkState
     }
 
     /**
      * Returns a Listing for the given page.
      */
-    override fun getGitRepositories(page: GitPage): Listing<GitRepositoryView> {
+    override fun searchGitRepositories(page: GitPage): Listing<GitRepositoryComplexView> {
 
         appDatabase.runInTransaction {
             appDatabase.clearAllGitData()
         }
 
+        val mPage = AtomicReference(page)
+
         // create a boundary callback which will observe when the user reaches to the edges of
         // the list and update the database with extra data.
-        val boundaryCallback = GitSearchRepositoriesBoundaryCallback(
-            curPage = page,
+        val boundaryCallback = SearchGitReposPListBoundaryCallback(
+            curPage = mPage,
             webservice = gitApi,
-            handleResponse = { curPage: GitPage, response: ServerResponse? -> this.insertResultIntoDb(response) },
+            handleResponse = { curPage: GitPage, response -> insertGitResultIntoDb(response) },
             ioExecutor = fiveTPoolFixedExecutor,
             skipIfFail = false
         )
+
+        val refreshState = MutableLiveData(NetworkState.LOADED)
+
         // we are using a mutable live data to trigger refresh requests which eventually calls
         // refresh method and gets a new live data. Each refresh request by the user becomes a newly
         // dispatched data in refreshTrigger
-        val refreshTrigger = MutableLiveData<Unit>()
-        val refreshState = Transformations.switchMap(refreshTrigger) { refresh(page) }
+        val refreshTrigger = {
+            refreshState.value = NetworkState.LOADING
+
+            GlobalScope.launch(Dispatchers.IO) {
+                boundaryCallback.reset()
+                appDatabase.runInTransaction {
+                    appDatabase.clearAllGitData()
+                }
+            }
+            refreshState.value = NetworkState.LOADED // for hide refresh layout because of on recycler implemented
+        }
 
         // We use toLiveData Kotlin extension function here, you could also use LivePagedListBuilder
-        val livePagedList = appDatabase.getGitDao().getAllGitRepositoriesSortedByRespIndex().toLiveData(
+        val livePagedList = appDatabase.getGitDao().getAllComplexGitRepositoriesSortedByRespIndex().toLiveData(
             pageSize = page.perPage.getPartOfOrCurrent(0.6),
             boundaryCallback = boundaryCallback
         )
@@ -174,13 +163,13 @@ class DataRepository @Inject constructor(
                 boundaryCallback.helper.retryAllFailed()
             },
             refresh = {
-                refreshTrigger.value = null
+                refreshTrigger.invoke()
             },
             refreshState = refreshState
         )
     }
 
-    //endregion Git
+//endregion Git
 
 
     companion object {
