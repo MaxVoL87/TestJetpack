@@ -20,7 +20,6 @@ import com.example.testjetpack.utils.withNotNullOrEmpty
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicReference
 import javax.inject.Inject
 
@@ -28,35 +27,6 @@ class GitDataRepository @Inject constructor(
     private val gitApi: IGitApi,
     private val appDatabase: AppDatabase
 ) : IGitDataRepository {
-
-    /**
-     * Inserts the response into the database while also assigning position indices to items.
-     */
-    private fun insertGitResultIntoDb(resp: GitResponse<*>?) {
-        if (resp is PagedGitResponse<*>) {
-            val rRepos = resp.items.mapNotNull { it as? GitRepository }
-            val licenses = mutableListOf<License>()
-            val owners = mutableListOf<User>()
-
-            appDatabase.runInTransaction {
-                withNotNullOrEmpty(rRepos) {
-                    val start = appDatabase.getGitRepositoryDao().getNextIndex()
-                    val repos = mapIndexed { index, child ->
-                        child.license?.let { license -> licenses.add(license) }
-                        owners.add(child.owner)
-                        return@mapIndexed child.toDBEntity(child.license, child.owner, start + index)
-                    }
-                    appDatabase.getGitRepositoryDao().insert(*repos.toTypedArray())
-                }
-                withNotNullOrEmpty(licenses) {
-                    appDatabase.getGitLicenseDao().insert(*toTypedArray())
-                }
-                withNotNullOrEmpty(owners) {
-                    appDatabase.getGitUserDao().insert(*toTypedArray())
-                }
-            }
-        }
-    }
 
     /**
      * Returns a Listing for the given page.
@@ -74,8 +44,7 @@ class GitDataRepository @Inject constructor(
         val boundaryCallback = SearchGitReposPListBoundaryCallback(
             curPage = mPage,
             webservice = gitApi,
-            handleResponse = { curPage: GitPage, response -> insertGitResultIntoDb(response) },
-            ioExecutor = fiveTPoolFixedExecutor,
+            handleResponseAsync = this::insertGitResultIntoDb,
             skipIfFail = false
         )
 
@@ -115,7 +84,32 @@ class GitDataRepository @Inject constructor(
         )
     }
 
-    companion object {
-        private val fiveTPoolFixedExecutor = Executors.newFixedThreadPool(5)
+    /**
+     * Inserts the response into the database while also assigning position indices to items.
+     */
+    private fun insertGitResultIntoDb(resp: GitResponse<*>?) {
+        if (resp is PagedGitResponse<*>) {
+            val rRepos = resp.items.mapNotNull { it as? GitRepository }
+            val licenses = mutableListOf<License>()
+            val owners = mutableListOf<User>()
+
+            appDatabase.runInTransaction {
+                withNotNullOrEmpty(rRepos) {
+                    val start = appDatabase.getGitRepositoryDao().getNextIndex()
+                    val repos = mapIndexed { index, child ->
+                        child.license?.let { license -> licenses.add(license) }
+                        owners.add(child.owner)
+                        return@mapIndexed child.toDBEntity(child.license, child.owner, start + index)
+                    }
+                    appDatabase.getGitRepositoryDao().insert(*repos.toTypedArray())
+                }
+                withNotNullOrEmpty(licenses) {
+                    appDatabase.getGitLicenseDao().insert(*toTypedArray())
+                }
+                withNotNullOrEmpty(owners) {
+                    appDatabase.getGitUserDao().insert(*toTypedArray())
+                }
+            }
+        }
     }
 }

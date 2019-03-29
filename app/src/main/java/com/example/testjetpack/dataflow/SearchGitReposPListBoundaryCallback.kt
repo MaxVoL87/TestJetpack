@@ -12,10 +12,12 @@ import com.example.testjetpack.utils.paging.PagingRequestHelper
 import com.example.testjetpack.utils.paging.createStatusLiveData
 import com.example.testjetpack.utils.reset
 import com.google.gson.Gson
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.util.concurrent.Executor
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicReference
 import javax.inject.Inject
@@ -30,12 +32,11 @@ import javax.inject.Inject
 class SearchGitReposPListBoundaryCallback(
     private val curPage: AtomicReference<GitPage>,
     private val webservice: IGitApi,
-    private val handleResponse: (GitPage, GitResponse<*>?) -> Unit,
-    private val ioExecutor: Executor,
+    private val handleResponseAsync: (GitResponse<*>?) -> Unit,
     private val skipIfFail: Boolean = false
 ) : PagedList.BoundaryCallback<GitRepositoryView>() {
 
-    val helper = PagingRequestHelper(ioExecutor)
+    val helper = PagingRequestHelper()
     val networkState = helper.createStatusLiveData()
 
     val lastSuccessPageNum = AtomicInteger(-1)
@@ -107,7 +108,9 @@ class SearchGitReposPListBoundaryCallback(
         return object : Callback<PagedGitResponse<T>> {
 
             override fun onFailure(call: Call<PagedGitResponse<T>>, t: Throwable) {
-                it.recordFailure(t)
+                GlobalScope.launch(Dispatchers.IO) {
+                        it.recordFailure(t)
+                    }
             }
 
             /**
@@ -115,26 +118,27 @@ class SearchGitReposPListBoundaryCallback(
              * paging library takes care of refreshing the list if necessary.
              */
             override fun onResponse(call: Call<PagedGitResponse<T>>, response: Response<PagedGitResponse<T>>) {
-                val resp: GitResponse<*>?
-                val func: () -> Unit
-                // case error in response
-                if (response.body() == null && response.errorBody() != null) {
-                    val error = gson
-                        .fromJson<ErrorGitListingWithDoc<GitFieldError>>(response.errorBody()?.charStream())
+                GlobalScope.launch(Dispatchers.IO) {
+                        val func: () -> Unit
+                        val resp: GitResponse<*>?
 
-                    resp = error
-                    func = { onFailure(call, Exception(error?.message)) }
-                } else {
-                    lastSuccessPageNum.set(curPage.get().page)
+                        // case error in response
+                        if (response.body() == null && response.errorBody() != null) {
+                            val error = gson
+                                .fromJson<ErrorGitListingWithDoc<GitFieldError>>(response.errorBody()?.charStream())
 
-                    resp = response.body()
-                    func = it::recordSuccess
-                }
+                            resp = error
+                            func = { onFailure(call, Exception(error?.message)) }
+                        } else {
+                            lastSuccessPageNum.set(curPage.get().page)
 
-                ioExecutor.execute {
-                    handleResponse(curPage.get(), resp)
-                    func.invoke()
-                }
+                            resp = response.body()?.apply { initLinks(response) }
+                            func = it::recordSuccess
+                        }
+
+                        handleResponseAsync(resp)
+                        func.invoke()
+                    }
             }
         }
 

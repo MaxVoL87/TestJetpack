@@ -4,6 +4,8 @@ import androidx.annotation.AnyThread
 import androidx.annotation.GuardedBy
 import androidx.annotation.VisibleForTesting
 import androidx.paging.DataSource
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 import java.util.Arrays
 import java.util.concurrent.CopyOnWriteArrayList
@@ -99,11 +101,14 @@ import java.util.concurrent.atomic.AtomicBoolean
  */
 // THIS class is likely to be moved into the library in a future release. Feel free to copy it
 // from this sample.
-class PagingRequestHelper (private val mRetryService: Executor) {
+class PagingRequestHelper {
     private val mLock = Any()
     @GuardedBy("mLock")
-    private val mRequestQueues =
-        arrayOf(RequestQueue(RequestType.INITIAL), RequestQueue(RequestType.BEFORE), RequestQueue(RequestType.AFTER))
+    private val mRequestQueues = arrayOf(
+        RequestQueue(RequestType.INITIAL),
+        RequestQueue(RequestType.BEFORE),
+        RequestQueue(RequestType.AFTER)
+    )
     internal val mListeners = CopyOnWriteArrayList<Listener>()
 
     /**
@@ -230,7 +235,7 @@ class PagingRequestHelper (private val mRetryService: Executor) {
         }
         for (failed in toBeRetried) {
             if (failed != null) {
-                failed.retry(mRetryService)
+                failed.retry()
                 retried = true
             }
         }
@@ -244,8 +249,8 @@ class PagingRequestHelper (private val mRetryService: Executor) {
             mRequest.run(Request.Callback(this, mHelper))
         }
 
-        fun retry(service: Executor) {
-            service.execute { mHelper.runIfNotRunning(mType, mRequest) }
+        fun retry() {
+            GlobalScope.launch { mHelper.runIfNotRunning(mType, mRequest) }
         }
     }
 
@@ -296,7 +301,7 @@ class PagingRequestHelper (private val mRetryService: Executor) {
              *
              * @param throwable The error that occured while carrying out the request.
              */
-            fun recordFailure(throwable: Throwable) {
+            fun recordFailure(throwable: Throwable?) {
 
                 if (throwable == null) {
                     throw IllegalArgumentException("You must provide a throwable describing" + " the error to record the failure")
@@ -374,10 +379,10 @@ class PagingRequestHelper (private val mRetryService: Executor) {
                     + '}'.toString())
         }
 
-        override fun equals(o: Any?): Boolean {
-            if (this === o) return true
-            if (o == null || javaClass != o.javaClass) return false
-            val that = o as StatusReport?
+        override fun equals(other: Any?): Boolean {
+            if (this === other) return true
+            if (other == null || javaClass != other.javaClass) return false
+            val that = other as StatusReport?
             if (initial != that!!.initial) return false
             if (before != that.before) return false
             return if (after != that.after) false else Arrays.equals(mErrors, that.mErrors)
