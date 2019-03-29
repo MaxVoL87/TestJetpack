@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName
 @Entity(tableName = "repository_table", indices = [Index(value = ["index_in_response"])])
 data class GitRepository(
     @SerializedName("stargazers_count") @ColumnInfo(name = "stargazers_count") val stargazersCount: Int,
-    @SerializedName("pushed_at") @ColumnInfo(name = "pushed_at") val pushedAt: String,
+    @SerializedName("pushed_at") @ColumnInfo(name = "pushed_at") val pushedAt: String?,
     @SerializedName("subscription_url") @ColumnInfo(name = "subscription_url") val subscriptionUrl: String?,
     @SerializedName("language") @ColumnInfo(name = "language") val language: String?,
     @SerializedName("branches_url") @ColumnInfo(name = "branches_url") val branchesUrl: String?,

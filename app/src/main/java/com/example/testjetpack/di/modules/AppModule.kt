@@ -3,9 +3,12 @@ package com.example.testjetpack.di.modules
 import com.example.testjetpack.BuildConfig
 import com.example.testjetpack.MainApplication
 import com.example.testjetpack.dataflow.local.AppDatabase
+import com.example.testjetpack.dataflow.network.IDataApi
 import com.example.testjetpack.dataflow.network.IGitApi
 import com.example.testjetpack.dataflow.repository.DataRepository
+import com.example.testjetpack.dataflow.repository.GitDataRepository
 import com.example.testjetpack.dataflow.repository.IDataRepository
+import com.example.testjetpack.dataflow.repository.IGitDataRepository
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.jakewharton.picasso.OkHttp3Downloader
@@ -27,8 +30,13 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideDataRepository(gitApi: IGitApi, appDatabase: AppDatabase): IDataRepository =
-        DataRepository(gitApi, appDatabase)
+    fun provideDataRepository(dataApi: IDataApi, appDatabase: AppDatabase): IDataRepository =
+        DataRepository(dataApi, appDatabase)
+
+    @Provides
+    @Singleton
+    fun provideGitDataRepository(gitApi: IGitApi, appDatabase: AppDatabase): IGitDataRepository =
+        GitDataRepository(gitApi, appDatabase)
 
     @Provides
     @Singleton

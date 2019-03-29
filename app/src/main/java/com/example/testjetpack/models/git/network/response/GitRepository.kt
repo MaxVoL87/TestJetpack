@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName
 
 data class GitRepository(
     @SerializedName("stargazers_count") val stargazersCount: Int,
-    @SerializedName("pushed_at") val pushedAt: String,
+    @SerializedName("pushed_at") val pushedAt: String?,
     @SerializedName("subscription_url") val subscriptionUrl: String?,
     @SerializedName("language") val language: String?,
     @SerializedName("branches_url") val branchesUrl: String?,

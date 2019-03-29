@@ -41,7 +41,7 @@ abstract class BaseViewModel<S : EventStateChange> : ViewModel() {
     }
 
     fun <T : Any?> processCallAsync(
-        call: () -> Deferred<T>,
+        call: () -> T,
         onSuccess: (T) -> Unit = { /* nothing by default*/ },
         onError: (E: Throwable?) -> Unit = { /* nothing by default*/ },
         showProgress: Boolean = false
@@ -52,7 +52,7 @@ abstract class BaseViewModel<S : EventStateChange> : ViewModel() {
                 showProgress()
             }
 
-            val jobResult = withContext(Dispatchers.IO) {
+            val jobResult = GlobalScope.async(Dispatchers.IO) {
                 call()
             }
 

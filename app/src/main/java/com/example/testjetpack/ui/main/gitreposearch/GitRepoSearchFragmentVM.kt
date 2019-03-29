@@ -5,7 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations.switchMap
 import com.example.testjetpack.MainApplication
-import com.example.testjetpack.dataflow.repository.IDataRepository
+import com.example.testjetpack.MainApplicationContract
+import com.example.testjetpack.dataflow.repository.IGitDataRepository
 import com.example.testjetpack.models.git.network.request.GitPage
 import com.example.testjetpack.models.Listing
 import com.example.testjetpack.models.git.db.GitRepositoryView
@@ -14,15 +15,12 @@ import com.example.testjetpack.ui.base.EventStateChange
 import com.example.testjetpack.utils.OnEditorOk
 import com.example.testjetpack.utils.UiUtils.hideKeyboard
 import com.example.testjetpack.utils.reset
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
 import javax.inject.Inject
 
 class GitRepoSearchFragmentVM : BaseViewModel<GitRepoSearchFragmentVMEventStateChange>() {
 
     @Inject
-    lateinit var repository: IDataRepository
+    lateinit var gitDataRepository: IGitDataRepository
 
     init {
         MainApplication.component.inject(this)
@@ -33,7 +31,7 @@ class GitRepoSearchFragmentVM : BaseViewModel<GitRepoSearchFragmentVMEventStateC
             GitPage(
                 page = 1,
                 q = "",
-                perPage = IDataRepository.DEFAULT_NETWORK_PAGE_SIZE
+                perPage = MainApplicationContract.DEFAULT_NETWORK_PAGE_SIZE
             )
         )
     private val _repoResult: MutableLiveData<Listing<GitRepositoryView>> = MutableLiveData()
@@ -74,11 +72,7 @@ class GitRepoSearchFragmentVM : BaseViewModel<GitRepoSearchFragmentVMEventStateC
         _page.value = mPage
 
         processCallAsync(
-            call = {
-                GlobalScope.async(Dispatchers.Unconfined) {
-                    repository.searchGitRepositories(page = mPage)
-                }
-            },
+            call = { gitDataRepository.searchGitRepositories(page = mPage) },
             onSuccess = { listing ->
                 _scrollToPosition.value = -1
                 _repoResult.value = listing

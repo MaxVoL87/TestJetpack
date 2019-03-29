@@ -1,8 +1,8 @@
 package com.example.testjetpack.di.modules
 
 import androidx.room.Room
-import com.example.testjetpack.BuildConfig
 import com.example.testjetpack.MainApplication
+import com.example.testjetpack.MainApplicationContract.DATABASE_NAME
 import com.example.testjetpack.dataflow.local.AppDatabase
 import dagger.Module
 import dagger.Provides
@@ -17,13 +17,10 @@ class DatabaseModule {
         return Room.databaseBuilder(
             context,
             AppDatabase::class.java,
-            databaseName
+            DATABASE_NAME
         )
             .fallbackToDestructiveMigration()
             .build()
     }
 
-    companion object {
-        private const val databaseName = BuildConfig.DB_NAME
-    }
 }

@@ -1,11 +1,13 @@
 package com.example.testjetpack.di.modules
 
-import com.example.testjetpack.BuildConfig
+import com.example.testjetpack.MainApplicationContract
+import com.example.testjetpack.dataflow.network.IDataApi
 import com.example.testjetpack.dataflow.network.IGitApi
+import com.example.testjetpack.di.annotations.BaseRetrofit
+import com.example.testjetpack.di.annotations.GitRetrofit
 import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
-import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -19,13 +21,18 @@ class NetworkModule {
 
     @Singleton
     @Provides
-    fun provideApiInterface(retrofit: Retrofit): IGitApi = retrofit.create(IGitApi::class.java)
+    fun provideGitApiInterface(@GitRetrofit retrofit: Retrofit): IGitApi = retrofit.create(IGitApi::class.java)
 
     @Singleton
     @Provides
-    fun provideRetrofit(httpUrl: HttpUrl, client: OkHttpClient, gson: Gson): Retrofit {
+    fun provideBaseApiInterface(@BaseRetrofit retrofit: Retrofit): IDataApi = retrofit.create(IDataApi::class.java)
+
+    @Singleton
+    @Provides
+    @GitRetrofit
+    fun provideGitRetrofit(client: OkHttpClient, gson: Gson): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(httpUrl)
+            .baseUrl(MainApplicationContract.API_GIT_URL)
             .client(client)
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
@@ -33,7 +40,14 @@ class NetworkModule {
 
     @Singleton
     @Provides
-    fun provideHttpUrl() = HttpUrl.parse(BuildConfig.API_BASE_URL)!!
+    @BaseRetrofit
+    fun provideBaseRetrofit(client: OkHttpClient, gson: Gson): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl(MainApplicationContract.API_BASE_URL)
+            .client(client)
+            .addConverterFactory(GsonConverterFactory.create(gson))
+            .build()
+    }
 
     @Singleton
     @Provides
