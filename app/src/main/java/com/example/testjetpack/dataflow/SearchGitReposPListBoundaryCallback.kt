@@ -71,11 +71,14 @@ class SearchGitReposPListBoundaryCallback(
      */
     @MainThread
     override fun onZeroItemsLoaded() {
-        helper.runIfNotRunning(PagingRequestHelper.RequestType.INITIAL) {
-            webservice
-                .searchRepos(curPage.get().q, getPageNum(), curPage.get().perPage)
-                .enqueue(createWebserviceCallback(it))
-        }
+        helper.runIfNotRunning(PagingRequestHelper.RequestType.INITIAL, object : PagingRequestHelper.Request {
+            override fun run(callback: PagingRequestHelper.Request.Callback) {
+                setPageNum(getPageNum() + 1)
+                webservice
+                    .searchRepos(curPage.get().q, getPageNum(), curPage.get().perPage)
+                    .enqueue(createWebserviceCallback(callback))
+            }
+        })
     }
 
     /**
@@ -83,12 +86,14 @@ class SearchGitReposPListBoundaryCallback(
      */
     @MainThread
     override fun onItemAtEndLoaded(itemAtEnd: GitRepositoryView) {
-        helper.runIfNotRunning(PagingRequestHelper.RequestType.AFTER) {
-            setPageNum(getPageNum() + 1)
-            webservice
-                .searchRepos(curPage.get().q, curPage.get().page, curPage.get().perPage)
-                .enqueue(createWebserviceCallback(it))
-        }
+        helper.runIfNotRunning(PagingRequestHelper.RequestType.AFTER, object : PagingRequestHelper.Request {
+            override fun run(callback: PagingRequestHelper.Request.Callback) {
+                setPageNum(getPageNum() + 1)
+                webservice
+                    .searchRepos(curPage.get().q, curPage.get().page, curPage.get().perPage)
+                    .enqueue(createWebserviceCallback(callback))
+            }
+        })
     }
 
     @MainThread
