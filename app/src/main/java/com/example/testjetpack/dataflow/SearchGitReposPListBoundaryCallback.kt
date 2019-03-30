@@ -11,6 +11,7 @@ import com.example.testjetpack.utils.fromJson
 import com.example.testjetpack.utils.paging.PagingRequestHelper
 import com.example.testjetpack.utils.paging.createStatusLiveData
 import com.example.testjetpack.utils.reset
+import com.example.testjetpack.utils.withNotNull
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -30,16 +31,17 @@ import javax.inject.Inject
  * rate limiting using the PagingRequestHelper class.
  */
 class SearchGitReposPListBoundaryCallback(
-    private val curPage: AtomicReference<GitPage>,
-    private val webservice: IGitApi,
-    private val handleResponseAsync: (GitResponse<*>?) -> Unit,
-    private val skipIfFail: Boolean = false
+    private val _curPage: AtomicReference<GitPage>,
+    private val _webservice: IGitApi,
+    private val _handleResponseAsync: (GitResponse<*>?) -> Unit,
+    private val _skipIfFail: Boolean = false
 ) : PagedList.BoundaryCallback<GitRepositoryView>() {
 
-    val helper = PagingRequestHelper()
-    val networkState = helper.createStatusLiveData()
+    private val _initialPageNum = AtomicInteger(_curPage.get().page)
+    private val _lastSuccessPageNum = AtomicInteger(-1)
 
-    val lastSuccessPageNum = AtomicInteger(-1)
+    private val _helper = PagingRequestHelper()
+    val networkState = _helper.createStatusLiveData()
 
     @Inject
     lateinit var gson: Gson
@@ -48,23 +50,31 @@ class SearchGitReposPListBoundaryCallback(
         MainApplication.component.inject(this)
     }
 
+    fun retry() {
+        _helper.retryAllFailed()
+    }
+
     fun reset() {
-        curPage.set(curPage.get().reset())
-        lastSuccessPageNum.set(-1)
+        _curPage.set(_curPage.get().reset(_initialPageNum.get()))
+        _lastSuccessPageNum.set(-1)
     }
 
     @Synchronized
-    fun getPageNum(): Int {
-        return if (lastSuccessPageNum.get() < curPage.get().page && !skipIfFail) {
-            lastSuccessPageNum.get()
+    fun reinitPageNum(increment: Int) {
+        var num: Int
+
+        if (_lastSuccessPageNum.get() < _curPage.get().page && !_skipIfFail) {
+            val ls = _lastSuccessPageNum.get()
+            num = if (ls < 0) _initialPageNum.get() else ls
         } else {
-            curPage.get().page
+            num = 0
+            num += _curPage.get().page
         }
-    }
 
-    @Synchronized
-    fun setPageNum(num: Int) {
-        curPage.set(curPage.get().copy(page = num))
+        num += increment
+        if (num >= 0) {
+            _curPage.set(_curPage.get().reset(num))
+        } else throw Exception("num < 0")
     }
 
     /**
@@ -72,11 +82,11 @@ class SearchGitReposPListBoundaryCallback(
      */
     @MainThread
     override fun onZeroItemsLoaded() {
-        helper.runIfNotRunning(PagingRequestHelper.RequestType.INITIAL, object : PagingRequestHelper.Request {
+        _helper.runIfNotRunning(PagingRequestHelper.RequestType.INITIAL, object : PagingRequestHelper.Request {
             override fun run(callback: PagingRequestHelper.Request.Callback) {
-                setPageNum(getPageNum() + 1)
-                webservice
-                    .searchRepos(curPage.get().q, getPageNum(), curPage.get().perPage)
+                reinitPageNum(0)
+                _webservice
+                    .searchRepos(_curPage.get().q, _curPage.get().page, _curPage.get().perPage)
                     .enqueue(createWebserviceCallback(callback))
             }
         })
@@ -87,11 +97,18 @@ class SearchGitReposPListBoundaryCallback(
      */
     @MainThread
     override fun onItemAtEndLoaded(itemAtEnd: GitRepositoryView) {
-        helper.runIfNotRunning(PagingRequestHelper.RequestType.AFTER, object : PagingRequestHelper.Request {
+        _helper.runIfNotRunning(PagingRequestHelper.RequestType.AFTER, object : PagingRequestHelper.Request {
             override fun run(callback: PagingRequestHelper.Request.Callback) {
-                setPageNum(getPageNum() + 1)
-                webservice
-                    .searchRepos(curPage.get().q, curPage.get().page, curPage.get().perPage)
+
+                // last page is current
+                if (_lastSuccessPageNum.get() == _curPage.get().page && _curPage.get().isLast == true) {
+                    callback.recordSuccess()
+                    return
+                }
+
+                reinitPageNum(1)
+                _webservice
+                    .searchRepos(_curPage.get().q, _curPage.get().page, _curPage.get().perPage)
                     .enqueue(createWebserviceCallback(callback))
             }
         })
@@ -109,8 +126,8 @@ class SearchGitReposPListBoundaryCallback(
 
             override fun onFailure(call: Call<PagedGitResponse<T>>, t: Throwable) {
                 GlobalScope.launch(Dispatchers.IO) {
-                        it.recordFailure(t)
-                    }
+                    it.recordFailure(t)
+                }
             }
 
             /**
@@ -119,26 +136,30 @@ class SearchGitReposPListBoundaryCallback(
              */
             override fun onResponse(call: Call<PagedGitResponse<T>>, response: Response<PagedGitResponse<T>>) {
                 GlobalScope.launch(Dispatchers.IO) {
-                        val func: () -> Unit
-                        val resp: GitResponse<*>?
+                    val func: () -> Unit
+                    val resp: GitResponse<*>?
 
-                        // case error in response
-                        if (response.body() == null && response.errorBody() != null) {
-                            val error = gson
-                                .fromJson<ErrorGitListingWithDoc<GitFieldError>>(response.errorBody()?.charStream())
+                    // case error in response
+                    if (response.body() == null && response.errorBody() != null) {
+                        val error = gson
+                            .fromJson<ErrorGitListingWithDoc<GitFieldError>>(response.errorBody()?.charStream())
 
-                            resp = error
-                            func = { onFailure(call, Exception(error?.message)) }
-                        } else {
-                            lastSuccessPageNum.set(curPage.get().page)
+                        resp = error
+                        func = { onFailure(call, Exception(error?.message)) }
+                    } else {
+                        resp = response.body()?.apply { initLinks(response) }
 
-                            resp = response.body()?.apply { initLinks(response) }
-                            func = it::recordSuccess
+                        withNotNull(resp?.getPage()) {
+                            _curPage.set(this)
                         }
+                        _lastSuccessPageNum.set(_curPage.get().page)
 
-                        handleResponseAsync(resp)
-                        func.invoke()
+                        func = it::recordSuccess
                     }
+
+                    _handleResponseAsync(resp)
+                    func.invoke()
+                }
             }
         }
 

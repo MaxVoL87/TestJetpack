@@ -42,10 +42,10 @@ class GitDataRepository @Inject constructor(
         // create a boundary callback which will observe when the user reaches to the edges of
         // the list and update the database with extra data.
         val boundaryCallback = SearchGitReposPListBoundaryCallback(
-            curPage = mPage,
-            webservice = gitApi,
-            handleResponseAsync = this::insertGitResultIntoDb,
-            skipIfFail = false
+            _curPage = mPage,
+            _webservice = gitApi,
+            _handleResponseAsync = this::insertGitResultIntoDb,
+            _skipIfFail = false
         )
 
         val refreshState = MutableLiveData(NetworkState.LOADED)
@@ -75,7 +75,7 @@ class GitDataRepository @Inject constructor(
             pagedList = livePagedList,
             networkState = boundaryCallback.networkState,
             retry = {
-                boundaryCallback.helper.retryAllFailed()
+                boundaryCallback.retry()
             },
             refresh = {
                 refreshTrigger.invoke()

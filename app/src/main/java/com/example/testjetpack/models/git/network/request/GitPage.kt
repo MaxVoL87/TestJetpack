@@ -7,9 +7,12 @@ data class GitPage(
     @SerializedName("page") val page: Int,
     @SerializedName("perPage") val perPage: Int,
 
-    // from header
+    // from response header
     val previous: String? = null,
     val next: String? = null,
     val first: String? = null,
-    val last: String? = null
+    val last: String? = null,
+
+    // manual set
+    val isLast: Boolean? = null
 )
