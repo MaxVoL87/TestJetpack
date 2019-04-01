@@ -22,13 +22,21 @@ import com.example.testjetpack.utils.withNotNull
 
 //todo: change
 class GitRepoSearchAdapter(
-    private val retryCallback: () -> Unit
+    private val _retryCallback: () -> Unit
 ) : PagedListAdapter<GitRepositoryView, BaseRecyclerItemViewHolder<ViewDataBinding, BaseRecyclerItemViewModel>>(
     POST_COMPARATOR
 ) {
-    private val vmCache = LRUIndexedCache<BaseRecyclerItemViewModel>(30)
+    private val _vmCache = LRUIndexedCache<BaseRecyclerItemViewModel>(30)
+    private var _networkState: NetworkState? = null
+    private var _onItemClickListener: OnItemClickListener<BaseRecyclerItemViewModel>? = null
 
-    private var networkState: NetworkState? = null
+    fun setOnItemClickListener(onItemClickListener: OnItemClickListener<BaseRecyclerItemViewModel>) {
+        _onItemClickListener = onItemClickListener
+    }
+
+    interface OnItemClickListener<T : BaseRecyclerItemViewModel> {
+        fun onItemClick(position: Int, item: T)
+    }
 
     override fun onBindViewHolder(
         holder: BaseRecyclerItemViewHolder<ViewDataBinding, BaseRecyclerItemViewModel>,
@@ -36,12 +44,14 @@ class GitRepoSearchAdapter(
     ) {
         var vm: BaseRecyclerItemViewModel? = null
         with(getItemViewType(position)) {
-            if (this == VIEW_TYPE_NETWORK_STATE_ITEM) networkState?.let { vm = NetworkStateItemVM(it, retryCallback) }
+            if (this == VIEW_TYPE_NETWORK_STATE_ITEM) _networkState?.let { vm = NetworkStateItemVM(it, _retryCallback) }
             else vm = getItemViewModel(this, position)
             return@with
         }
 
-        holder.bind(vm)
+        withNotNull(holder.bind(vm)) {
+            vm?.let { viewModel -> root.setOnClickListener { _onItemClickListener?.onItemClick(position, viewModel) } }
+        }
     }
 
     override fun onBindViewHolder(
@@ -72,7 +82,7 @@ class GitRepoSearchAdapter(
             ?: throw CastExeption(BaseRecyclerItemViewModel::class.java)
     }
 
-    private fun hasExtraRow() = networkState != null && networkState != NetworkState.LOADED
+    private fun hasExtraRow() = _networkState != null && _networkState != NetworkState.LOADED
 
     override fun getItemViewType(position: Int): Int {
         return if (hasExtraRow() && position == itemCount - 1) {
@@ -87,9 +97,9 @@ class GitRepoSearchAdapter(
     }
 
     fun setNetworkState(newNetworkState: NetworkState?) {
-        val previousState = this.networkState
+        val previousState = this._networkState
         val hadExtraRow = hasExtraRow()
-        this.networkState = newNetworkState
+        this._networkState = newNetworkState
         val hasExtraRow = hasExtraRow()
         if (hadExtraRow != hasExtraRow) {
             if (hadExtraRow) {
@@ -109,7 +119,7 @@ class GitRepoSearchAdapter(
         var vm: BaseRecyclerItemViewModel? = null
 
         val item = getItem(position)
-        var vmCached = vmCache[position]
+        var vmCached = _vmCache[position]
 
         when (itemViewType) {
             R.layout.item_gitreposearch -> {
@@ -126,7 +136,7 @@ class GitRepoSearchAdapter(
         }
 
         withNotNull(vm) {
-            if (vmCached == null) vmCache.put(position, this)
+            if (vmCached == null) _vmCache.put(position, this)
         }
 
         return vm

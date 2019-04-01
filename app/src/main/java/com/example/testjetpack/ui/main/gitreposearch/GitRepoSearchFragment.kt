@@ -43,10 +43,17 @@ class GitRepoSearchFragment : BaseFragment<FragmentGitreposearchBinding, GitRepo
         return view
     }
 
-    // region VM renderers
+    // region VM events renderer
 
-    override val RENDERERS: Map<KClass<out EventStateChange>, Function1<Any, Unit>> = mapOf()
-    // endregion VM renderers
+    private val openGitRepositoryRenderer: (Any) -> Unit = { event ->
+        event as GitRepoSearchFragmentVMEventStateChange.OpenGitRepository
+        callback?.openGitRepository(event.repo)
+    }
+
+    override val RENDERERS: Map<KClass<out EventStateChange>, Function1<Any, Unit>> = mapOf(
+        GitRepoSearchFragmentVMEventStateChange.OpenGitRepository::class to openGitRepositoryRenderer
+    )
+    // endregion VM events renderer
 
     companion object {
         @JvmStatic

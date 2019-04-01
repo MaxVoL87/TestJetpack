@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentManager
 import com.example.testjetpack.R
 import com.example.testjetpack.databinding.ActivityMainBinding
 import com.example.testjetpack.databinding.NavHeaderMainBinding
+import com.example.testjetpack.models.git.db.GitRepositoryView
 import com.example.testjetpack.models.own.Notification
 import com.example.testjetpack.ui.base.BaseActivity
 import com.example.testjetpack.ui.base.EventStateChange
@@ -15,6 +16,7 @@ import com.example.testjetpack.ui.main.myprofile.IMyProfileFragmentCallback
 import com.example.testjetpack.ui.main.myprofile.MyProfileFragment
 import com.example.testjetpack.ui.main.notifications.INotificationFragmentCallback
 import com.example.testjetpack.ui.main.notifications.NotificationFragment
+import com.example.testjetpack.utils.browseWithoutCurrentApp
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.custom_toolbar.*
@@ -91,6 +93,10 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityVM>(),
         replaceFragment(MyProfileFragment.newInstance(), true)
     }
 
+    override fun openGitRepository(repo: GitRepositoryView) {
+        this.browseWithoutCurrentApp(repo.htmlUrl ?: repo.url)
+    }
+
     override fun openNotificationDetails(notification: Notification) {
         showAlert("Not Implemented")
     }
@@ -99,7 +105,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityVM>(),
         showAlert("Not Implemented")
     }
 
-    // region VM renderers
+    // region VM events renderer
 
     private val closeDrawerRenderer: (Any) -> Unit = { event ->
         event as MainActivityVMEventStateChange.CloseDrawer
@@ -126,5 +132,5 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityVM>(),
         MainActivityVMEventStateChange.CloseDrawer::class to closeDrawerRenderer
 
     )
-    // endregion VM renderers
+    // endregion VM events renderer
 }

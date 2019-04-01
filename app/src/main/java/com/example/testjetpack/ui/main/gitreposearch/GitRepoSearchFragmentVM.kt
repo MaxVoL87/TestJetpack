@@ -10,10 +10,12 @@ import com.example.testjetpack.dataflow.repository.IGitDataRepository
 import com.example.testjetpack.models.git.network.request.GitPage
 import com.example.testjetpack.models.Listing
 import com.example.testjetpack.models.git.db.GitRepositoryView
+import com.example.testjetpack.ui.base.BaseRecyclerItemViewModel
 import com.example.testjetpack.ui.base.BaseViewModel
 import com.example.testjetpack.ui.base.EventStateChange
 import com.example.testjetpack.utils.OnEditorOk
 import com.example.testjetpack.utils.UiUtils.hideKeyboard
+import com.example.testjetpack.utils.livedata.Event
 import com.example.testjetpack.utils.reset
 import javax.inject.Inject
 
@@ -53,7 +55,14 @@ class GitRepoSearchFragmentVM : BaseViewModel<GitRepoSearchFragmentVMEventStateC
         }
     }
 
-    val adapter = GitRepoSearchAdapter { retry() }
+    val adapter = GitRepoSearchAdapter { retry() }.apply {
+        setOnItemClickListener(object : GitRepoSearchAdapter.OnItemClickListener<BaseRecyclerItemViewModel> {
+            override fun onItemClick(position: Int, item: BaseRecyclerItemViewModel) {
+                if (item is GitRepoSearchItemVM)
+                    _events.value = Event(GitRepoSearchFragmentVMEventStateChange.OpenGitRepository(item.repo))
+            }
+        })
+    }
     val repos = switchMap(_repoResult) { it.pagedList }
     val networkState = switchMap(_repoResult) { it.networkState }
     val refreshState = switchMap(_repoResult) { it.refreshState }
@@ -89,11 +98,12 @@ class GitRepoSearchFragmentVM : BaseViewModel<GitRepoSearchFragmentVMEventStateC
         _repoResult.value?.refresh?.invoke()
     }
 
-    fun retry() {
+    private fun retry() {
         val listing = _repoResult.value
         listing?.retry?.invoke()
     }
 }
 
 sealed class GitRepoSearchFragmentVMEventStateChange : EventStateChange {
+    class OpenGitRepository(val repo: GitRepositoryView): GitRepoSearchFragmentVMEventStateChange()
 }
