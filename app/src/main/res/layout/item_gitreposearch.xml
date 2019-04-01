@@ -66,7 +66,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/min_text_margin"
             android:layout_marginEnd="@dimen/min_text_margin"
-            android:text='@{String.format("%d.", viewModel.repo.index)}'
+            android:text='@{String.format("%d.", viewModel.repo.index + 1)}'
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvRepoUrl"
             tools:text="1." />
