@@ -19,19 +19,34 @@
 
         <TextView
             android:id="@+id/tvUserName"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/min_text_margin"
             android:layout_marginTop="@dimen/min_text_margin"
             android:layout_marginEnd="@dimen/min_text_margin"
-            android:drawableStart="@drawable/ic_check_36dp"
+            android:drawableStart="@drawable/ic_link_24dp"
             android:drawablePadding="@dimen/min_text_margin"
-            android:gravity="center_vertical"
+            android:gravity="center_vertical|start"
             android:text='@{viewModel.repo.ownerName}'
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="User Name" />
+
+        <TextView
+            android:id="@+id/tvLanguage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/min_text_margin"
+            android:layout_marginTop="@dimen/min_text_margin"
+            android:layout_marginEnd="@dimen/min_text_margin"
+            android:drawablePadding="@dimen/min_text_margin"
+            android:text='@{viewModel.repo.language}'
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@+id/tvUserName"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Language" />
 
         <TextView
             android:id="@+id/tvRepoName"
