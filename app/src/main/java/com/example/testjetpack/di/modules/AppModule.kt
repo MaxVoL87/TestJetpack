@@ -9,6 +9,7 @@ import com.example.testjetpack.dataflow.repository.DataRepository
 import com.example.testjetpack.dataflow.repository.GitDataRepository
 import com.example.testjetpack.dataflow.repository.IDataRepository
 import com.example.testjetpack.dataflow.repository.IGitDataRepository
+import com.example.testjetpack.tasks.TasksFactory
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.jakewharton.picasso.OkHttp3Downloader
@@ -30,16 +31,6 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideDataRepository(dataApi: IDataApi, appDatabase: AppDatabase): IDataRepository =
-        DataRepository(dataApi, appDatabase)
-
-    @Provides
-    @Singleton
-    fun provideGitDataRepository(gitApi: IGitApi, appDatabase: AppDatabase): IGitDataRepository =
-        GitDataRepository(gitApi, appDatabase)
-
-    @Provides
-    @Singleton
     fun providePicasso(application: MainApplication): Picasso {
         val client = OkHttpClient.Builder()
         //.addInterceptor(ServiceGenerator.createOAuth2Interceptor())
@@ -52,4 +43,19 @@ class AppModule {
             .loggingEnabled(BuildConfig.DEBUG)
             .build()
     }
+
+    @Provides
+    @Singleton
+    fun provideDataRepository(dataApi: IDataApi, appDatabase: AppDatabase): IDataRepository =
+        DataRepository(dataApi, appDatabase)
+
+    @Provides
+    @Singleton
+    fun provideGitDataRepository(gitApi: IGitApi, appDatabase: AppDatabase): IGitDataRepository =
+        GitDataRepository(gitApi, appDatabase)
+
+    @Provides
+    @Singleton
+    fun provideTaskFactory(application: MainApplication): TasksFactory = TasksFactory(application)
+
 }
