@@ -1,5 +1,7 @@
 package com.example.testjetpack.dataflow.repository
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.example.testjetpack.dataflow.local.AppDatabase
 import com.example.testjetpack.dataflow.network.IDataApi
 import com.example.testjetpack.models.own.Notification
@@ -11,7 +13,7 @@ class DataRepository @Inject constructor(
     private val appDatabase: AppDatabase
 ) : IDataRepository {
 
-    override fun getProfileAsync(): Profile {
+    override fun getProfile(): Profile {
         //todo: change with api
         return Profile(
             "https://picsum.photos/200/200/?random",
@@ -23,38 +25,19 @@ class DataRepository @Inject constructor(
         )
     }
 
-    override fun getNotificationsAsync(): List<Notification> {
-        //todo: change with api
-        return listOf(
-            Notification(
-                "00001",
-                "Welcome!",
-                "Snooze these notifications for: an hour, eight hours, a day, three days, or the next week. Or, turn email notifications off. For more detailed preferences, see your account page.",
-                "02.02.2019",
-                "02.02.2019"
-            ),
-            Notification(
-                "00002",
-                "Your email has been verified",
-                "Thank you for verifying your email address. Your new Upclick account has been activated and you can now login to the Merchant Area. All your account details...",
-                "20.02.2019",
-                null
-            ),
-            Notification(
-                "00003",
-                "Start your travel",
-                "This article is part of our Travel Business Startup Guide—a curated list of articles to help you plan, start, and grow your travel business!",
-                "20.04.2019",
-                null
-            ),
-            Notification(
-                "00004",
-                "Hello",
-                "Hello from the outside \nAt least I can say that I've tried \nTo tell you I'm sorry \nFor breaking your heart…",
-                "02.20.2019",
-                null
-            )
-        )
+    override fun getNotifications(): LiveData<List<Notification>> {
+        val notifications = MutableLiveData<List<Notification>>()
+
+        appDatabase.runInTransaction {
+            notifications.postValue(appDatabase.getNotificationDao().loadAllNotificationsByID())
+        }
+
+        return notifications
     }
 
+    override fun insertNotificationsIntoDB(notifications: List<Notification>) {
+        appDatabase.runInTransaction {
+            appDatabase.getNotificationDao().insertNotifications(*notifications.toTypedArray())
+        }
+    }
 }

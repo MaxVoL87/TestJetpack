@@ -1,11 +1,14 @@
 package com.example.testjetpack.dataflow.repository
 
+import androidx.lifecycle.LiveData
 import com.example.testjetpack.models.own.Notification
 import com.example.testjetpack.models.own.Profile
 
 interface IDataRepository {
 
-    fun getProfileAsync(): Profile
+    fun getProfile(): Profile
 
-    fun getNotificationsAsync(): List<Notification>
+    fun getNotifications(): LiveData<List<Notification>>
+
+    fun insertNotificationsIntoDB(notifications: List<Notification>)
 }

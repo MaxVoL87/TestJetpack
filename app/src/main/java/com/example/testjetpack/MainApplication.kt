@@ -1,14 +1,21 @@
 package com.example.testjetpack
 
+import androidx.work.WorkManager
 import com.example.testjetpack.di.DaggerIAppComponent
 import com.example.testjetpack.di.IAppComponent
 import com.example.testjetpack.di.modules.AppModule
 import com.example.testjetpack.di.modules.DatabaseModule
 import com.example.testjetpack.di.modules.NetworkModule
+import com.example.testjetpack.tasks.TasksFactory
 import dagger.android.support.DaggerApplication
 import timber.log.Timber
+import javax.inject.Inject
 
 class MainApplication : DaggerApplication() {
+
+    @Inject
+    lateinit var taskFactory: TasksFactory
+
 
     private val applicationInjector = DaggerIAppComponent.builder()
         .application(this)
@@ -18,11 +25,6 @@ class MainApplication : DaggerApplication() {
         .build()
 
     override fun applicationInjector() = applicationInjector
-
-    companion object {
-        @JvmStatic
-        lateinit var component: IAppComponent
-    }
 
     override fun onCreate() {
         super.onCreate()
@@ -38,5 +40,14 @@ class MainApplication : DaggerApplication() {
             })
         }
 
+        WorkManager.getInstance().cancelAllWork()
+        WorkManager.getInstance().enqueue(taskFactory.createNotificationDownloadTask())
+    }
+
+
+
+    companion object {
+        @JvmStatic
+        lateinit var component: IAppComponent
     }
 }

@@ -25,7 +25,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun getGitDao(): IGitDao
 
 
-    abstract fun notificationDao(): INotificationDao
+    abstract fun getNotificationDao(): INotificationDao
 
     fun clearAllGitData() {
         getGitRepositoryDao().clearAll()

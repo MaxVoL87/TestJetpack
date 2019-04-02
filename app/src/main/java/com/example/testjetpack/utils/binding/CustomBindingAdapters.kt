@@ -5,9 +5,23 @@ import androidx.paging.PagedList
 import androidx.recyclerview.widget.RecyclerView
 import com.example.testjetpack.models.NetworkState
 import com.example.testjetpack.models.git.db.GitRepositoryView
+import com.example.testjetpack.ui.base.BaseRecyclerAdapter
+import com.example.testjetpack.ui.base.BaseRecyclerItemViewModel
 import com.example.testjetpack.ui.main.gitreposearch.GitRepoSearchAdapter
 import com.example.testjetpack.utils.withNotNull
 
+/**
+ * Set PagedListAdapter data
+ */
+@BindingAdapter("items")
+fun RecyclerView.setBaseRecyclerAdapterItems(
+    items: List<BaseRecyclerItemViewModel>?
+) {
+    withNotNull(adapter as BaseRecyclerAdapter) {
+        itemViewModels = if (items.isNullOrEmpty()) mutableListOf()
+        else items.toMutableList()
+    }
+}
 
 /**
  * Set PagedListAdapter data
