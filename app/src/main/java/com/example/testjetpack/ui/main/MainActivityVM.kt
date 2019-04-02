@@ -37,8 +37,8 @@ class MainActivityVM : BaseViewModel<MainActivityVMEventStateChange>(),
             R.id.nav_my_profile -> {
                 event = MainActivityVMEventStateChange.OpenProfile
             }
-            R.id.nav_my_history -> {
-
+            R.id.nav_gps -> {
+                event = MainActivityVMEventStateChange.OpenGps
             }
             R.id.nav_manage -> {
 
@@ -81,5 +81,6 @@ class MainActivityVM : BaseViewModel<MainActivityVMEventStateChange>(),
 sealed class MainActivityVMEventStateChange : EventStateChange {
     object CloseDrawer : MainActivityVMEventStateChange()
     object OpenProfile : MainActivityVMEventStateChange()
+    object OpenGps : MainActivityVMEventStateChange()
     object OpenNotifications : MainActivityVMEventStateChange()
 }

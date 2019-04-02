@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.testjetpack.dataflow.local.AppDatabase
 import com.example.testjetpack.dataflow.network.IDataApi
+import com.example.testjetpack.models.gps.Location
 import com.example.testjetpack.models.own.Notification
 import com.example.testjetpack.models.own.Profile
 import javax.inject.Inject
@@ -29,7 +30,7 @@ class DataRepository @Inject constructor(
         val notifications = MutableLiveData<List<Notification>>()
 
         appDatabase.runInTransaction {
-            notifications.postValue(appDatabase.getNotificationDao().loadAllNotificationsByID())
+            notifications.postValue(appDatabase.getNotificationDao().loadAllByID())
         }
 
         return notifications
@@ -37,7 +38,13 @@ class DataRepository @Inject constructor(
 
     override fun insertNotificationsIntoDB(notifications: List<Notification>) {
         appDatabase.runInTransaction {
-            appDatabase.getNotificationDao().insertNotifications(*notifications.toTypedArray())
+            appDatabase.getNotificationDao().insert(*notifications.toTypedArray())
+        }
+    }
+
+    override fun insertLocationsIntoDB(locations: List<Location>) {
+        appDatabase.runInTransaction {
+            appDatabase.getLocationDao().insert(*locations.toTypedArray())
         }
     }
 }

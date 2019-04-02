@@ -12,6 +12,8 @@ import com.example.testjetpack.ui.base.BaseActivity
 import com.example.testjetpack.ui.base.EventStateChange
 import com.example.testjetpack.ui.main.gitreposearch.GitRepoSearchFragment
 import com.example.testjetpack.ui.main.gitreposearch.IGitRepoSearchFragmentCallback
+import com.example.testjetpack.ui.main.gps.IGpsFragmentCallback
+import com.example.testjetpack.ui.main.gps.GpsFragment
 import com.example.testjetpack.ui.main.myprofile.IMyProfileFragmentCallback
 import com.example.testjetpack.ui.main.myprofile.MyProfileFragment
 import com.example.testjetpack.ui.main.notifications.INotificationFragmentCallback
@@ -28,7 +30,8 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityVM>(),
     FragmentManager.OnBackStackChangedListener,
     IGitRepoSearchFragmentCallback,
     IMyProfileFragmentCallback,
-    INotificationFragmentCallback {
+    INotificationFragmentCallback,
+    IGpsFragmentCallback {
 
     override val viewModelClass: Class<MainActivityVM> = MainActivityVM::class.java
     override val layoutId: Int = R.layout.activity_main
@@ -85,12 +88,16 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityVM>(),
         replaceFragment(GitRepoSearchFragment.newInstance(), addToBackStack)
     }
 
-    private fun openNotifications() {
-        replaceFragment(NotificationFragment.newInstance(), true)
-    }
-
     private fun openMyProfile() {
         replaceFragment(MyProfileFragment.newInstance(), true)
+    }
+
+    private fun openGps() {
+        replaceFragment(GpsFragment.newInstance(), true)
+    }
+
+    private fun openNotifications() {
+        replaceFragment(NotificationFragment.newInstance(), true)
     }
 
     override fun openGitRepository(repo: GitRepositoryView) {
@@ -126,8 +133,16 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityVM>(),
         }
     }
 
+    private val openGpsRenderer: (Any) -> Unit = { event ->
+        event as MainActivityVMEventStateChange.OpenGps
+        if (getCurFragment(R.id.container) !is GpsFragment) {
+            openGps()
+        }
+    }
+
     override val RENDERERS: Map<KClass<out EventStateChange>, Function1<Any, Unit>> = mapOf(
         MainActivityVMEventStateChange.OpenProfile::class to openProfileRenderer,
+        MainActivityVMEventStateChange.OpenGps::class to openGpsRenderer,
         MainActivityVMEventStateChange.OpenNotifications::class to openNotificationsRenderer,
         MainActivityVMEventStateChange.CloseDrawer::class to closeDrawerRenderer
 
