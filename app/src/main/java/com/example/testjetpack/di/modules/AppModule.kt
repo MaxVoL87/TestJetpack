@@ -56,6 +56,6 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideTaskFactory(application: MainApplication): TasksFactory = TasksFactory(application)
+    fun provideTaskFactory(): TasksFactory = TasksFactory()
 
 }

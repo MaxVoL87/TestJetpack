@@ -1,13 +1,12 @@
 package com.example.testjetpack.tasks
 
-import android.content.Context
 import android.os.Build
 import androidx.work.Constraints
 import androidx.work.PeriodicWorkRequest
 import com.example.testjetpack.tasks.workers.NotificationDownloadWorker
 import java.util.concurrent.TimeUnit
 
-class TasksFactory(private val appContext: Context) {
+class TasksFactory {
 
     fun createNotificationDownloadTask(): PeriodicWorkRequest {
 
