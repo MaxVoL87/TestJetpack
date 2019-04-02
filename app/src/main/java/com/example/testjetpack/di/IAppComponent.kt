@@ -6,6 +6,7 @@ import com.example.testjetpack.di.modules.*
 import com.example.testjetpack.tasks.workers.NotificationDownloadWorker
 import com.example.testjetpack.ui.main.MainActivityVM
 import com.example.testjetpack.ui.main.gitreposearch.GitRepoSearchFragmentVM
+import com.example.testjetpack.ui.main.gps.GpsFragmentVM
 import com.example.testjetpack.ui.main.myprofile.MyProfileFragmentVM
 import com.example.testjetpack.ui.main.notifications.NotificationFragmentVM
 import dagger.BindsInstance
@@ -44,6 +45,7 @@ interface IAppComponent : AndroidInjector<MainApplication> {
     fun inject(gitRepoSearchFragmentVM: GitRepoSearchFragmentVM)
     fun inject(notificationFragmentVM: NotificationFragmentVM)
     fun inject(myProfileFragmentVM: MyProfileFragmentVM)
+    fun inject(gpsFragmentVM: GpsFragmentVM)
 
     fun inject(searchGitReposPListBoundaryCallback: SearchGitReposPListBoundaryCallback)
 

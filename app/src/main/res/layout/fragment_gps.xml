@@ -6,6 +6,14 @@
     <data>
 
         <variable
+            name="settingsClient"
+            type="com.google.android.gms.location.SettingsClient" />
+
+        <variable
+            name="fusedLocationProviderClient"
+            type="com.google.android.gms.location.FusedLocationProviderClient" />
+
+        <variable
             name="viewModel"
             type="com.example.testjetpack.ui.main.gps.GpsFragmentVM" />
 
@@ -20,10 +28,10 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:srcCompat="@color/colorPrimary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@color/colorPrimary"
             tools:ignore="ContentDescription" />
 
         <TextView
@@ -33,7 +41,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/text_margin"
             android:layout_marginTop="8dp"
-            android:text="@string/location_listener_state"
+            android:text='@{safeUnbox(viewModel.isLocationListenerStarted()) ? @string/location_listener_started : @string/location_listener_stopped}'
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/toolbar" />
@@ -44,12 +52,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/text_margin"
+            android:text='@{safeUnbox(viewModel.isLocationListenerStarted()) ? @string/location_listener_stop : @string/location_listener_start}'
+            android:onClick='@{(v) -> viewModel.startStopLocationUpdates(settingsClient, fusedLocationProviderClient)}'
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvLocationListenerState"
-            app:layout_constraintVertical_bias="1"
-            android:text="Start"/>
+            app:layout_constraintVertical_bias="1" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
