@@ -67,22 +67,21 @@ class GpsFragmentVM : BaseViewModel<GpsFragmentVMEventStateChange>() {
     private var accelerationTimer: Timer? = null
     private fun getAccelerationTimerTask() = object : TimerTask() {
         private var _lastCalcLocation: Location? = null
-        private var _lastCalcSpeed: Float? = null
-        private var _lastCalcTime: Long = 0
+        private var _lastCalcSpeed: Float = 0.0F
+        private var _lastCalcAcceleration: Float = -1.0F
+        private var _lastCalcTime: Long = _accelerationCalcTime
 
         override fun run() {
             val acceleration: Float
-            val curLocationSpeed = _curLocation?.speed
+            val curLocationSpeed = _curLocation?.speed ?: return //return if _curLocation == null
             val lastCalcSpeed = _lastCalcSpeed
             val lastCalcTime = _lastCalcTime
 
-            if (_lastCalcLocation == null || curLocationSpeed == null || lastCalcSpeed == null || lastCalcTime == 0L) {
-                _lastCalcSpeed = 0.0F
+            if (_lastCalcLocation == null) {
                 acceleration = 0.0F
-                _lastCalcTime += _accelerationCalcTime
             } else {
                 if (_lastCalcLocation == _curLocation) {
-                    acceleration = 0.0F
+                    acceleration = _lastCalcAcceleration
                     _lastCalcTime += _accelerationCalcTime
                 } else {
                     _lastCalcSpeed = curLocationSpeed
@@ -92,9 +91,11 @@ class GpsFragmentVM : BaseViewModel<GpsFragmentVMEventStateChange>() {
                 }
             }
             _lastCalcLocation = _curLocation
+            _lastCalcAcceleration = acceleration
 
-            _acceleration.postValue(if (acceleration > 0.0) acceleration.toString() else "0.0")
-            _deceleration.postValue(if (acceleration < 0.0) (abs(acceleration)).toString() else "0.0")
+            _acceleration.postValue((if (acceleration > 0.0) acceleration else 0.0F).toString())
+            _deceleration.postValue((if (acceleration < 0.0) (abs(acceleration)) else 0.0F).toString())
+
         }
 
     }
@@ -149,8 +150,9 @@ class GpsFragmentVM : BaseViewModel<GpsFragmentVMEventStateChange>() {
             return
         }
 
-        accelerationTimer = Timer(true)
-        accelerationTimer?.schedule(getAccelerationTimerTask(), 0, _accelerationCalcTime)
+        accelerationTimer = Timer(true).apply {
+            schedule(getAccelerationTimerTask(), 0, _accelerationCalcTime)
+        }
         // Create LocationSettingsRequest object using location request
         val builder = LocationSettingsRequest.Builder()
         builder.addLocationRequest(_locationRequest)

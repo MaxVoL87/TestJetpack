@@ -36,24 +36,25 @@
             android:id="@+id/isListenerStarted"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="45dp"
-            android:src='@{safeUnbox(viewModel.isLocationListenerStarted()) ? @drawable/ic_gps_fixed_red_48dp : @drawable/ic_gps_not_fixed_grey_48dp}'
+            android:layout_alignStart="@id/toolbar"
             android:layout_alignTop="@id/toolbar"
             android:layout_alignBottom="@id/toolbar"
-            android:layout_alignStart="@id/toolbar"
+            android:layout_marginStart="45dp"
+            android:src='@{safeUnbox(viewModel.isLocationListenerStarted()) ? @drawable/ic_gps_fixed_red_48dp : @drawable/ic_gps_not_fixed_grey_48dp}'
             tools:ignore="ContentDescription" />
 
+        //todo: move to toolbar?
         <Switch
             android:id="@+id/sDiagnostic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_above="@id/bStartStopLocationListener"
+            android:layout_alignTop="@id/toolbar"
+            android:layout_alignEnd="@id/toolbar"
+            android:layout_alignBottom="@id/toolbar"
             android:layout_marginEnd="@dimen/text_margin"
             android:checked='@={viewModel.isNeedToShowDiagnostic()}'
-            android:text="@string/gps_diagnostic_switch"
-            android:layout_alignTop="@id/toolbar"
-            android:layout_alignBottom="@id/toolbar"
-            android:layout_alignEnd="@id/toolbar"
-            android:layout_above="@id/bStartStopLocationListener"/>
+            android:text="@string/gps_diagnostic_switch" />
 
         <ScrollView
             android:layout_width="match_parent"
@@ -435,10 +436,10 @@
             style="@style/ButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
             android:layout_margin="@dimen/text_margin"
             android:onClick='@{(v) -> viewModel.startStopLocationUpdates(settingsClient, fusedLocationProviderClient)}'
-            android:text='@{safeUnbox(viewModel.isLocationListenerStarted()) ? @string/location_listener_stop : @string/location_listener_start}'
-            android:layout_centerHorizontal="true"
-            android:layout_alignParentBottom="true" />
+            android:text='@{safeUnbox(viewModel.isLocationListenerStarted()) ? @string/location_listener_stop : @string/location_listener_start}' />
     </RelativeLayout>
 </layout>
