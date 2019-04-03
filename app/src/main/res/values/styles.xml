@@ -85,4 +85,8 @@
     </style>
 
 
+    <style name="SeparatorStyle">
+        <item name="android:layout_marginTop">@dimen/activity_vertical_margin</item>
+        <item name="android:background">@color/colorSeparator</item>
+    </style>
 </resources>

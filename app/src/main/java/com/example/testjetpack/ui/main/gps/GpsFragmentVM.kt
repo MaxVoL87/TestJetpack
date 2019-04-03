@@ -16,12 +16,14 @@ import com.example.testjetpack.utils.toDBEntity
 import com.google.android.gms.location.*
 import java.util.*
 import javax.inject.Inject
+import kotlin.math.abs
 
 class GpsFragmentVM : BaseViewModel<GpsFragmentVMEventStateChange>() {
 
     //initial values
     private val _interval: Long = 1000
     private val _fastestInterval: Long = 1000
+    private val _accelerationCalcTime: Long = 3
     private var _startTime: Long? = null
 
     private var _fusedLocationProviderClient: FusedLocationProviderClient? = null
@@ -62,15 +64,52 @@ class GpsFragmentVM : BaseViewModel<GpsFragmentVMEventStateChange>() {
         MainApplication.component.inject(this)
     }
 
-    private var _curLocation: Location? = null
-    set(value) {
-        field = value
-        if(isNeedToShowDiagnostic.value == true) _location.value = value
+    private var accelerationTimer: Timer? = null
+    private fun getAccelerationTimerTask() = object : TimerTask() {
+        private var _lastCalcLocation: Location? = null
+        private var _lastCalcSpeed: Float? = null
+        private var _lastCalcTime: Long = 0
+
+        override fun run() {
+            val acceleration: Float
+            val curLocationSpeed = _curLocation?.speed
+            val lastCalcSpeed = _lastCalcSpeed
+            val lastCalcTime = _lastCalcTime
+
+            if (_lastCalcLocation == null || curLocationSpeed == null || lastCalcSpeed == null || lastCalcTime == 0L) {
+                _lastCalcSpeed = 0.0F
+                acceleration = 0.0F
+                _lastCalcTime += _accelerationCalcTime
+            } else {
+                if (_lastCalcLocation == _curLocation) {
+                    acceleration = 0.0F
+                    _lastCalcTime += _accelerationCalcTime
+                } else {
+                    _lastCalcSpeed = curLocationSpeed
+                    _lastCalcTime = _accelerationCalcTime
+
+                    acceleration = (curLocationSpeed - lastCalcSpeed) / lastCalcTime
+                }
+            }
+            _lastCalcLocation = _curLocation
+
+            _acceleration.postValue(if (acceleration > 0.0) acceleration.toString() else "0.0")
+            _deceleration.postValue(if (acceleration < 0.0) (abs(acceleration)).toString() else "0.0")
+        }
+
     }
+
+    private var _curLocation: Location? = null
+        set(value) {
+            field = value
+            if (isNeedToShowDiagnostic.value == true) _location.value = value
+        }
 
     private val _location = MutableLiveData<Location>()
     private val _isLocationAvailable = MutableLiveData<Boolean>(false)
     private val _isLocationListenerStarted = MutableLiveData<Boolean>(false)
+    private val _acceleration: MutableLiveData<String> = MutableLiveData()
+    private val _deceleration: MutableLiveData<String> = MutableLiveData()
 
     val isLocationAvailable: LiveData<Boolean>
         get() = _isLocationAvailable
@@ -86,21 +125,32 @@ class GpsFragmentVM : BaseViewModel<GpsFragmentVMEventStateChange>() {
     val bearing: LiveData<String> = switchMap(_location) { MutableLiveData(it.bearing.toString()) }
     val speed: LiveData<String> = switchMap(_location) { MutableLiveData(it.speed.toString()) }
     val accuracy: LiveData<String> = switchMap(_location) { MutableLiveData(it.accuracy.toString()) }
-    val verticalAccuracy: LiveData<String> = switchMap(_location) { MutableLiveData(it.verticalAccuracyMeters.toString()) }
-    val speedAccuracy: LiveData<String> = switchMap(_location) { MutableLiveData(it.speedAccuracyMetersPerSecond.toString()) }
-    val bearingAccuracy: LiveData<String> = switchMap(_location) { MutableLiveData(it.bearingAccuracyDegrees.toString()) }
+    val verticalAccuracy: LiveData<String> =
+        switchMap(_location) { MutableLiveData(it.verticalAccuracyMeters.toString()) }
+    val speedAccuracy: LiveData<String> =
+        switchMap(_location) { MutableLiveData(it.speedAccuracyMetersPerSecond.toString()) }
+    val bearingAccuracy: LiveData<String> =
+        switchMap(_location) { MutableLiveData(it.bearingAccuracyDegrees.toString()) }
     val time: LiveData<String> = switchMap(_location) { MutableLiveData(it.time.toString()) }
     val elapsedRealTime: LiveData<String> = switchMap(_location) { MutableLiveData(it.elapsedRealtimeNanos.toString()) }
+
+    val acceleration: LiveData<String>
+        get() = _acceleration
+    val deceleration: LiveData<String>
+        get() = _deceleration
 
     fun startStopLocationUpdates(
         settingsClient: SettingsClient,
         fusedLocationProviderClient: FusedLocationProviderClient
     ) {
         if (_isLocationListenerStarted.value == true) {
+            accelerationTimer?.cancel()
             stopLocationUpdates()
             return
         }
 
+        accelerationTimer = Timer(true)
+        accelerationTimer?.schedule(getAccelerationTimerTask(), 0, _accelerationCalcTime)
         // Create LocationSettingsRequest object using location request
         val builder = LocationSettingsRequest.Builder()
         builder.addLocationRequest(_locationRequest)

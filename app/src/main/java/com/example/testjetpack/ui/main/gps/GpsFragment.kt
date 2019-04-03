@@ -3,10 +3,12 @@ package com.example.testjetpack.ui.main.gps
 
 import android.Manifest
 import android.content.Context
+import android.location.LocationManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat.getSystemService
 import com.example.testjetpack.R
 import com.example.testjetpack.databinding.FragmentGpsBinding
 import com.example.testjetpack.ui.base.BaseFragment
@@ -41,6 +43,14 @@ class GpsFragment : BaseFragment<FragmentGpsBinding, GpsFragmentVM>() {
         binding.settingsClient = LocationServices.getSettingsClient(requireContext())
         binding.fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireContext())
         return view
+    }
+
+    override fun onStart() {
+        super.onStart()
+        val locationManager = getSystemService(requireContext(), LocationManager::class.java) as LocationManager
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            showAlert("GPS Not Enabled")
+        }
     }
 
     // region VM events renderer
