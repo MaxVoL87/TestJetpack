@@ -23,7 +23,7 @@ class GpsFragmentVM : BaseViewModel<GpsFragmentVMEventStateChange>() {
     //initial values
     private val _interval: Long = 1000
     private val _fastestInterval: Long = 1000
-    private val _accelerationCalcTime: Long = 3
+    private val _accelerationCalcTime: Long = 2000
     private var _startTime: Long? = null
 
     private var _fusedLocationProviderClient: FusedLocationProviderClient? = null
@@ -87,7 +87,7 @@ class GpsFragmentVM : BaseViewModel<GpsFragmentVMEventStateChange>() {
                     _lastCalcSpeed = curLocationSpeed
                     _lastCalcTime = _accelerationCalcTime
 
-                    acceleration = (curLocationSpeed - lastCalcSpeed) / lastCalcTime
+                    acceleration = (curLocationSpeed - lastCalcSpeed) / (lastCalcTime / 1000) // (V - V0)/t
                 }
             }
             _lastCalcLocation = _curLocation
