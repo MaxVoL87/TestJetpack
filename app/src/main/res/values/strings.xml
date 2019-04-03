@@ -30,5 +30,7 @@
     <string name="location_listener_stopped">Listener Stopped</string>
     <string name="location_listener_start">Start</string>
     <string name="location_listener_stop">Stop</string>
+    <string name="gps_diagnostic_switch">diagnostic</string>
+    <string name="no_value">none</string>
 
 </resources>

@@ -13,12 +13,12 @@ data class Location(
     val longitude: Double,
     val bearing: Float,
     val speed: Float,
-    val time: Long,
-    val accuracy: Float,
-
+    val accuracy: Float, // horizontal
     @ColumnInfo(name = "vertical_accuracy_meters") val verticalAccuracyMeters: Float,
     @ColumnInfo(name = "speed_accuracy_meters_per_second") val speedAccuracyMetersPerSecond: Float,
     @ColumnInfo(name = "bearing_accuracy_degrees") val bearingAccuracyDegrees: Float,
+
+    val time: Long,
     @ColumnInfo(name = "elapsed_realtime_nanos") val elapsedRealtimeNanos: Long
 ){
     @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") var id: Int = 0

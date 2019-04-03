@@ -1,5 +1,6 @@
 package com.example.testjetpack.utils.binding
 
+import android.graphics.Color
 import android.net.Uri
 import android.view.View
 import android.widget.EditText
@@ -12,6 +13,22 @@ import com.example.testjetpack.utils.picasso.CircleTransform
 import com.example.testjetpack.utils.showKeyboard
 import com.squareup.picasso.Picasso
 
+/**
+ * Load and circle image
+ */
+@BindingAdapter("text", "isAvailable", "notAvailableText", "changeColor")
+fun TextView.setTextIfAvailable(text: String?, isAvailable: Boolean?, notAvailableText: String?, changeColor: Boolean) {
+    val prevText = this.text
+    this.text = if (isAvailable == true) {
+        text
+    } else {
+        notAvailableText
+    }
+
+    if (changeColor) {
+        this.setTextColor(if (prevText != text) Color.RED else Color.GRAY) //change to default
+    }
+}
 
 /**
  * Load and circle image

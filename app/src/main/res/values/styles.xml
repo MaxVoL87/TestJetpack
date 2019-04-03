@@ -62,6 +62,10 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="HeaderText2" parent="HeaderText">
+        <item name="android:textSize">16sp</item>
+    </style>
+
     <style name="ButtonStyle" parent="Widget.AppCompat.Button.Colored">
         <!--<item name="android:stateListAnimator">@animator/button_animator</item>-->
         <!--<item name="android:outlineAmbientShadowColor">@color/colorButton</item>-->
@@ -79,7 +83,6 @@
         //38
         <item name="android:paddingBottom">25dp</item>
     </style>
-
 
 
 </resources>
