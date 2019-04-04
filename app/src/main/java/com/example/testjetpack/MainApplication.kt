@@ -5,6 +5,7 @@ import com.example.testjetpack.di.DaggerIAppComponent
 import com.example.testjetpack.di.IAppComponent
 import com.example.testjetpack.di.modules.AppModule
 import com.example.testjetpack.di.modules.DatabaseModule
+import com.example.testjetpack.di.modules.GpsModule
 import com.example.testjetpack.di.modules.NetworkModule
 import com.example.testjetpack.tasks.TasksFactory
 import dagger.android.support.DaggerApplication
@@ -22,6 +23,7 @@ class MainApplication : DaggerApplication() {
         .appModule(AppModule())
         .netModule(NetworkModule())
         .dbModule(DatabaseModule())
+        .gpsModule(GpsModule())
         .build()
 
     override fun applicationInjector() = applicationInjector

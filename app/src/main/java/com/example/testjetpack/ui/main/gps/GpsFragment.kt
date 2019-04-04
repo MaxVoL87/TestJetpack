@@ -40,8 +40,6 @@ class GpsFragment : BaseFragment<FragmentGpsBinding, GpsFragmentVM>() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = super.onCreateView(inflater, container, savedInstanceState)
         binding.viewModel = viewModel
-        binding.settingsClient = LocationServices.getSettingsClient(requireContext())
-        binding.fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireContext())
         return view
     }
 

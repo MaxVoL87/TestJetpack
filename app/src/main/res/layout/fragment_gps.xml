@@ -7,14 +7,6 @@
     <data>
 
         <variable
-            name="settingsClient"
-            type="com.google.android.gms.location.SettingsClient" />
-
-        <variable
-            name="fusedLocationProviderClient"
-            type="com.google.android.gms.location.FusedLocationProviderClient" />
-
-        <variable
             name="viewModel"
             type="com.example.testjetpack.ui.main.gps.GpsFragmentVM" />
 
@@ -439,7 +431,7 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_margin="@dimen/text_margin"
-            android:onClick='@{(v) -> viewModel.startStopLocationUpdates(settingsClient, fusedLocationProviderClient)}'
+            android:onClick='@{(v) -> viewModel.startStopLocationUpdates()}'
             android:text='@{safeUnbox(viewModel.isLocationListenerStarted()) ? @string/location_listener_stop : @string/location_listener_start}' />
     </RelativeLayout>
 </layout>

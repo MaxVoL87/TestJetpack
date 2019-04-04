@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations.switchMap
 import com.example.testjetpack.MainApplication
+import com.example.testjetpack.dataflow.gps.LocationProvider
 import com.example.testjetpack.dataflow.repository.IDataRepository
 import com.example.testjetpack.models.gps.Location
 import com.example.testjetpack.ui.base.BaseViewModel
@@ -22,23 +23,15 @@ class GpsFragmentVM : BaseViewModel<GpsFragmentVMEventStateChange>() {
 
     //initial values
     private val _interval: Long = 1000
-    private val _fastestInterval: Long = 1000
     private val _accelerationCalcTime: Long = 250
     private var _startTime: Long? = null
 
-    private var _fusedLocationProviderClient: FusedLocationProviderClient? = null
-    private val _locationRequest = LocationRequest().apply {
-        // Create the location request to start receiving updates
-        priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-        interval = _interval
-        fastestInterval = _fastestInterval
-    }
-    private val _locationCallback = object : LocationCallback() {
-        override fun onLocationResult(locationResult: LocationResult) {
+    private val _locationCallback = object : LocationProvider.LocationServiceListener {
+        override fun onLocationCalculated(location: android.location.Location) {
             val startTime = _startTime ?: throw UnexpectedExeption("onLocationResult.startTime == null")
             //if (_isLocationAvailable.value != true) return if not available - no location
 
-            val dbLocation = locationResult.lastLocation.toDBEntity(startTime)
+            val dbLocation = location.toDBEntity(startTime)
             _curLocation = dbLocation
 
             processCallAsync(
@@ -51,14 +44,15 @@ class GpsFragmentVM : BaseViewModel<GpsFragmentVMEventStateChange>() {
             )
         }
 
-        override fun onLocationAvailability(lolacionAvailability: LocationAvailability?) {
-            super.onLocationAvailability(lolacionAvailability)
-            _isLocationAvailable.value = lolacionAvailability?.isLocationAvailable
+        override fun onLocationAvailability(locationAvailability: LocationAvailability?) {
+            _isLocationAvailable.value = locationAvailability?.isLocationAvailable
         }
     }
 
     @Inject
     lateinit var dataRepository: IDataRepository
+    @Inject
+    lateinit var locationProvider: LocationProvider
 
     init {
         MainApplication.component.inject(this)
@@ -140,10 +134,7 @@ class GpsFragmentVM : BaseViewModel<GpsFragmentVMEventStateChange>() {
     val deceleration: LiveData<String>
         get() = _deceleration
 
-    fun startStopLocationUpdates(
-        settingsClient: SettingsClient,
-        fusedLocationProviderClient: FusedLocationProviderClient
-    ) {
+    fun startStopLocationUpdates() {
         if (_isLocationListenerStarted.value == true) {
             accelerationTimer?.cancel()
             stopLocationUpdates()
@@ -153,13 +144,6 @@ class GpsFragmentVM : BaseViewModel<GpsFragmentVMEventStateChange>() {
         accelerationTimer = Timer(true).apply {
             schedule(getAccelerationTimerTask(), 0, _accelerationCalcTime)
         }
-        // Create LocationSettingsRequest object using location request
-        val builder = LocationSettingsRequest.Builder()
-        builder.addLocationRequest(_locationRequest)
-        val locationSettingsRequest = builder.build()
-
-        settingsClient.checkLocationSettings(locationSettingsRequest)
-        _fusedLocationProviderClient = fusedLocationProviderClient
 
         _events.value = Event(GpsFragmentVMEventStateChange.RequestLocationUpdatesPermissions)
     }
@@ -167,13 +151,15 @@ class GpsFragmentVM : BaseViewModel<GpsFragmentVMEventStateChange>() {
     @SuppressLint("MissingPermission")
     fun onPermissionSuccess() {
         _startTime = Calendar.getInstance().time.time
-        _fusedLocationProviderClient?.requestLocationUpdates(_locationRequest, _locationCallback, Looper.myLooper())
+        locationProvider
+            .setInterval(_interval)
+            .setPriority(LocationProvider.Priority.HIGH)
+            .requestLocationUpdates(_locationCallback, Looper.getMainLooper())
         _isLocationListenerStarted.value = true
     }
 
     private fun stopLocationUpdates() {
-        _fusedLocationProviderClient?.removeLocationUpdates(_locationCallback)
-        _fusedLocationProviderClient = null
+        locationProvider.stopLocationUpdates()
         _isLocationListenerStarted.value = false
     }
 

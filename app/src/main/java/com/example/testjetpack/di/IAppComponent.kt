@@ -18,7 +18,7 @@ import javax.inject.Singleton
 @Singleton
 @Component(
     modules = [AndroidSupportInjectionModule::class, ActivityModule::class, FragmentModule::class,
-        AppModule::class, NetworkModule::class, DatabaseModule::class]
+        AppModule::class, NetworkModule::class, DatabaseModule::class, GpsModule::class]
 )
 interface IAppComponent : AndroidInjector<MainApplication> {
     override fun inject(application: MainApplication)
@@ -36,6 +36,9 @@ interface IAppComponent : AndroidInjector<MainApplication> {
 
         @BindsInstance
         fun dbModule(dbModule: DatabaseModule): Builder
+
+        @BindsInstance
+        fun gpsModule(gpsModule: GpsModule): Builder
 
         fun build(): IAppComponent
     }
