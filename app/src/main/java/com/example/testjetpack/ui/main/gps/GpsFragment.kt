@@ -5,17 +5,17 @@ import android.Manifest
 import android.content.Context
 import android.location.LocationManager
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.core.content.ContextCompat.getSystemService
 import com.example.testjetpack.R
 import com.example.testjetpack.databinding.FragmentGpsBinding
 import com.example.testjetpack.ui.base.BaseFragment
 import com.example.testjetpack.ui.base.EventStateChange
 import com.example.testjetpack.utils.permissionsGranted
-import com.google.android.gms.location.LocationServices
+import com.example.testjetpack.utils.withNotNull
 import kotlin.reflect.KClass
+
+
 
 class GpsFragment : BaseFragment<FragmentGpsBinding, GpsFragmentVM>() {
     override val name: String = "GPS"
@@ -49,6 +49,34 @@ class GpsFragment : BaseFragment<FragmentGpsBinding, GpsFragmentVM>() {
         if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             showAlert("GPS Not Enabled")
         }
+    }
+
+    private val isGpsOnlyItemId = 1
+    private val isShowDiagnosticItemId = 2
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        menu.add(Menu.NONE, isGpsOnlyItemId, Menu.NONE, "GPS Only")
+        menu.add(Menu.NONE, isShowDiagnosticItemId, Menu.NONE, "Diagnostic")
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            isGpsOnlyItemId -> {
+                withNotNull(viewModel.isGPSOnly.value) {
+                    viewModel.isGPSOnly.value = !this
+                }
+                return true
+            }
+            isShowDiagnosticItemId -> {
+                withNotNull(viewModel.isNeedToShowDiagnostic.value) {
+                    viewModel.isNeedToShowDiagnostic.value = !this
+                }
+                return true
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 
     // region VM events renderer

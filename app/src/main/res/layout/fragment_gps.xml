@@ -46,7 +46,8 @@
             android:layout_alignBottom="@id/toolbar"
             android:layout_toStartOf="@+id/sDiagnostic"
             android:checked='@={viewModel.isGPSOnly}'
-            android:enabled='@{!viewModel.isLocationListenerStarted}'
+            android:enabled='@{!safeUnbox(viewModel.isLocationListenerStarted)}'
+            android:elevation="1000dp"
             android:text="GPS Only" />
 
         <Switch
