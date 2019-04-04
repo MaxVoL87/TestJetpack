@@ -23,7 +23,7 @@ class GpsFragmentVM : BaseViewModel<GpsFragmentVMEventStateChange>() {
     //initial values
     private val _interval: Long = 1000
     private val _fastestInterval: Long = 1000
-    private val _accelerationCalcTime: Long = 2000
+    private val _accelerationCalcTime: Long = 250
     private var _startTime: Long? = null
 
     private var _fusedLocationProviderClient: FusedLocationProviderClient? = null
