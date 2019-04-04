@@ -2,6 +2,8 @@ package com.example.testjetpack.utils
 
 import android.location.Location
 import android.os.Build
+import com.example.testjetpack.dataflow.gps.acceleration_extra
+import com.example.testjetpack.dataflow.gps.satellites_extra
 import com.example.testjetpack.models.git.License
 import com.example.testjetpack.models.git.User
 import com.example.testjetpack.models.git.network.request.GitPage
@@ -94,17 +96,30 @@ fun GitRepository.toDBEntity(license: License?, owner: User, indexInResponse: In
         indexInResponse = indexInResponse
     )
 
-fun Location.toDBEntity(startTime: Long) = com.example.testjetpack.models.gps.Location(
-    startTime = startTime,
-    altitude = altitude,
-    latitude = latitude,
-    longitude = longitude,
-    bearing = bearing,
-    speed = speed,
-    accuracy = accuracy,
-    verticalAccuracyMeters = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) verticalAccuracyMeters else -1F,
-    speedAccuracyMetersPerSecond = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) speedAccuracyMetersPerSecond else -1F,
-    bearingAccuracyDegrees = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) bearingAccuracyDegrees else -1F,
-    time = time,
-    elapsedRealtimeNanos = elapsedRealtimeNanos
-)
+fun Location.toDBEntity(startTime: Long): com.example.testjetpack.models.gps.Location {
+
+    var acceleration = -1F
+    var satellites = -1
+
+    withNotNull(extras){
+        acceleration = getFloat(acceleration_extra, acceleration)
+        satellites = getInt(satellites_extra, satellites)
+    }
+
+    return com.example.testjetpack.models.gps.Location(
+        startTime = startTime,
+        altitude = altitude,
+        latitude = latitude,
+        longitude = longitude,
+        bearing = bearing,
+        speed = speed,
+        accuracy = accuracy,
+        verticalAccuracyMeters = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) verticalAccuracyMeters else -1F,
+        speedAccuracyMetersPerSecond = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) speedAccuracyMetersPerSecond else -1F,
+        bearingAccuracyDegrees = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) bearingAccuracyDegrees else -1F,
+        time = time,
+        elapsedRealtimeNanos = elapsedRealtimeNanos,
+        acceleration = acceleration,
+        satellites = satellites
+    )
+}

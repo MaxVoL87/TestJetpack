@@ -114,5 +114,7 @@ class LocationProvider(context: Context) {
         }
         return _locationCallback!!
     }
-
 }
+
+const val acceleration_extra = "acceleration_extra"
+const val satellites_extra = "satellites_extra"
