@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations.switchMap
 import com.example.testjetpack.MainApplication
+import com.example.testjetpack.dataflow.gps.ILocationProviderListener
 import com.example.testjetpack.dataflow.gps.LocationProvider
 import com.example.testjetpack.dataflow.repository.IDataRepository
 import com.example.testjetpack.models.gps.Location
@@ -14,7 +15,6 @@ import com.example.testjetpack.ui.base.EventStateChange
 import com.example.testjetpack.ui.base.UnexpectedExeption
 import com.example.testjetpack.utils.livedata.Event
 import com.example.testjetpack.utils.toDBEntity
-import com.google.android.gms.location.*
 import java.util.*
 import javax.inject.Inject
 
@@ -24,7 +24,7 @@ class GpsFragmentVM : BaseViewModel<GpsFragmentVMEventStateChange>() {
     private val _interval: Long = 1000
     private var _startTime: Long? = null
 
-    private val _locationCallback = object : LocationProvider.LocationServiceListener {
+    private val _locationCallback = object : ILocationProviderListener {
         override fun onLocationCalculated(location: android.location.Location) {
             val startTime = _startTime ?: throw UnexpectedExeption("onLocationResult.startTime == null")
             //if (_isLocationAvailable.value != true) return if not available - no location
@@ -42,9 +42,10 @@ class GpsFragmentVM : BaseViewModel<GpsFragmentVMEventStateChange>() {
             )
         }
 
-        override fun onLocationAvailability(locationAvailability: LocationAvailability?) {
-            _isLocationAvailable.value = locationAvailability?.isLocationAvailable
+        override fun onLocationAvailable(isAvailable: Boolean) {
+            _isLocationAvailable.value = isAvailable
         }
+
     }
 
     @Inject

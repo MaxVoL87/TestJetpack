@@ -4,6 +4,7 @@ import android.content.Context
 import android.location.Location
 import android.os.Looper
 import androidx.annotation.RequiresPermission
+import com.example.testjetpack.utils.calculateAcceleration
 import com.google.android.gms.location.*
 import com.google.android.gms.tasks.Task
 
@@ -34,30 +35,21 @@ class LocationProvider(context: Context) {
         PASSIVE(LocationRequest.PRIORITY_NO_POWER)
     }
 
-    interface LocationServiceListener {
-
-        fun onLocationCalculated(location: Location)
-
-        fun onLocationAvailability(locationAvailability: LocationAvailability?)
-    }
-
-
     private var _interval: Long = 1000
     private var _fastestInterval: Long = 500
     private var _priority: Int = LocationRequest.PRIORITY_NO_POWER
 
     private var _locationRequest: LocationRequest? = null
     private var _locationCallback: LocationCallback? = null
-    private var _listener: LocationServiceListener? = null
+    private var _listener: ILocationProviderListener? = null
 
     private var _lastCalcLocation: Location? = null
-    private var _lastCalcSpeed: Float = 0.0F
 
     val isAllive: Boolean
         get() = _listener != null
 
     @RequiresPermission(anyOf = ["android.permission.ACCESS_COARSE_LOCATION", "android.permission.ACCESS_FINE_LOCATION"])
-    fun requestLocationUpdates(listener: LocationServiceListener, looper: Looper): Task<Void> {
+    fun requestLocationUpdates(listener: ILocationProviderListener, looper: Looper): Task<Void> {
         if (isAllive) throw Exception("Service already  running")
 
         _listener = listener
@@ -106,30 +98,19 @@ class LocationProvider(context: Context) {
                 if (_listener == null) return
                 val location = locationResult.lastLocation
 
-                val acceleration: Float
                 val lastCalcLocation = _lastCalcLocation
-                if (lastCalcLocation != null) {
-                    val curLocationSpeed = location.speed
-                    val lastCalcSpeed = _lastCalcSpeed
-                    val speedDiff = curLocationSpeed - lastCalcSpeed
-                    val timeDiff = (location.time - lastCalcLocation.time).toFloat() * 0.001F //milliseconds to seconds
-
-                    _lastCalcSpeed = curLocationSpeed
-                    acceleration =
-                        if (speedDiff == 0.0F || timeDiff == 0.0F) 0.0F
-                        else speedDiff / timeDiff // (V - V0)/t
-                } else {
-                    acceleration = 0.0F
-                }
+                val acceleration =
+                    if (lastCalcLocation != null) location.calculateAcceleration(lastCalcLocation.speed, lastCalcLocation.time)
+                    else 0.0F
 
                 location.extras.putFloat(acceleration_extra, acceleration)
                 _lastCalcLocation = location
                 _listener?.onLocationCalculated(location)
             }
 
-            override fun onLocationAvailability(lolacionAvailability: LocationAvailability?) {
-                super.onLocationAvailability(lolacionAvailability)
-                _listener?.onLocationAvailability(lolacionAvailability)
+            override fun onLocationAvailability(locationAvailability: LocationAvailability?) {
+                super.onLocationAvailability(locationAvailability)
+                _listener?.onLocationAvailable(locationAvailability?.isLocationAvailable ?: false)
             }
         }
         return _locationCallback!!
@@ -137,9 +118,5 @@ class LocationProvider(context: Context) {
 
     private fun resetCalculations() {
         _lastCalcLocation = null
-        _lastCalcSpeed = 0.0F
     }
 }
-
-const val acceleration_extra = "acceleration_extra"
-const val satellites_extra = "satellites_extra"
