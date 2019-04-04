@@ -399,7 +399,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/text_margin"
-                    android:text="deceleration (m/c²):"
+                    android:text="satellites:"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/lAcceleration" />
 
@@ -417,7 +417,7 @@
                     app:layout_constraintStart_toEndOf="@+id/lDeceleration"
                     app:layout_constraintTop_toTopOf="@+id/lDeceleration"
                     app:notAvailableText='@{@string/no_value}'
-                    app:text='@{viewModel.deceleration}'
+                    app:text='@{viewModel.satellites}'
                     tools:text="0" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>

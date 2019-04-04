@@ -50,6 +50,9 @@ class LocationProvider(context: Context) {
     private var _locationCallback: LocationCallback? = null
     private var _listener: LocationServiceListener? = null
 
+    private var _lastCalcLocation: Location? = null
+    private var _lastCalcSpeed: Float = 0.0F
+
     val isAllive: Boolean
         get() = _listener != null
 
@@ -72,6 +75,7 @@ class LocationProvider(context: Context) {
 
     fun stopLocationUpdates(): Task<Void> {
         _listener = null
+        resetCalculations()
         return _fusedLocationProviderClient.removeLocationUpdates(_locationCallback)
     }
 
@@ -102,8 +106,24 @@ class LocationProvider(context: Context) {
                 if (_listener == null) return
                 val location = locationResult.lastLocation
 
+                val acceleration: Float
+                val lastCalcLocation = _lastCalcLocation
+                if (lastCalcLocation != null) {
+                    val curLocationSpeed = location.speed
+                    val lastCalcSpeed = _lastCalcSpeed
+                    val speedDiff = curLocationSpeed - lastCalcSpeed
+                    val timeDiff = (location.time - lastCalcLocation.time).toFloat() * 0.001F //milliseconds to seconds
 
+                    _lastCalcSpeed = curLocationSpeed
+                    acceleration =
+                        if (speedDiff == 0.0F || timeDiff == 0.0F) 0.0F
+                        else speedDiff / timeDiff // (V - V0)/t
+                } else {
+                    acceleration = 0.0F
+                }
 
+                location.extras.putFloat(acceleration_extra, acceleration)
+                _lastCalcLocation = location
                 _listener?.onLocationCalculated(location)
             }
 
@@ -113,6 +133,11 @@ class LocationProvider(context: Context) {
             }
         }
         return _locationCallback!!
+    }
+
+    private fun resetCalculations() {
+        _lastCalcLocation = null
+        _lastCalcSpeed = 0.0F
     }
 }
 
