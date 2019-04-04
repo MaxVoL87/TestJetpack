@@ -30,6 +30,9 @@ class GpsLocationProvider(mContext: Context) {
     private val MIN_DISTANCE_CHANGE_FOR_UPDATES: Float = 0.0F // 0 meters
     private var _interval: Long = 1000
 
+    val isAllive: Boolean
+        get() = _listener != null
+
     @RequiresPermission(ACCESS_FINE_LOCATION)
     fun requestLocationUpdates(listener: ILocationProviderListener) {
         if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) throw Exception("GPS not enabled")

@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations.switchMap
 import com.example.testjetpack.MainApplication
+import com.example.testjetpack.dataflow.gps.GpsLocationProvider
 import com.example.testjetpack.dataflow.gps.ILocationProviderListener
 import com.example.testjetpack.dataflow.gps.LocationProvider
 import com.example.testjetpack.dataflow.repository.IDataRepository
@@ -52,6 +53,8 @@ class GpsFragmentVM : BaseViewModel<GpsFragmentVMEventStateChange>() {
     lateinit var dataRepository: IDataRepository
     @Inject
     lateinit var locationProvider: LocationProvider
+    @Inject
+    lateinit var gpsLocationProvider: GpsLocationProvider
 
     init {
         MainApplication.component.inject(this)
@@ -74,6 +77,7 @@ class GpsFragmentVM : BaseViewModel<GpsFragmentVMEventStateChange>() {
         get() = _isLocationListenerStarted
 
     val isNeedToShowDiagnostic = MutableLiveData<Boolean>(true)
+    val isGPSOnly = MutableLiveData<Boolean>(false)
 
     val latitude: LiveData<String> = switchMap(_location) { MutableLiveData(it.latitude.toString()) }
     val longitude: LiveData<String> = switchMap(_location) { MutableLiveData(it.longitude.toString()) }
@@ -81,9 +85,12 @@ class GpsFragmentVM : BaseViewModel<GpsFragmentVMEventStateChange>() {
     val bearing: LiveData<String> = switchMap(_location) { MutableLiveData(it.bearing.toString()) }
     val speed: LiveData<String> = switchMap(_location) { MutableLiveData(it.speed.toString()) }
     val accuracy: LiveData<String> = switchMap(_location) { MutableLiveData(it.accuracy.toString()) }
-    val verticalAccuracy: LiveData<String> = switchMap(_location) { MutableLiveData(it.verticalAccuracyMeters.toString()) }
-    val speedAccuracy: LiveData<String> = switchMap(_location) { MutableLiveData(it.speedAccuracyMetersPerSecond.toString()) }
-    val bearingAccuracy: LiveData<String> = switchMap(_location) { MutableLiveData(it.bearingAccuracyDegrees.toString()) }
+    val verticalAccuracy: LiveData<String> =
+        switchMap(_location) { MutableLiveData(it.verticalAccuracyMeters.toString()) }
+    val speedAccuracy: LiveData<String> =
+        switchMap(_location) { MutableLiveData(it.speedAccuracyMetersPerSecond.toString()) }
+    val bearingAccuracy: LiveData<String> =
+        switchMap(_location) { MutableLiveData(it.bearingAccuracyDegrees.toString()) }
     val time: LiveData<String> = switchMap(_location) { MutableLiveData(it.time.toString()) }
     val elapsedRealTime: LiveData<String> = switchMap(_location) { MutableLiveData(it.elapsedRealtimeNanos.toString()) }
 
@@ -102,15 +109,24 @@ class GpsFragmentVM : BaseViewModel<GpsFragmentVMEventStateChange>() {
     @SuppressLint("MissingPermission")
     fun onPermissionSuccess() {
         _startTime = Calendar.getInstance().time.time
-        locationProvider
-            .setInterval(_interval)
-            .setPriority(LocationProvider.Priority.HIGH)
-            .requestLocationUpdates(_locationCallback, Looper.getMainLooper())
+
+        if (isGPSOnly.value == true) {
+            gpsLocationProvider
+                .setInterval(_interval)
+                .requestLocationUpdates(_locationCallback)
+        } else {
+            locationProvider
+                .setInterval(_interval)
+                .setPriority(LocationProvider.Priority.HIGH)
+                .requestLocationUpdates(_locationCallback, Looper.getMainLooper())
+        }
+
         _isLocationListenerStarted.value = true
     }
 
     private fun stopLocationUpdates() {
-        locationProvider.stopLocationUpdates()
+        if (locationProvider.isAllive) locationProvider.stopLocationUpdates()
+        if (gpsLocationProvider.isAllive) gpsLocationProvider.stopLocationUpdates()
         _isLocationListenerStarted.value = false
     }
 

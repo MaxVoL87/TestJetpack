@@ -36,6 +36,19 @@
             tools:ignore="ContentDescription" />
 
         //todo: move to toolbar?
+
+        <Switch
+            android:id="@+id/sGpsOnly"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/bStartStopLocationListener"
+            android:layout_alignTop="@id/toolbar"
+            android:layout_alignBottom="@id/toolbar"
+            android:layout_toStartOf="@+id/sDiagnostic"
+            android:checked='@={viewModel.isGPSOnly}'
+            android:enabled='@{!viewModel.isLocationListenerStarted}'
+            android:text="GPS Only" />
+
         <Switch
             android:id="@+id/sDiagnostic"
             android:layout_width="wrap_content"
@@ -45,7 +58,7 @@
             android:layout_alignEnd="@id/toolbar"
             android:layout_alignBottom="@id/toolbar"
             android:layout_marginEnd="@dimen/text_margin"
-            android:checked='@={viewModel.isNeedToShowDiagnostic()}'
+            android:checked='@={viewModel.isNeedToShowDiagnostic}'
             android:text="@string/gps_diagnostic_switch" />
 
         <ScrollView
