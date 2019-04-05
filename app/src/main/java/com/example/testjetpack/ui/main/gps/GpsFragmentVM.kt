@@ -15,6 +15,8 @@ import com.example.testjetpack.ui.base.BaseViewModel
 import com.example.testjetpack.ui.base.EventStateChange
 import com.example.testjetpack.ui.base.UnexpectedExeption
 import com.example.testjetpack.utils.livedata.Event
+import com.example.testjetpack.utils.livedata.toLDString
+import com.example.testjetpack.utils.livedata.toMutableLiveData
 import com.example.testjetpack.utils.toDBEntity
 import java.util.*
 import javax.inject.Inject
@@ -63,12 +65,12 @@ class GpsFragmentVM : BaseViewModel<GpsFragmentVMEventStateChange>() {
     private var _curLocation: Location? = null
         set(value) {
             field = value
-            if (isNeedToShowDiagnostic.value == true) _location.value = value
+            initLocationValues(value)
         }
 
     private val _location = MutableLiveData<Location>()
-    private val _isLocationAvailable = MutableLiveData<Boolean>(false)
-    private val _isLocationListenerStarted = MutableLiveData<Boolean>(false)
+    private val _isLocationAvailable = false.toMutableLiveData()
+    private val _isLocationListenerStarted = false.toMutableLiveData()
 
     val isLocationAvailable: LiveData<Boolean>
         get() = _isLocationAvailable
@@ -76,26 +78,23 @@ class GpsFragmentVM : BaseViewModel<GpsFragmentVMEventStateChange>() {
     val isLocationListenerStarted: LiveData<Boolean>
         get() = _isLocationListenerStarted
 
-    val isNeedToShowDiagnostic = MutableLiveData<Boolean>(true)
-    val isGPSOnly = MutableLiveData<Boolean>(false)
+    val isNeedToShowDiagnostic = true.toMutableLiveData()
+    val isGPSOnly = false.toMutableLiveData()
 
-    val latitude: LiveData<String> = switchMap(_location) { MutableLiveData(it.latitude.toString()) }
-    val longitude: LiveData<String> = switchMap(_location) { MutableLiveData(it.longitude.toString()) }
-    val altitude: LiveData<String> = switchMap(_location) { MutableLiveData(it.altitude.toString()) }
-    val bearing: LiveData<String> = switchMap(_location) { MutableLiveData(it.bearing.toString()) }
-    val speed: LiveData<String> = switchMap(_location) { MutableLiveData(it.speed.toString()) }
-    val accuracy: LiveData<String> = switchMap(_location) { MutableLiveData(it.accuracy.toString()) }
-    val verticalAccuracy: LiveData<String> =
-        switchMap(_location) { MutableLiveData(it.verticalAccuracyMeters.toString()) }
-    val speedAccuracy: LiveData<String> =
-        switchMap(_location) { MutableLiveData(it.speedAccuracyMetersPerSecond.toString()) }
-    val bearingAccuracy: LiveData<String> =
-        switchMap(_location) { MutableLiveData(it.bearingAccuracyDegrees.toString()) }
-    val time: LiveData<String> = switchMap(_location) { MutableLiveData(it.time.toString()) }
-    val elapsedRealTime: LiveData<String> = switchMap(_location) { MutableLiveData(it.elapsedRealtimeNanos.toString()) }
+    val latitude: LiveData<String> = switchMap(_location) { it.latitude.toLDString() }
+    val longitude: LiveData<String> = switchMap(_location) { it.longitude.toLDString() }
+    val altitude: LiveData<String> = switchMap(_location) { it.altitude.toLDString() }
+    val bearing: LiveData<String> = switchMap(_location) { it.bearing.toLDString() }
+    val speed: LiveData<String> = switchMap(_location) { it.speed.toLDString() }
+    val accuracy: LiveData<String> = switchMap(_location) { it.accuracy.toLDString() }
+    val verticalAccuracy: LiveData<String> = switchMap(_location) { it.verticalAccuracyMeters.toLDString() }
+    val speedAccuracy: LiveData<String> = switchMap(_location) { it.speedAccuracyMetersPerSecond.toLDString() }
+    val bearingAccuracy: LiveData<String> = switchMap(_location) { it.bearingAccuracyDegrees.toLDString() }
+    val time: LiveData<String> = switchMap(_location) { it.time.toLDString() }
+    val elapsedRealTime: LiveData<String> = switchMap(_location) { it.elapsedRealtimeNanos.toLDString() }
 
-    val acceleration: LiveData<String> = switchMap(_location) { MutableLiveData(it.acceleration.toString()) }
-    val satellites: LiveData<String> = switchMap(_location) { MutableLiveData(it.satellites.toString()) }
+    val acceleration: LiveData<String> = switchMap(_location) { it.acceleration.toLDString() }
+    val satellites: LiveData<String> = switchMap(_location) { it.satellites.toLDString() }
 
     fun startStopLocationUpdates() {
         if (_isLocationListenerStarted.value == true) {
@@ -124,7 +123,7 @@ class GpsFragmentVM : BaseViewModel<GpsFragmentVMEventStateChange>() {
         _isLocationListenerStarted.value = true
     }
 
-    fun clearDBData(){
+    fun clearDBData() {
         processCallAsync(
             call = { dataRepository.removeAllLocationsfromDB() },
             onSuccess = {},
@@ -141,6 +140,14 @@ class GpsFragmentVM : BaseViewModel<GpsFragmentVMEventStateChange>() {
         _isLocationListenerStarted.value = false
     }
 
+    private fun initLocationValues(location: Location?) {
+        if (isNeedToShowDiagnostic.value != true) return
+        if (location == null) {
+            _isLocationAvailable.value = false
+            return
+        }
+        _location.value = location
+    }
 }
 
 sealed class GpsFragmentVMEventStateChange : EventStateChange {

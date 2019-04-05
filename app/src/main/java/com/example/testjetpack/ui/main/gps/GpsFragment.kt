@@ -16,7 +16,6 @@ import com.example.testjetpack.utils.withNotNull
 import kotlin.reflect.KClass
 
 
-
 class GpsFragment : BaseFragment<FragmentGpsBinding, GpsFragmentVM>() {
     override val name: String = "GPS"
     override val viewModelClass: Class<GpsFragmentVM> = GpsFragmentVM::class.java
@@ -63,7 +62,7 @@ class GpsFragment : BaseFragment<FragmentGpsBinding, GpsFragmentVM>() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
+        when (item.itemId) {
             isGpsOnlyItemId -> {
                 withNotNull(viewModel.isGPSOnly.value) {
                     viewModel.isGPSOnly.value = !this
@@ -77,7 +76,7 @@ class GpsFragment : BaseFragment<FragmentGpsBinding, GpsFragmentVM>() {
                 return true
             }
             clearDBDataItemId -> {
-                    viewModel.clearDBData()
+                viewModel.clearDBData()
                 return true
             }
         }
@@ -89,7 +88,13 @@ class GpsFragment : BaseFragment<FragmentGpsBinding, GpsFragmentVM>() {
 
     private val requestLocationUpdatesPermissions: (Any) -> Unit = { event ->
         event as GpsFragmentVMEventStateChange.RequestLocationUpdatesPermissions
-        if(permissionsGranted(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION,  Manifest.permission.ACCESS_COARSE_LOCATION), true)){
+        if (permissionsGranted(
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ), true
+            )
+        ) {
             viewModel.onPermissionSuccess()
         } else {
             showAlert("Permissions Not Granted!")
