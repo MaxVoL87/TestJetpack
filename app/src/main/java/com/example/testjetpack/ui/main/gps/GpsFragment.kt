@@ -53,10 +53,12 @@ class GpsFragment : BaseFragment<FragmentGpsBinding, GpsFragmentVM>() {
 
     private val isGpsOnlyItemId = 1
     private val isShowDiagnosticItemId = 2
+    private val clearDBDataItemId = 3
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         menu.add(Menu.NONE, isGpsOnlyItemId, Menu.NONE, "GPS Only")
         menu.add(Menu.NONE, isShowDiagnosticItemId, Menu.NONE, "Diagnostic")
+        menu.add(Menu.NONE, clearDBDataItemId, Menu.NONE, "Clear DB")
         super.onCreateOptionsMenu(menu, inflater)
     }
 
@@ -72,6 +74,10 @@ class GpsFragment : BaseFragment<FragmentGpsBinding, GpsFragmentVM>() {
                 withNotNull(viewModel.isNeedToShowDiagnostic.value) {
                     viewModel.isNeedToShowDiagnostic.value = !this
                 }
+                return true
+            }
+            clearDBDataItemId -> {
+                    viewModel.clearDBData()
                 return true
             }
         }

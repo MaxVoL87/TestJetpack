@@ -47,4 +47,10 @@ class DataRepository @Inject constructor(
             appDatabase.getLocationDao().insert(*locations.toTypedArray())
         }
     }
+
+    override fun removeAllLocationsfromDB() {
+        appDatabase.runInTransaction {
+            appDatabase.getLocationDao().clearAll()
+        }
+    }
 }

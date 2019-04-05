@@ -12,25 +12,27 @@ import androidx.annotation.RequiresApi
 import com.example.testjetpack.utils.calculateAcceleration
 import com.example.testjetpack.utils.withNotNull
 
-
+/**
+ * Location provider based on Gps only
+ */
 class GpsLocationProvider(mContext: Context) {
 
     private val locationManager: LocationManager = mContext.getSystemService(LOCATION_SERVICE) as LocationManager
 
-    private var mGpsStatus: GpsStatus? = null
-    private var mGnssStatusCallback: GnssStatus.Callback? = null
+    private var _gpsStatus: GpsStatus? = null
+    private var _gnssStatusCallback: GnssStatus.Callback? = null
     private var _locationListener: LocationListener? = null
     private var _gpsListener: GpsStatus.Listener? = null
 
     private var _listener: ILocationProviderListener? = null
     private var _lastCalcLocation: Location? = null
-    private var szSatellitesInUse: Int = 0
-    private var szSatellitesInView: Int = 0
+    private var _satellitesInUse: Int = 0
+    private var _satellitesInView: Int = 0
 
-    private val MIN_DISTANCE_CHANGE_FOR_UPDATES: Float = 0.0F // 0 meters
+    private val _minDistanceChangeForUpdates: Float = 0.0F // 0 meters
     private var _interval: Long = 1000
 
-    val isAllive: Boolean
+    val isAlive: Boolean
         get() = _listener != null
 
     @RequiresPermission(ACCESS_FINE_LOCATION)
@@ -48,7 +50,7 @@ class GpsLocationProvider(mContext: Context) {
         locationManager.requestLocationUpdates(
             LocationManager.GPS_PROVIDER,
             _interval,
-            MIN_DISTANCE_CHANGE_FOR_UPDATES,
+            _minDistanceChangeForUpdates,
             getLocationListener()
         )
     }
@@ -57,7 +59,7 @@ class GpsLocationProvider(mContext: Context) {
         _listener = null
         locationManager.removeUpdates(_locationListener)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            locationManager.unregisterGnssStatusCallback(mGnssStatusCallback)
+            locationManager.unregisterGnssStatusCallback(_gnssStatusCallback)
         } else {
             locationManager.removeGpsStatusListener(_gpsListener)
         }
@@ -71,8 +73,8 @@ class GpsLocationProvider(mContext: Context) {
 
     private fun resetCalculations() {
         _lastCalcLocation = null
-        szSatellitesInUse = 0
-        szSatellitesInView = 0
+        _satellitesInUse = 0
+        _satellitesInView = 0
     }
 
     private fun getLocationListener(): LocationListener {
@@ -87,7 +89,8 @@ class GpsLocationProvider(mContext: Context) {
                     else 0.0F
 
                 location.extras.putFloat(acceleration_extra, acceleration)
-                location.extras.putInt(satellites_extra, szSatellitesInUse)
+                location.extras.putInt(satellites_extra, location.extras.getInt("satellites", -1))
+
                 _lastCalcLocation = location
 
                 _listener?.onLocationCalculated(location)
@@ -109,7 +112,7 @@ class GpsLocationProvider(mContext: Context) {
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun getGnssCallback(): GnssStatus.Callback {
-        mGnssStatusCallback = object : GnssStatus.Callback() {
+        _gnssStatusCallback = object : GnssStatus.Callback() {
             override fun onSatelliteStatusChanged(status: GnssStatus?) {
                 super.onSatelliteStatusChanged(status)
                 var satellitesCount = 0
@@ -120,8 +123,8 @@ class GpsLocationProvider(mContext: Context) {
                         if (usedInFix(i)) usedInFixCount++
                     }
                 }
-                szSatellitesInView = satellitesCount
-                szSatellitesInUse = usedInFixCount
+                _satellitesInView = satellitesCount
+                _satellitesInUse = usedInFixCount
             }
 
             override fun onStarted() {
@@ -136,7 +139,7 @@ class GpsLocationProvider(mContext: Context) {
                 super.onStopped()
             }
         }
-        return mGnssStatusCallback!!
+        return _gnssStatusCallback!!
     }
 
     @RequiresPermission(ACCESS_FINE_LOCATION)
@@ -150,10 +153,10 @@ class GpsLocationProvider(mContext: Context) {
                 GPS_EVENT_FIRST_FIX -> {
                 }
                 GPS_EVENT_SATELLITE_STATUS -> {
-                    mGpsStatus = locationManager.getGpsStatus(mGpsStatus)
-                    val satellites = mGpsStatus!!.satellites.toList()
-                    szSatellitesInView = satellites.size
-                    szSatellitesInUse = satellites.count { it.usedInFix() }
+                    _gpsStatus = locationManager.getGpsStatus(_gpsStatus)
+                    val satellites = _gpsStatus!!.satellites.toList()
+                    _satellitesInView = satellites.size
+                    _satellitesInUse = satellites.count { it.usedInFix() }
                 }
             }
         }

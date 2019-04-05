@@ -2,7 +2,7 @@ package com.example.testjetpack.di.modules
 
 import com.example.testjetpack.MainApplication
 import com.example.testjetpack.dataflow.gps.GpsLocationProvider
-import com.example.testjetpack.dataflow.gps.LocationProvider
+import com.example.testjetpack.dataflow.gps.GmsLocationProvider
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -12,8 +12,8 @@ class GpsModule {
 
     @Singleton
     @Provides
-    fun provideLocationProvider(mainApplication: MainApplication): LocationProvider {
-        return LocationProvider(mainApplication)
+    fun provideLocationProvider(mainApplication: MainApplication): GmsLocationProvider {
+        return GmsLocationProvider(mainApplication)
     }
 
     @Singleton

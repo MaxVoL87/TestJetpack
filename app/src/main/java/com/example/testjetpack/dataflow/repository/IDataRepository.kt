@@ -15,4 +15,6 @@ interface IDataRepository {
 
 
     fun insertLocationsIntoDB(locations: List<Location>)
+
+    fun removeAllLocationsfromDB()
 }

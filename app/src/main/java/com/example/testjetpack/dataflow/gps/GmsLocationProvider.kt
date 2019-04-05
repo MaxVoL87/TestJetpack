@@ -8,7 +8,10 @@ import com.example.testjetpack.utils.calculateAcceleration
 import com.google.android.gms.location.*
 import com.google.android.gms.tasks.Task
 
-class LocationProvider(context: Context) {
+/**
+ * Location Provider based on Google Mobile Services FusedLocationProviderClient
+ */
+class GmsLocationProvider(context: Context) {
 
     private val _settingsClient = LocationServices.getSettingsClient(context)
     private val _fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context)
@@ -45,12 +48,12 @@ class LocationProvider(context: Context) {
 
     private var _lastCalcLocation: Location? = null
 
-    val isAllive: Boolean
+    val isAlive: Boolean
         get() = _listener != null
 
     @RequiresPermission(anyOf = ["android.permission.ACCESS_COARSE_LOCATION", "android.permission.ACCESS_FINE_LOCATION"])
     fun requestLocationUpdates(listener: ILocationProviderListener, looper: Looper): Task<Void> {
-        if (isAllive) throw Exception("Service already  running")
+        if (isAlive) throw Exception("Service already  running")
 
         _listener = listener
         val request = createLocationRequest()
@@ -71,13 +74,13 @@ class LocationProvider(context: Context) {
         return _fusedLocationProviderClient.removeLocationUpdates(_locationCallback)
     }
 
-    fun setInterval(interval: Long): LocationProvider {
+    fun setInterval(interval: Long): GmsLocationProvider {
         _interval = interval
         _fastestInterval = interval
         return this
     }
 
-    fun setPriority(priority: Priority): LocationProvider {
+    fun setPriority(priority: Priority): GmsLocationProvider {
         _priority = priority.value
         return this
     }
@@ -104,6 +107,8 @@ class LocationProvider(context: Context) {
                     else 0.0F
 
                 location.extras.putFloat(acceleration_extra, acceleration)
+                location.extras.putInt(satellites_extra, location.extras.getInt("satellites", -1))
+
                 _lastCalcLocation = location
                 _listener?.onLocationCalculated(location)
             }

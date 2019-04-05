@@ -8,7 +8,7 @@ import androidx.lifecycle.Transformations.switchMap
 import com.example.testjetpack.MainApplication
 import com.example.testjetpack.dataflow.gps.GpsLocationProvider
 import com.example.testjetpack.dataflow.gps.ILocationProviderListener
-import com.example.testjetpack.dataflow.gps.LocationProvider
+import com.example.testjetpack.dataflow.gps.GmsLocationProvider
 import com.example.testjetpack.dataflow.repository.IDataRepository
 import com.example.testjetpack.models.gps.Location
 import com.example.testjetpack.ui.base.BaseViewModel
@@ -52,7 +52,7 @@ class GpsFragmentVM : BaseViewModel<GpsFragmentVMEventStateChange>() {
     @Inject
     lateinit var dataRepository: IDataRepository
     @Inject
-    lateinit var locationProvider: LocationProvider
+    lateinit var gmsLocationProvider: GmsLocationProvider
     @Inject
     lateinit var gpsLocationProvider: GpsLocationProvider
 
@@ -115,18 +115,29 @@ class GpsFragmentVM : BaseViewModel<GpsFragmentVMEventStateChange>() {
                 .setInterval(_interval)
                 .requestLocationUpdates(_locationCallback)
         } else {
-            locationProvider
+            gmsLocationProvider
                 .setInterval(_interval)
-                .setPriority(LocationProvider.Priority.HIGH)
+                .setPriority(GmsLocationProvider.Priority.HIGH)
                 .requestLocationUpdates(_locationCallback, Looper.getMainLooper())
         }
 
         _isLocationListenerStarted.value = true
     }
 
+    fun clearDBData(){
+        processCallAsync(
+            call = { dataRepository.removeAllLocationsfromDB() },
+            onSuccess = {},
+            onError = {
+                onError(it)
+            },
+            showProgress = true
+        )
+    }
+
     private fun stopLocationUpdates() {
-        if (locationProvider.isAllive) locationProvider.stopLocationUpdates()
-        if (gpsLocationProvider.isAllive) gpsLocationProvider.stopLocationUpdates()
+        if (gmsLocationProvider.isAlive) gmsLocationProvider.stopLocationUpdates()
+        if (gpsLocationProvider.isAlive) gpsLocationProvider.stopLocationUpdates()
         _isLocationListenerStarted.value = false
     }
 
