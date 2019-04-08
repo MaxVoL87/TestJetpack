@@ -35,33 +35,6 @@
             android:src='@{safeUnbox(viewModel.isLocationListenerStarted()) ? @drawable/ic_gps_fixed_red_48dp : @drawable/ic_gps_not_fixed_grey_48dp}'
             tools:ignore="ContentDescription" />
 
-        //todo: move to toolbar?
-
-        <Switch
-            android:id="@+id/sGpsOnly"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@id/bStartStopLocationListener"
-            android:layout_alignTop="@id/toolbar"
-            android:layout_alignBottom="@id/toolbar"
-            android:layout_toStartOf="@+id/sDiagnostic"
-            android:checked='@={viewModel.isGPSOnly}'
-            android:enabled='@{!safeUnbox(viewModel.isLocationListenerStarted)}'
-            android:elevation="1000dp"
-            android:text="GPS Only" />
-
-        <Switch
-            android:id="@+id/sDiagnostic"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@id/bStartStopLocationListener"
-            android:layout_alignTop="@id/toolbar"
-            android:layout_alignEnd="@id/toolbar"
-            android:layout_alignBottom="@id/toolbar"
-            android:layout_marginEnd="@dimen/text_margin"
-            android:checked='@={viewModel.isNeedToShowDiagnostic}'
-            android:text="@string/gps_diagnostic_switch" />
-
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

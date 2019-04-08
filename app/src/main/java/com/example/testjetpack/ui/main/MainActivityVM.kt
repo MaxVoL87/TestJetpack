@@ -52,7 +52,7 @@ class MainActivityVM : BaseViewModel<MainActivityVMEventStateChange>(),
             }
 
             R.id.nav_log_out -> {
-
+                event = MainActivityVMEventStateChange.LogOut
             }
         }
 
@@ -83,4 +83,5 @@ sealed class MainActivityVMEventStateChange : EventStateChange {
     object OpenProfile : MainActivityVMEventStateChange()
     object OpenGps : MainActivityVMEventStateChange()
     object OpenNotifications : MainActivityVMEventStateChange()
+    object LogOut : MainActivityVMEventStateChange()
 }

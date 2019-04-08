@@ -107,19 +107,23 @@ class GpsFragmentVM : BaseViewModel<GpsFragmentVMEventStateChange>() {
 
     @SuppressLint("MissingPermission")
     fun onPermissionSuccess() {
-        _startTime = Calendar.getInstance().time.time
-
-        if (isGPSOnly.value == true) {
-            gpsLocationProvider
-                .setInterval(_interval)
-                .requestLocationUpdates(_locationCallback)
-        } else {
-            gmsLocationProvider
-                .setInterval(_interval)
-                .setPriority(GmsLocationProvider.Priority.HIGH)
-                .requestLocationUpdates(_locationCallback, Looper.getMainLooper())
+        try {
+            if (isGPSOnly.value == true) {
+                gpsLocationProvider
+                    .setInterval(_interval)
+                    .requestLocationUpdates(_locationCallback)
+            } else {
+                gmsLocationProvider
+                    .setInterval(_interval)
+                    .setPriority(GmsLocationProvider.Priority.HIGH)
+                    .requestLocationUpdates(_locationCallback, Looper.getMainLooper())
+            }
+        } catch (ex: Throwable){
+            showAlert(ex)
+            return
         }
 
+        _startTime = Calendar.getInstance().time.time
         _isLocationListenerStarted.value = true
     }
 

@@ -140,10 +140,16 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityVM>(),
         }
     }
 
+    private val logOutRenderer: (Any) -> Unit = { event ->
+        event as MainActivityVMEventStateChange.LogOut
+        finishAndRemoveTask()
+    }
+
     override val RENDERERS: Map<KClass<out EventStateChange>, Function1<Any, Unit>> = mapOf(
         MainActivityVMEventStateChange.OpenProfile::class to openProfileRenderer,
         MainActivityVMEventStateChange.OpenGps::class to openGpsRenderer,
         MainActivityVMEventStateChange.OpenNotifications::class to openNotificationsRenderer,
+        MainActivityVMEventStateChange.LogOut::class to logOutRenderer,
         MainActivityVMEventStateChange.CloseDrawer::class to closeDrawerRenderer
 
     )
