@@ -22,7 +22,7 @@ import com.example.testjetpack.utils.browseWithoutCurrentApp
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.custom_toolbar.*
-import javax.inject.Inject
+import org.koin.android.ext.android.inject
 import kotlin.reflect.KClass
 
 
@@ -33,15 +33,14 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityVM>(),
     INotificationFragmentCallback,
     IGpsFragmentCallback {
 
-    override val viewModelClass: Class<MainActivityVM> = MainActivityVM::class.java
+    override val viewModelClass: KClass<MainActivityVM> = MainActivityVM::class
     override val layoutId: Int = R.layout.activity_main
     override val containerId: Int = R.id.container
     override val observeLiveData: MainActivityVM.() -> Unit
         get() = {
         }
 
-    @Inject
-    lateinit var picasso: Picasso
+    private val picasso: Picasso by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

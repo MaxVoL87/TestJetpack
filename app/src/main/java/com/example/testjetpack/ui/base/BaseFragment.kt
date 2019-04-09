@@ -9,18 +9,18 @@ import android.widget.ListPopupWindow
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import com.example.testjetpack.MainApplicationContract
 import com.example.testjetpack.R
 import com.example.testjetpack.utils.livedata.EventObserver
-import dagger.android.support.DaggerFragment
 import kotlinx.coroutines.*
+import org.koin.android.viewmodel.ext.android.getViewModel
 import retrofit2.HttpException
 import timber.log.Timber
 import kotlin.reflect.KClass
 
-abstract class BaseFragment<B : ViewDataBinding, T : BaseViewModel<out EventStateChange>> : DaggerFragment() {
+abstract class BaseFragment<B : ViewDataBinding, T : BaseViewModel<out EventStateChange>> : Fragment() {
     companion object {
         private const val COROUTINE_DELAY = 1000L
     }
@@ -29,8 +29,8 @@ abstract class BaseFragment<B : ViewDataBinding, T : BaseViewModel<out EventStat
 
     abstract val name: String
     protected lateinit var binding: B
-    abstract val viewModelClass: Class<T>
-    protected val viewModel: T by lazy(LazyThreadSafetyMode.NONE) { ViewModelProviders.of(this).get(viewModelClass) }
+    abstract val viewModelClass: KClass<T>
+    protected val viewModel: T by lazy(LazyThreadSafetyMode.NONE) { getViewModel(viewModelClass) }
 
     private var canBeClicked = true
     private val coroutines = mutableListOf<Deferred<*>>()

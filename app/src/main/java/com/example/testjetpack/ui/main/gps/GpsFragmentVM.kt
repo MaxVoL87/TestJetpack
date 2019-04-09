@@ -5,7 +5,6 @@ import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations.switchMap
-import com.example.testjetpack.MainApplication
 import com.example.testjetpack.dataflow.gps.GpsLocationProvider
 import com.example.testjetpack.dataflow.gps.ILocationProviderListener
 import com.example.testjetpack.dataflow.gps.GmsLocationProvider
@@ -19,9 +18,12 @@ import com.example.testjetpack.utils.livedata.toLDString
 import com.example.testjetpack.utils.livedata.toMutableLiveData
 import com.example.testjetpack.utils.toDBEntity
 import java.util.*
-import javax.inject.Inject
 
-class GpsFragmentVM : BaseViewModel<GpsFragmentVMEventStateChange>() {
+class GpsFragmentVM(
+    private val dataRepository: IDataRepository,
+    private val gmsLocationProvider: GmsLocationProvider,
+    private val gpsLocationProvider: GpsLocationProvider
+) : BaseViewModel<GpsFragmentVMEventStateChange>() {
 
     //initial values
     private val _interval: Long = 1000
@@ -49,17 +51,6 @@ class GpsFragmentVM : BaseViewModel<GpsFragmentVMEventStateChange>() {
             _isLocationAvailable.value = isAvailable
         }
 
-    }
-
-    @Inject
-    lateinit var dataRepository: IDataRepository
-    @Inject
-    lateinit var gmsLocationProvider: GmsLocationProvider
-    @Inject
-    lateinit var gpsLocationProvider: GpsLocationProvider
-
-    init {
-        MainApplication.component.inject(this)
     }
 
     private var _curLocation: Location? = null
@@ -118,7 +109,7 @@ class GpsFragmentVM : BaseViewModel<GpsFragmentVMEventStateChange>() {
                     .setPriority(GmsLocationProvider.Priority.HIGH)
                     .requestLocationUpdates(_locationCallback, Looper.getMainLooper())
             }
-        } catch (ex: Throwable){
+        } catch (ex: Throwable) {
             showAlert(ex)
             return
         }

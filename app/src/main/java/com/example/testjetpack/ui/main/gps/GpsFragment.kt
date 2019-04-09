@@ -22,7 +22,7 @@ import kotlin.reflect.KClass
 
 class GpsFragment : BaseFragment<FragmentGpsBinding, GpsFragmentVM>() {
     override val name: String = "GPS"
-    override val viewModelClass: Class<GpsFragmentVM> = GpsFragmentVM::class.java
+    override val viewModelClass: KClass<GpsFragmentVM> = GpsFragmentVM::class
     override val layoutId: Int = R.layout.fragment_gps
     override val observeLiveData: GpsFragmentVM.() -> Unit
         get() = {

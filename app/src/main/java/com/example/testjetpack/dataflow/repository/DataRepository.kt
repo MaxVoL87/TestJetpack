@@ -7,9 +7,8 @@ import com.example.testjetpack.dataflow.network.IDataApi
 import com.example.testjetpack.models.gps.Location
 import com.example.testjetpack.models.own.Notification
 import com.example.testjetpack.models.own.Profile
-import javax.inject.Inject
 
-class DataRepository @Inject constructor(
+class DataRepository(
     private val dataApi: IDataApi,
     private val appDatabase: AppDatabase
 ) : IDataRepository {

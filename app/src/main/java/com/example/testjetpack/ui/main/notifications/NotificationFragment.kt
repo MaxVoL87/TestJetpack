@@ -19,7 +19,7 @@ import kotlin.reflect.KClass
 class NotificationFragment : BaseFragment<FragmentNotificationListBinding, NotificationFragmentVM>() {
 
     override val name: String = "Notifications"
-    override val viewModelClass: Class<NotificationFragmentVM> = NotificationFragmentVM::class.java
+    override val viewModelClass: KClass<NotificationFragmentVM> = NotificationFragmentVM::class
     override val layoutId: Int = R.layout.fragment_notification_list
     override val observeLiveData: NotificationFragmentVM.() -> Unit
         get() = {

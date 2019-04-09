@@ -1,39 +1,35 @@
 package com.example.testjetpack
 
+import android.app.Application
+import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
-import com.example.testjetpack.di.DaggerIAppComponent
-import com.example.testjetpack.di.IAppComponent
-import com.example.testjetpack.di.modules.AppModule
-import com.example.testjetpack.di.modules.DatabaseModule
-import com.example.testjetpack.di.modules.GpsModule
-import com.example.testjetpack.di.modules.NetworkModule
-import com.example.testjetpack.tasks.TasksFactory
-import dagger.android.support.DaggerApplication
+import com.example.testjetpack.di.*
+import org.koin.android.ext.android.inject
+import org.koin.android.ext.koin.androidContext
+import org.koin.android.ext.koin.androidLogger
+import org.koin.core.context.startKoin
+import org.koin.core.qualifier.named
 import timber.log.Timber
-import javax.inject.Inject
 
-class MainApplication : DaggerApplication() {
+class MainApplication : Application() {
 
-    @Inject
-    lateinit var taskFactory: TasksFactory
-
-
-    private val applicationInjector = DaggerIAppComponent.builder()
-        .application(this)
-        .appModule(AppModule())
-        .netModule(NetworkModule())
-        .dbModule(DatabaseModule())
-        .gpsModule(GpsModule())
-        .build()
-
-    override fun applicationInjector() = applicationInjector
+    private val notificationDownloadWork: PeriodicWorkRequest by inject(named(notificationDownloadWorkName))
 
     override fun onCreate() {
         super.onCreate()
 
-        component = applicationInjector
+        // start Koin context
+        startKoin {
+            androidContext(this@MainApplication)
+            androidLogger()
+            modules(
+                appModule,
+                networkModule,
+                databaseModule,
+                gpsModule
+            )
+        }
 
-        applicationInjector.inject(this)
         if (BuildConfig.DEBUG) {
             Timber.plant(object : Timber.DebugTree() {
                 override fun createStackElementTag(element: StackTraceElement): String {
@@ -43,13 +39,6 @@ class MainApplication : DaggerApplication() {
         }
 
         WorkManager.getInstance().cancelAllWork()
-        WorkManager.getInstance().enqueue(taskFactory.createNotificationDownloadTask())
-    }
-
-
-
-    companion object {
-        @JvmStatic
-        lateinit var component: IAppComponent
+        WorkManager.getInstance().enqueue(notificationDownloadWork)
     }
 }

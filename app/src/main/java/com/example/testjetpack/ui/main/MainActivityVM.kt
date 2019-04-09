@@ -3,7 +3,6 @@ package com.example.testjetpack.ui.main
 import android.view.MenuItem
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.testjetpack.MainApplication
 import com.example.testjetpack.R
 import com.example.testjetpack.dataflow.repository.IDataRepository
 import com.example.testjetpack.models.own.Profile
@@ -11,17 +10,10 @@ import com.example.testjetpack.ui.base.BaseViewModel
 import com.example.testjetpack.ui.base.EventStateChange
 import com.example.testjetpack.utils.livedata.Event
 import com.google.android.material.navigation.NavigationView
-import javax.inject.Inject
 
-class MainActivityVM : BaseViewModel<MainActivityVMEventStateChange>(),
-    NavigationView.OnNavigationItemSelectedListener {
-
-    @Inject
-    lateinit var repository: IDataRepository
-
-    init {
-        MainApplication.component.inject(this)
-    }
+class MainActivityVM(
+    private val repository: IDataRepository
+) : BaseViewModel<MainActivityVMEventStateChange>(), NavigationView.OnNavigationItemSelectedListener {
 
     val profile: LiveData<Profile?>
         get() = _profile
@@ -56,7 +48,7 @@ class MainActivityVM : BaseViewModel<MainActivityVMEventStateChange>(),
             }
         }
 
-        if(event == null) return false
+        if (event == null) return false
 
         _events.value = Event(event)
         return true

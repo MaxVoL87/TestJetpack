@@ -3,7 +3,6 @@ package com.example.testjetpack.ui.main.notifications
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations.switchMap
-import com.example.testjetpack.MainApplication
 import com.example.testjetpack.dataflow.repository.IDataRepository
 import com.example.testjetpack.models.own.Notification
 import com.example.testjetpack.ui.base.BaseRecyclerItemViewModel
@@ -11,16 +10,10 @@ import com.example.testjetpack.ui.base.BaseRecyclerAdapter
 import com.example.testjetpack.ui.base.BaseViewModel
 import com.example.testjetpack.ui.base.EventStateChange
 import com.example.testjetpack.utils.livedata.Event
-import javax.inject.Inject
 
-class NotificationFragmentVM : BaseViewModel<NotificationFragmentVMEventStateChange>() {
-
-    @Inject
-    lateinit var repository: IDataRepository
-
-    init {
-        MainApplication.component.inject(this)
-    }
+class NotificationFragmentVM(
+    private val repository: IDataRepository
+) : BaseViewModel<NotificationFragmentVMEventStateChange>() {
 
     private val _notificationsResponse = MutableLiveData<LiveData<List<Notification>>>()
 
@@ -44,7 +37,7 @@ class NotificationFragmentVM : BaseViewModel<NotificationFragmentVMEventStateCha
             call = { repository.getNotifications() },
             onSuccess = { _notificationsResponse.postValue(it) },
             onError = {
-                _notificationsResponse.postValue( null)
+                _notificationsResponse.postValue(null)
                 onError(it)
             },
             showProgress = true
