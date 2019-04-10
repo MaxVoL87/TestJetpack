@@ -1,6 +1,8 @@
 package com.example.testjetpack.di
 
+import com.example.testjetpack.BuildConfig
 import com.example.testjetpack.MainApplicationContract
+import com.example.testjetpack.MainApplicationContract.NETWORK_TAG
 import com.example.testjetpack.dataflow.network.IDataApi
 import com.example.testjetpack.dataflow.network.IGitApi
 import okhttp3.Interceptor
@@ -46,7 +48,7 @@ val networkModule = module {
 
                 it.proceed(request)
             }
-            .addNetworkInterceptor(get())
+            .apply { if (BuildConfig.DEBUG) addNetworkInterceptor(get()) }
             .connectTimeout(40, TimeUnit.SECONDS)
             .readTimeout(40, TimeUnit.SECONDS)
             .writeTimeout(40, TimeUnit.SECONDS)
@@ -54,11 +56,8 @@ val networkModule = module {
     }
 
     single<Interceptor> {
-        HttpLoggingInterceptor(HttpLoggingInterceptor.Logger {
-            Timber.tag("Network").d(it)
-        }).apply {
-            level = HttpLoggingInterceptor.Level.BODY
-        }
+        HttpLoggingInterceptor(HttpLoggingInterceptor.Logger { Timber.tag(NETWORK_TAG).d(it) })
+            .apply { level = HttpLoggingInterceptor.Level.BODY }
     }
 
 }
