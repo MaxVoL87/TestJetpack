@@ -17,6 +17,7 @@ import com.example.testjetpack.ui.base.EventStateChange
 import com.example.testjetpack.utils.permissionsGranted
 import com.example.testjetpack.utils.withNotNull
 import androidx.lifecycle.Observer
+import org.koin.androidx.scope.currentScope
 import kotlin.reflect.KClass
 
 

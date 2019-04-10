@@ -1,4 +1,4 @@
-package com.example.testjetpack.tasks.workers
+package com.example.testjetpack.workers
 
 import android.content.Context
 import androidx.work.Worker

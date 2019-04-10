@@ -24,13 +24,13 @@ abstract class BaseFragment<B : ViewDataBinding, T : BaseViewModel<out EventStat
     companion object {
         private const val COROUTINE_DELAY = 1000L
     }
+    protected abstract val name: String
+    protected abstract val layoutId: Int
+    protected abstract val viewModelClass: KClass<T>
+    protected lateinit var binding: B
+    protected val viewModel: T by lazy(LazyThreadSafetyMode.NONE) { getViewModel(viewModelClass) }
 
     var popupWindow: ListPopupWindow? = null
-
-    abstract val name: String
-    protected lateinit var binding: B
-    abstract val viewModelClass: KClass<T>
-    protected val viewModel: T by lazy(LazyThreadSafetyMode.NONE) { getViewModel(viewModelClass) }
 
     private var canBeClicked = true
     private val coroutines = mutableListOf<Deferred<*>>()
@@ -40,7 +40,7 @@ abstract class BaseFragment<B : ViewDataBinding, T : BaseViewModel<out EventStat
         coroutines.add(coroutine)
     }
 
-    protected abstract val layoutId: Int
+
 
     protected open fun observeBaseLiveData() = with(viewModel) {
 

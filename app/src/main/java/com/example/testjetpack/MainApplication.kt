@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
 import com.example.testjetpack.di.*
+import com.example.testjetpack.workers.NotificationDownloadWorker
 import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -13,7 +14,7 @@ import timber.log.Timber
 
 class MainApplication : Application() {
 
-    private val notificationDownloadWork: PeriodicWorkRequest by inject(named(notificationDownloadWorkName))
+    private val notificationDownloadWork: PeriodicWorkRequest by inject(named<NotificationDownloadWorker>())
 
     override fun onCreate() {
         super.onCreate()

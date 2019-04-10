@@ -8,7 +8,7 @@ import com.example.testjetpack.dataflow.repository.DataRepository
 import com.example.testjetpack.dataflow.repository.GitDataRepository
 import com.example.testjetpack.dataflow.repository.IDataRepository
 import com.example.testjetpack.dataflow.repository.IGitDataRepository
-import com.example.testjetpack.tasks.workers.NotificationDownloadWorker
+import com.example.testjetpack.workers.NotificationDownloadWorker
 import com.example.testjetpack.ui.main.MainActivityVM
 import com.example.testjetpack.ui.main.gitreposearch.GitRepoSearchFragmentVM
 import com.example.testjetpack.ui.main.gps.GpsFragmentVM
@@ -26,6 +26,7 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import java.util.concurrent.TimeUnit
 
+// https://insert-koin.io/docs/2.0/documentation/reference/index.html
 val appModule = module {
 
     single<Gson> {
@@ -54,7 +55,7 @@ val appModule = module {
     single<IDataRepository> { DataRepository(get(), get()) }
 
     // Simple Presenter Factory
-    factory (named(notificationDownloadWorkName)) {
+    factory (named<NotificationDownloadWorker>()) {
         val constraints = Constraints.Builder()
             .setRequiresDeviceIdle(false) // only when device Idle
             .setRequiresCharging(false) // only when device charging

@@ -18,11 +18,11 @@ import org.koin.android.viewmodel.ext.android.getViewModel
 
 
 abstract class BaseActivity<B : ViewDataBinding, T : BaseViewModel<out EventStateChange>> : AppCompatActivity() {
-    protected lateinit var binding: B
-    abstract val viewModelClass: KClass<T>
-    protected val viewModel: T by lazy(LazyThreadSafetyMode.NONE) { getViewModel(viewModelClass) }
     protected abstract val layoutId: Int
     protected abstract val containerId: Int
+    protected abstract val viewModelClass: KClass<T>
+    protected lateinit var binding: B
+    protected val viewModel: T by lazy(LazyThreadSafetyMode.NONE) { getViewModel(viewModelClass) }
     protected abstract val observeLiveData: T.() -> Unit
 
 
