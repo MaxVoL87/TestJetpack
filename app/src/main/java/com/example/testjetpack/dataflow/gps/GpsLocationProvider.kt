@@ -14,6 +14,7 @@ import com.example.testjetpack.utils.withNotNull
 
 /**
  * Location provider based on Gps only
+ * https://stackoverflow.com/questions/26148235/getting-satellites-in-view-and-satellites-in-use-counts-in-android
  */
 class GpsLocationProvider(mContext: Context) {
 
