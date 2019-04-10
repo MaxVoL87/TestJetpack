@@ -21,9 +21,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.util.concurrent.atomic.AtomicReference
-import javax.inject.Inject
 
-class GitDataRepository @Inject constructor(
+class GitDataRepository(
     private val gitApi: IGitApi,
     private val appDatabase: AppDatabase
 ) : IGitDataRepository {

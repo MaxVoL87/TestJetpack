@@ -12,6 +12,8 @@ import com.example.testjetpack.ui.base.BaseActivity
 import com.example.testjetpack.ui.base.EventStateChange
 import com.example.testjetpack.ui.main.gitreposearch.GitRepoSearchFragment
 import com.example.testjetpack.ui.main.gitreposearch.IGitRepoSearchFragmentCallback
+import com.example.testjetpack.ui.main.gps.IGpsFragmentCallback
+import com.example.testjetpack.ui.main.gps.GpsFragment
 import com.example.testjetpack.ui.main.myprofile.IMyProfileFragmentCallback
 import com.example.testjetpack.ui.main.myprofile.MyProfileFragment
 import com.example.testjetpack.ui.main.notifications.INotificationFragmentCallback
@@ -20,7 +22,7 @@ import com.example.testjetpack.utils.browseWithoutCurrentApp
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.custom_toolbar.*
-import javax.inject.Inject
+import org.koin.android.ext.android.inject
 import kotlin.reflect.KClass
 
 
@@ -28,17 +30,17 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityVM>(),
     FragmentManager.OnBackStackChangedListener,
     IGitRepoSearchFragmentCallback,
     IMyProfileFragmentCallback,
-    INotificationFragmentCallback {
+    INotificationFragmentCallback,
+    IGpsFragmentCallback {
 
-    override val viewModelClass: Class<MainActivityVM> = MainActivityVM::class.java
+    override val viewModelClass: KClass<MainActivityVM> = MainActivityVM::class
     override val layoutId: Int = R.layout.activity_main
     override val containerId: Int = R.id.container
     override val observeLiveData: MainActivityVM.() -> Unit
         get() = {
         }
 
-    @Inject
-    lateinit var picasso: Picasso
+    private val picasso: Picasso by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -85,12 +87,16 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityVM>(),
         replaceFragment(GitRepoSearchFragment.newInstance(), addToBackStack)
     }
 
-    private fun openNotifications() {
-        replaceFragment(NotificationFragment.newInstance(), true)
-    }
-
     private fun openMyProfile() {
         replaceFragment(MyProfileFragment.newInstance(), true)
+    }
+
+    private fun openGps() {
+        replaceFragment(GpsFragment.newInstance(), true)
+    }
+
+    private fun openNotifications() {
+        replaceFragment(NotificationFragment.newInstance(), true)
     }
 
     override fun openGitRepository(repo: GitRepositoryView) {
@@ -126,9 +132,23 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityVM>(),
         }
     }
 
+    private val openGpsRenderer: (Any) -> Unit = { event ->
+        event as MainActivityVMEventStateChange.OpenGps
+        if (getCurFragment(R.id.container) !is GpsFragment) {
+            openGps()
+        }
+    }
+
+    private val logOutRenderer: (Any) -> Unit = { event ->
+        event as MainActivityVMEventStateChange.LogOut
+        finishAndRemoveTask()
+    }
+
     override val RENDERERS: Map<KClass<out EventStateChange>, Function1<Any, Unit>> = mapOf(
         MainActivityVMEventStateChange.OpenProfile::class to openProfileRenderer,
+        MainActivityVMEventStateChange.OpenGps::class to openGpsRenderer,
         MainActivityVMEventStateChange.OpenNotifications::class to openNotificationsRenderer,
+        MainActivityVMEventStateChange.LogOut::class to logOutRenderer,
         MainActivityVMEventStateChange.CloseDrawer::class to closeDrawerRenderer
 
     )

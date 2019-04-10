@@ -7,11 +7,12 @@ import com.example.testjetpack.models.git.db.GitRepository
 import com.example.testjetpack.models.git.License
 import com.example.testjetpack.models.own.Notification
 import com.example.testjetpack.models.git.User
+import com.example.testjetpack.models.gps.Location
 
 // https://www.youtube.com/watch?v=sU-ot_Oz3AE&feature=youtu.be
 @Database(
     version = 1,
-    entities = [GitRepository::class, User::class, License::class, Notification::class],
+    entities = [GitRepository::class, User::class, License::class, Notification::class, Location::class],
     views = [GitRepositoryView::class]
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -26,6 +27,10 @@ abstract class AppDatabase : RoomDatabase() {
 
 
     abstract fun getNotificationDao(): INotificationDao
+
+
+    abstract fun getLocationDao(): ILocationDao
+
 
     fun clearAllGitData() {
         getGitRepositoryDao().clearAll()

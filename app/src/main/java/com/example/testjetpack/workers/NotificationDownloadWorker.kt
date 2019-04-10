@@ -1,23 +1,18 @@
-package com.example.testjetpack.tasks.workers
+package com.example.testjetpack.workers
 
 import android.content.Context
 import androidx.work.Worker
 import androidx.work.WorkerParameters
-import com.example.testjetpack.MainApplication
 import com.example.testjetpack.dataflow.repository.IDataRepository
 import com.example.testjetpack.models.own.Notification
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 import java.util.*
-import javax.inject.Inject
 
 class NotificationDownloadWorker(appContext: Context, workerParams: WorkerParameters) :
-    Worker(appContext, workerParams) {
+    Worker(appContext, workerParams), KoinComponent {
 
-    @Inject
-    lateinit var dataRepository: IDataRepository
-
-    init {
-        MainApplication.component.inject(this)
-    }
+    private val dataRepository: IDataRepository by inject()
 
     override fun doWork(): Result {
         // Download notifications

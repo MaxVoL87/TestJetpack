@@ -1,28 +1,19 @@
 package com.example.testjetpack.ui.main.myprofile
 
 import androidx.lifecycle.LiveData
-import com.example.testjetpack.MainApplication
 import com.example.testjetpack.dataflow.repository.IDataRepository
 import com.example.testjetpack.models.own.Profile
 import com.example.testjetpack.ui.base.BaseViewModel
-import javax.inject.Inject
 import androidx.lifecycle.MutableLiveData
 import com.example.testjetpack.ui.base.EventStateChange
 import com.example.testjetpack.utils.livedata.Event
 import com.squareup.picasso.Picasso
 
+class MyProfileFragmentVM(
+    private val repository: IDataRepository,
+    val picasso: Picasso
+) : BaseViewModel<MyProfileFragmentVMEventStateChange>() {
 
-class MyProfileFragmentVM : BaseViewModel<MyProfileFragmentVMEventStateChange>() {
-
-    @Inject
-    lateinit var picasso: Picasso
-
-    @Inject
-    lateinit var repository: IDataRepository
-
-    init {
-        MainApplication.component.inject(this)
-    }
 
     val profile: LiveData<Profile?>
         get() = _profile

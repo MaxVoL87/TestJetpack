@@ -6,23 +6,23 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import com.example.testjetpack.utils.UiUtils.hideKeyboard
 import com.example.testjetpack.utils.livedata.EventObserver
-import dagger.android.support.DaggerAppCompatActivity
 import retrofit2.HttpException
 import timber.log.Timber
 import kotlin.reflect.KClass
 import androidx.annotation.IdRes
+import androidx.appcompat.app.AppCompatActivity
 import com.example.testjetpack.R
+import org.koin.android.viewmodel.ext.android.getViewModel
 
 
-abstract class BaseActivity<B : ViewDataBinding, T : BaseViewModel<out EventStateChange>> : DaggerAppCompatActivity() {
-    protected lateinit var binding: B
-    abstract val viewModelClass: Class<T>
-    protected val viewModel: T by lazy(LazyThreadSafetyMode.NONE) { ViewModelProviders.of(this).get(viewModelClass) }
+abstract class BaseActivity<B : ViewDataBinding, T : BaseViewModel<out EventStateChange>> : AppCompatActivity() {
     protected abstract val layoutId: Int
     protected abstract val containerId: Int
+    protected abstract val viewModelClass: KClass<T>
+    protected lateinit var binding: B
+    protected val viewModel: T by lazy(LazyThreadSafetyMode.NONE) { getViewModel(viewModelClass) }
     protected abstract val observeLiveData: T.() -> Unit
 
 
@@ -116,7 +116,7 @@ abstract class BaseActivity<B : ViewDataBinding, T : BaseViewModel<out EventStat
         Toast.makeText(this@BaseActivity, text, Toast.LENGTH_SHORT).show()
     }
 
-    fun getCurFragment(@IdRes containerId: Int) = supportFragmentManager?.findFragmentById(containerId)
+    fun getCurFragment(@IdRes containerId: Int) = supportFragmentManager.findFragmentById(containerId)
 
     private fun render(stateChangeEvent: EventStateChange) {
         RENDERERS[stateChangeEvent::class]?.invoke(stateChangeEvent)

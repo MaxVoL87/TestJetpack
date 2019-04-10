@@ -2,7 +2,6 @@ package com.example.testjetpack.dataflow
 
 import androidx.annotation.MainThread
 import androidx.paging.PagedList
-import com.example.testjetpack.MainApplication
 import com.example.testjetpack.dataflow.network.IGitApi
 import com.example.testjetpack.models.git.db.GitRepositoryView
 import com.example.testjetpack.models.git.network.request.GitPage
@@ -16,12 +15,13 @@ import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicReference
-import javax.inject.Inject
 
 /**
  * This boundary callback gets notified when user reaches to the edges of the list such that the
@@ -35,7 +35,7 @@ class SearchGitReposPListBoundaryCallback(
     private val _webservice: IGitApi,
     private val _handleResponseAsync: (GitResponse<*>?) -> Unit,
     private val _skipIfFail: Boolean = false
-) : PagedList.BoundaryCallback<GitRepositoryView>() {
+) : PagedList.BoundaryCallback<GitRepositoryView>(), KoinComponent {
 
     private val _initialPageNum = AtomicInteger(_curPage.get().page)
     private val _lastSuccessPageNum = AtomicInteger(-1)
@@ -43,12 +43,7 @@ class SearchGitReposPListBoundaryCallback(
     private val _helper = PagingRequestHelper()
     val networkState = _helper.createStatusLiveData()
 
-    @Inject
-    lateinit var gson: Gson
-
-    init {
-        MainApplication.component.inject(this)
-    }
+    private val gson: Gson by inject()
 
     fun retry() {
         _helper.retryAllFailed()

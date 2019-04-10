@@ -4,7 +4,6 @@ import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations.switchMap
-import com.example.testjetpack.MainApplication
 import com.example.testjetpack.MainApplicationContract
 import com.example.testjetpack.dataflow.repository.IGitDataRepository
 import com.example.testjetpack.models.git.network.request.GitPage
@@ -17,16 +16,10 @@ import com.example.testjetpack.utils.OnEditorOk
 import com.example.testjetpack.utils.UiUtils.hideKeyboard
 import com.example.testjetpack.utils.livedata.Event
 import com.example.testjetpack.utils.reset
-import javax.inject.Inject
 
-class GitRepoSearchFragmentVM : BaseViewModel<GitRepoSearchFragmentVMEventStateChange>() {
-
-    @Inject
-    lateinit var gitDataRepository: IGitDataRepository
-
-    init {
-        MainApplication.component.inject(this)
-    }
+class GitRepoSearchFragmentVM(
+    private val gitDataRepository: IGitDataRepository
+) : BaseViewModel<GitRepoSearchFragmentVMEventStateChange>() {
 
     private val _page: MutableLiveData<GitPage> =
         MutableLiveData(
@@ -105,5 +98,5 @@ class GitRepoSearchFragmentVM : BaseViewModel<GitRepoSearchFragmentVMEventStateC
 }
 
 sealed class GitRepoSearchFragmentVMEventStateChange : EventStateChange {
-    class OpenGitRepository(val repo: GitRepositoryView): GitRepoSearchFragmentVMEventStateChange()
+    class OpenGitRepository(val repo: GitRepositoryView) : GitRepoSearchFragmentVMEventStateChange()
 }

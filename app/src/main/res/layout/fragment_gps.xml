@@ -1,0 +1,424 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.example.testjetpack.ui.main.gps.GpsFragmentVM" />
+
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_alignParentTop="true"
+            app:srcCompat="@color/colorPrimary"
+            tools:ignore="ContentDescription" />
+
+        <ImageView
+            android:id="@+id/isListenerStarted"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@id/toolbar"
+            android:layout_alignTop="@id/toolbar"
+            android:layout_alignBottom="@id/toolbar"
+            android:layout_marginStart="45dp"
+            android:src='@{safeUnbox(viewModel.isLocationListenerStarted()) ? @drawable/ic_gps_fixed_red_48dp : @drawable/ic_gps_not_fixed_grey_48dp}'
+            tools:ignore="ContentDescription" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/toolbar"
+            android:layout_alignParentBottom="true"
+            android:scrollbarAlwaysDrawVerticalTrack="true">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:context=".ui.main.gps.GpsFragment"
+                tools:ignore="HardcodedText">
+
+                <TextView
+                    android:id="@+id/lLatitude"
+                    style="@style/HeaderText2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/text_margin"
+                    android:text="latitude (°):"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvLatitude"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/text_margin"
+                    android:layout_marginEnd="@dimen/text_margin"
+                    app:changeColor='@{true}'
+                    app:isAvailable='@{viewModel.isLocationAvailable}'
+                    app:layout_constraintBottom_toBottomOf="@+id/lLatitude"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1"
+                    app:layout_constraintStart_toEndOf="@+id/lLatitude"
+                    app:layout_constraintTop_toTopOf="@+id/lLatitude"
+                    app:notAvailableText='@{@string/no_value}'
+                    app:text='@{viewModel.latitude}'
+                    tools:text="0.0" />
+
+                <TextView
+                    android:id="@+id/lLongitude"
+                    style="@style/HeaderText2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/text_margin"
+                    android:text="longitude (°):"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/lLatitude" />
+
+                <TextView
+                    android:id="@+id/tvLongitude"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/text_margin"
+                    android:layout_marginEnd="@dimen/text_margin"
+                    app:changeColor='@{true}'
+                    app:isAvailable='@{viewModel.isLocationAvailable}'
+                    app:layout_constraintBottom_toBottomOf="@+id/lLongitude"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1"
+                    app:layout_constraintStart_toEndOf="@+id/lLongitude"
+                    app:layout_constraintTop_toTopOf="@+id/lLongitude"
+                    app:notAvailableText='@{@string/no_value}'
+                    app:text='@{viewModel.longitude}'
+                    tools:text="0.0" />
+
+                <TextView
+                    android:id="@+id/lAltitude"
+                    style="@style/HeaderText2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/text_margin"
+                    android:text="altitude (m):"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/lLongitude" />
+
+                <TextView
+                    android:id="@+id/tvAltitude"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/text_margin"
+                    android:layout_marginEnd="@dimen/text_margin"
+                    app:changeColor='@{true}'
+                    app:isAvailable='@{viewModel.isLocationAvailable}'
+                    app:layout_constraintBottom_toBottomOf="@+id/lAltitude"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1"
+                    app:layout_constraintStart_toEndOf="@+id/lAltitude"
+                    app:layout_constraintTop_toTopOf="@+id/lAltitude"
+                    app:notAvailableText='@{@string/no_value}'
+                    app:text='@{viewModel.altitude}'
+                    tools:text="0.0" />
+
+                <TextView
+                    android:id="@+id/lBearing"
+                    style="@style/HeaderText2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/text_margin"
+                    android:text="bearing (°):"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/lAltitude" />
+
+                <TextView
+                    android:id="@+id/tvBearing"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/text_margin"
+                    android:layout_marginEnd="@dimen/text_margin"
+                    app:changeColor='@{true}'
+                    app:isAvailable='@{viewModel.isLocationAvailable}'
+                    app:layout_constraintBottom_toBottomOf="@+id/lBearing"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1"
+                    app:layout_constraintStart_toEndOf="@+id/lBearing"
+                    app:layout_constraintTop_toTopOf="@+id/lBearing"
+                    app:notAvailableText='@{@string/no_value}'
+                    app:text='@{viewModel.bearing}'
+                    tools:text="0.0" />
+
+                <TextView
+                    android:id="@+id/lSpeed"
+                    style="@style/HeaderText2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/text_margin"
+                    android:text="speed (m/c):"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/lBearing" />
+
+                <TextView
+                    android:id="@+id/tvSpeed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/text_margin"
+                    android:layout_marginEnd="@dimen/text_margin"
+                    app:changeColor='@{true}'
+                    app:isAvailable='@{viewModel.isLocationAvailable}'
+                    app:layout_constraintBottom_toBottomOf="@+id/lSpeed"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1"
+                    app:layout_constraintStart_toEndOf="@+id/lSpeed"
+                    app:layout_constraintTop_toTopOf="@+id/lSpeed"
+                    app:notAvailableText='@{@string/no_value}'
+                    app:text='@{viewModel.speed}'
+                    tools:text="0" />
+
+                <TextView
+                    android:id="@+id/lAccuracy"
+                    style="@style/HeaderText2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/text_margin"
+                    android:text="accuracy (m):"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/lSpeed" />
+
+                <TextView
+                    android:id="@+id/tvAccuracy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/text_margin"
+                    android:layout_marginEnd="@dimen/text_margin"
+                    app:changeColor='@{true}'
+                    app:isAvailable='@{viewModel.isLocationAvailable}'
+                    app:layout_constraintBottom_toBottomOf="@+id/lAccuracy"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1"
+                    app:layout_constraintStart_toEndOf="@+id/lAccuracy"
+                    app:layout_constraintTop_toTopOf="@+id/lAccuracy"
+                    app:notAvailableText='@{@string/no_value}'
+                    app:text='@{viewModel.accuracy}'
+                    tools:text="0" />
+
+                <TextView
+                    android:id="@+id/lVerticalAccuracy"
+                    style="@style/HeaderText2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/text_margin"
+                    android:text="vertical accuracy (m):"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/lAccuracy" />
+
+                <TextView
+                    android:id="@+id/tvVerticalAccuracy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/text_margin"
+                    android:layout_marginEnd="@dimen/text_margin"
+                    app:changeColor='@{true}'
+                    app:isAvailable='@{viewModel.isLocationAvailable}'
+                    app:layout_constraintBottom_toBottomOf="@+id/lVerticalAccuracy"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1"
+                    app:layout_constraintStart_toEndOf="@+id/lVerticalAccuracy"
+                    app:layout_constraintTop_toTopOf="@+id/lVerticalAccuracy"
+                    app:notAvailableText='@{@string/no_value}'
+                    app:text='@{viewModel.verticalAccuracy}'
+                    tools:text="0" />
+
+                <TextView
+                    android:id="@+id/lSpeedAccuracy"
+                    style="@style/HeaderText2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/text_margin"
+                    android:text="speed accuracy (m/c):"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/lVerticalAccuracy" />
+
+                <TextView
+                    android:id="@+id/tvSpeedAccuracy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/text_margin"
+                    android:layout_marginEnd="@dimen/text_margin"
+                    app:changeColor='@{true}'
+                    app:isAvailable='@{viewModel.isLocationAvailable}'
+                    app:layout_constraintBottom_toBottomOf="@+id/lSpeedAccuracy"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1"
+                    app:layout_constraintStart_toEndOf="@+id/lSpeedAccuracy"
+                    app:layout_constraintTop_toTopOf="@+id/lSpeedAccuracy"
+                    app:notAvailableText='@{@string/no_value}'
+                    app:text='@{viewModel.speedAccuracy}'
+                    tools:text="0" />
+
+                <TextView
+                    android:id="@+id/lBearingAccuracy"
+                    style="@style/HeaderText2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/text_margin"
+                    android:text="bearing accuracy (°):"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/lSpeedAccuracy" />
+
+                <TextView
+                    android:id="@+id/tvBearingAccuracy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/text_margin"
+                    android:layout_marginEnd="@dimen/text_margin"
+                    app:changeColor='@{true}'
+                    app:isAvailable='@{viewModel.isLocationAvailable}'
+                    app:layout_constraintBottom_toBottomOf="@+id/lBearingAccuracy"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1"
+                    app:layout_constraintStart_toEndOf="@+id/lBearingAccuracy"
+                    app:layout_constraintTop_toTopOf="@+id/lBearingAccuracy"
+                    app:notAvailableText='@{@string/no_value}'
+                    app:text='@{viewModel.bearingAccuracy}'
+                    tools:text="0" />
+
+                <TextView
+                    android:id="@+id/lTime"
+                    style="@style/HeaderText2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/text_margin"
+                    android:text="time (millis):"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/lBearingAccuracy" />
+
+                <TextView
+                    android:id="@+id/tvTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/text_margin"
+                    android:layout_marginEnd="@dimen/text_margin"
+                    app:changeColor='@{true}'
+                    app:isAvailable='@{viewModel.isLocationAvailable}'
+                    app:layout_constraintBottom_toBottomOf="@+id/lTime"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1"
+                    app:layout_constraintStart_toEndOf="@+id/lTime"
+                    app:layout_constraintTop_toTopOf="@+id/lTime"
+                    app:notAvailableText='@{@string/no_value}'
+                    app:text='@{viewModel.time}'
+                    tools:text="0" />
+
+                <TextView
+                    android:id="@+id/lElapsedRealTime"
+                    style="@style/HeaderText2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/text_margin"
+                    android:text="elapsed real-time (nanos):"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/lTime" />
+
+                <TextView
+                    android:id="@+id/tvElapsedRealTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/text_margin"
+                    android:layout_marginEnd="@dimen/text_margin"
+                    app:changeColor='@{true}'
+                    app:isAvailable='@{viewModel.isLocationAvailable}'
+                    app:layout_constraintBottom_toBottomOf="@+id/lElapsedRealTime"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1"
+                    app:layout_constraintStart_toEndOf="@+id/lElapsedRealTime"
+                    app:layout_constraintTop_toTopOf="@+id/lElapsedRealTime"
+                    app:notAvailableText='@{@string/no_value}'
+                    app:text='@{viewModel.elapsedRealTime}'
+                    tools:text="0" />
+
+                <View
+                    android:id="@+id/separator"
+                    style="@style/SeparatorStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/lElapsedRealTime" />
+
+                <TextView
+                    android:id="@+id/lAcceleration"
+                    style="@style/HeaderText2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/text_margin"
+                    android:text="acceleration (m/c²):"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/separator" />
+
+                <TextView
+                    android:id="@+id/tvAcceleration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/text_margin"
+                    android:layout_marginEnd="@dimen/text_margin"
+                    app:changeColor='@{true}'
+                    app:isAvailable='@{viewModel.isLocationAvailable}'
+                    app:layout_constraintBottom_toBottomOf="@+id/lAcceleration"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toEndOf="@+id/lAcceleration"
+                    app:layout_constraintTop_toTopOf="@+id/lAcceleration"
+                    app:notAvailableText='@{@string/no_value}'
+                    app:text='@{viewModel.acceleration}'
+                    tools:text="0" />
+
+                <TextView
+                    android:id="@+id/lDeceleration"
+                    style="@style/HeaderText2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/text_margin"
+                    android:text="satellites:"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/lAcceleration" />
+
+                <TextView
+                    android:id="@+id/tvDeceleration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/text_margin"
+                    android:layout_marginEnd="@dimen/text_margin"
+                    app:changeColor='@{true}'
+                    app:isAvailable='@{viewModel.isLocationAvailable}'
+                    app:layout_constraintBottom_toBottomOf="@+id/lDeceleration"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toEndOf="@+id/lDeceleration"
+                    app:layout_constraintTop_toTopOf="@+id/lDeceleration"
+                    app:notAvailableText='@{@string/no_value}'
+                    app:text='@{viewModel.satellites}'
+                    tools:text="0" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+
+        <Button
+            android:id="@+id/bStartStopLocationListener"
+            style="@style/ButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="@dimen/text_margin"
+            android:onClick='@{(v) -> viewModel.startStopLocationUpdates()}'
+            android:text='@{safeUnbox(viewModel.isLocationListenerStarted()) ? @string/location_listener_stop : @string/location_listener_start}' />
+    </RelativeLayout>
+</layout>

@@ -7,17 +7,17 @@ import com.example.testjetpack.models.own.Notification
 interface INotificationDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertNotifications(vararg notifications: Notification)
+    fun insert(vararg notifications: Notification)
 
     @Update
-    fun updateNotifications(vararg notifications: Notification)
+    fun update(vararg notifications: Notification)
 
     @Delete
-    fun deleteNotifications(vararg notifications: Notification)
+    fun delete(vararg notifications: Notification)
 
     @Query("SELECT * FROM notification_table")
-    fun loadAllNotifications(): List<Notification>
+    fun loadAll(): List<Notification>
 
     @Query("SELECT * FROM notification_table ORDER BY id ASC")
-    fun loadAllNotificationsByID(): List<Notification>
+    fun loadAllByID(): List<Notification>
 }

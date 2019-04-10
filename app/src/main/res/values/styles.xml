@@ -62,6 +62,10 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="HeaderText2" parent="HeaderText">
+        <item name="android:textSize">16sp</item>
+    </style>
+
     <style name="ButtonStyle" parent="Widget.AppCompat.Button.Colored">
         <!--<item name="android:stateListAnimator">@animator/button_animator</item>-->
         <!--<item name="android:outlineAmbientShadowColor">@color/colorButton</item>-->
@@ -81,5 +85,8 @@
     </style>
 
 
-
+    <style name="SeparatorStyle">
+        <item name="android:layout_marginTop">@dimen/activity_vertical_margin</item>
+        <item name="android:background">@color/colorSeparator</item>
+    </style>
 </resources>
