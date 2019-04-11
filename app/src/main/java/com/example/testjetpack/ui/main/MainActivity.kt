@@ -2,7 +2,7 @@ package com.example.testjetpack.ui.main
 
 import android.os.Bundle
 import androidx.core.view.GravityCompat
-import androidx.fragment.app.FragmentManager
+import androidx.navigation.ui.NavigationUI.*
 import com.example.testjetpack.R
 import com.example.testjetpack.databinding.ActivityMainBinding
 import com.example.testjetpack.databinding.NavHeaderMainBinding
@@ -10,32 +10,31 @@ import com.example.testjetpack.models.git.db.GitRepositoryView
 import com.example.testjetpack.models.own.Notification
 import com.example.testjetpack.ui.base.BaseActivity
 import com.example.testjetpack.ui.base.EventStateChange
-import com.example.testjetpack.ui.main.gitreposearch.GitRepoSearchFragment
 import com.example.testjetpack.ui.main.gitreposearch.IGitRepoSearchFragmentCallback
 import com.example.testjetpack.ui.main.gps.IGpsFragmentCallback
 import com.example.testjetpack.ui.main.gps.GpsFragment
 import com.example.testjetpack.ui.main.myprofile.IMyProfileFragmentCallback
 import com.example.testjetpack.ui.main.myprofile.MyProfileFragment
-import com.example.testjetpack.ui.main.notifications.INotificationFragmentCallback
-import com.example.testjetpack.ui.main.notifications.NotificationFragment
+import com.example.testjetpack.ui.main.notifications.INotificationsFragmentCallback
+import com.example.testjetpack.ui.main.notifications.NotificationsFragment
 import com.example.testjetpack.utils.browseWithoutCurrentApp
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.custom_toolbar.*
 import org.koin.android.ext.android.inject
 import kotlin.reflect.KClass
 
 
 class MainActivity : BaseActivity<ActivityMainBinding, MainActivityVM>(),
-    FragmentManager.OnBackStackChangedListener,
     IGitRepoSearchFragmentCallback,
     IMyProfileFragmentCallback,
-    INotificationFragmentCallback,
+    INotificationsFragmentCallback,
     IGpsFragmentCallback {
 
     override val viewModelClass: KClass<MainActivityVM> = MainActivityVM::class
     override val layoutId: Int = R.layout.activity_main
-    override val containerId: Int = R.id.container
+    override val navControllerId: Int = R.id.nav_host_fragment
     override val observeLiveData: MainActivityVM.() -> Unit
         get() = {
         }
@@ -52,13 +51,10 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityVM>(),
         headerBinding.picasso = picasso
 
         setSupportActionBar(toolbar)
-
-        //Listen for changes in the back stack
-        supportFragmentManager.addOnBackStackChangedListener(this)
-        //Handle when activity is recreated like on orientation Change
-        shouldDisplayHomeUp()
-
-        openGitRepoSearch(false)
+        // Update action bar to reflect navigation
+        setupActionBarWithNavController(this, navController, drawer_layout)
+        // Tie nav graph to items in nav drawer
+        setupWithNavController(nav_view, navController)
     }
 
     override fun onStart() {
@@ -74,29 +70,20 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityVM>(),
         }
     }
 
-    override fun onBackStackChanged() {
-        shouldDisplayHomeUp()
-    }
-
-    private fun shouldDisplayHomeUp() {
-        //Enable Up button only  if there are entries in the back stack
-        supportActionBar?.setDisplayHomeAsUpEnabled(supportFragmentManager.backStackEntryCount > 0)
-    }
-
-    private fun openGitRepoSearch(addToBackStack: Boolean) {
-        replaceFragment(GitRepoSearchFragment.newInstance(), addToBackStack)
+    override fun onSupportNavigateUp(): Boolean {
+        return navigateUp(navController, drawer_layout)
     }
 
     private fun openMyProfile() {
-        replaceFragment(MyProfileFragment.newInstance(), true)
+        navController.navigate(R.id.action_global_myProfileFragment)
     }
 
     private fun openGps() {
-        replaceFragment(GpsFragment.newInstance(), true)
+        navController.navigate(R.id.action_global_gpsFragment)
     }
 
     private fun openNotifications() {
-        replaceFragment(NotificationFragment.newInstance(), true)
+        navController.navigate(R.id.action_global_notificationsFragment)
     }
 
     override fun openGitRepository(repo: GitRepositoryView) {
@@ -120,21 +107,21 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityVM>(),
 
     private val openProfileRenderer: (Any) -> Unit = { event ->
         event as MainActivityVMEventStateChange.OpenProfile
-        if (getCurFragment(R.id.container) !is MyProfileFragment) {
+        if (getCurFragment(nav_host_fragment) !is MyProfileFragment) {
             openMyProfile()
         }
     }
 
     private val openNotificationsRenderer: (Any) -> Unit = { event ->
         event as MainActivityVMEventStateChange.OpenNotifications
-        if (getCurFragment(R.id.container) !is NotificationFragment) {
+        if (getCurFragment(nav_host_fragment) !is NotificationsFragment) {
             openNotifications()
         }
     }
 
     private val openGpsRenderer: (Any) -> Unit = { event ->
         event as MainActivityVMEventStateChange.OpenGps
-        if (getCurFragment(R.id.container) !is GpsFragment) {
+        if (getCurFragment(nav_host_fragment) !is GpsFragment) {
             openGps()
         }
     }

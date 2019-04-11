@@ -55,9 +55,4 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding, MyProfileFragme
         MyProfileFragmentVMEventStateChange.OpenCreditCardDetails::class to openCreditCardDetailsRenderer
     )
     // endregion VM renderers
-
-    companion object {
-        @JvmStatic
-        fun newInstance() = MyProfileFragment()
-    }
 }

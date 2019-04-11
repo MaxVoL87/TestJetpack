@@ -11,9 +11,9 @@ import com.example.testjetpack.ui.base.BaseViewModel
 import com.example.testjetpack.ui.base.EventStateChange
 import com.example.testjetpack.utils.livedata.Event
 
-class NotificationFragmentVM(
+class NotificationsFragmentVM(
     private val repository: IDataRepository
-) : BaseViewModel<NotificationFragmentVMEventStateChange>() {
+) : BaseViewModel<NotificationsFragmentVMEventStateChange>() {
 
     private val _notificationsResponse = MutableLiveData<LiveData<List<Notification>>>()
 
@@ -23,7 +23,7 @@ class NotificationFragmentVM(
                 override fun onItemClick(position: Int, item: BaseRecyclerItemViewModel) {
                     if (item is NotificationItemViewModel)
                         _events.value =
-                            Event(NotificationFragmentVMEventStateChange.OpenNotification(item.notification))
+                            Event(NotificationsFragmentVMEventStateChange.OpenNotifications(item.notification))
                 }
             })
         }
@@ -45,6 +45,6 @@ class NotificationFragmentVM(
     }
 }
 
-sealed class NotificationFragmentVMEventStateChange : EventStateChange {
-    class OpenNotification(val notification: Notification) : NotificationFragmentVMEventStateChange()
+sealed class NotificationsFragmentVMEventStateChange : EventStateChange {
+    class OpenNotifications(val notification: Notification) : NotificationsFragmentVMEventStateChange()
 }

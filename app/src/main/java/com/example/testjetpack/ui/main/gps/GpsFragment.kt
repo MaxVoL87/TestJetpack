@@ -147,9 +147,4 @@ class GpsFragment : BaseFragment<FragmentGpsBinding, GpsFragmentVM>() {
         GpsFragmentVMEventStateChange.RequestLocationUpdatesPermissions::class to requestLocationUpdatesPermissions
     )
     // endregion VM events renderer
-
-    companion object {
-        @JvmStatic
-        fun newInstance() = GpsFragment()
-    }
 }

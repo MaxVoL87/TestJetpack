@@ -6,22 +6,24 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.Observer
-import com.example.testjetpack.utils.UiUtils.hideKeyboard
 import com.example.testjetpack.utils.livedata.EventObserver
 import retrofit2.HttpException
 import timber.log.Timber
 import kotlin.reflect.KClass
 import androidx.annotation.IdRes
 import androidx.appcompat.app.AppCompatActivity
-import com.example.testjetpack.R
+import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
 import org.koin.android.viewmodel.ext.android.getViewModel
 
 
 abstract class BaseActivity<B : ViewDataBinding, T : BaseViewModel<out EventStateChange>> : AppCompatActivity() {
     protected abstract val layoutId: Int
-    protected abstract val containerId: Int
+    protected abstract val navControllerId: Int
     protected abstract val viewModelClass: KClass<T>
     protected lateinit var binding: B
+    protected val navController: NavController by lazy(LazyThreadSafetyMode.NONE) { Navigation.findNavController(this, navControllerId) }
     protected val viewModel: T by lazy(LazyThreadSafetyMode.NONE) { getViewModel(viewModelClass) }
     protected abstract val observeLiveData: T.() -> Unit
 
@@ -81,29 +83,6 @@ abstract class BaseActivity<B : ViewDataBinding, T : BaseViewModel<out EventStat
         observeLiveData()
     }
 
-    /**
-     * Replace fragment with tag equals to it's class name {@link Class#getName()}
-     *
-     * @param fragment             Instance of {@link Fragment}
-     * @param needToAddToBackStack boolean value representing necessity for adding fragment to backstack.
-     *                             If true fragment will be added to backstack with tag equals
-     *                             to it's class name }
-     */
-    protected fun <T : BaseFragment<*, *>> replaceFragment(fragment: T, needToAddToBackStack: Boolean = true): T {
-        currentFocus?.let { hideKeyboard(it) }
-        val name = fragment.javaClass.name
-        with(supportFragmentManager.beginTransaction()) {
-            setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left)
-            replace(containerId, fragment, name)
-            if (needToAddToBackStack) {
-                addToBackStack(name)
-            }
-            commit()
-        }
-        supportFragmentManager.executePendingTransactions()
-        return fragment
-    }
-
     fun showProgress() {
         // nothing
     }
@@ -117,6 +96,7 @@ abstract class BaseActivity<B : ViewDataBinding, T : BaseViewModel<out EventStat
     }
 
     fun getCurFragment(@IdRes containerId: Int) = supportFragmentManager.findFragmentById(containerId)
+    fun getCurFragment(navHostFragment: Fragment) : Fragment = navHostFragment.childFragmentManager.fragments[0]
 
     private fun render(stateChangeEvent: EventStateChange) {
         RENDERERS[stateChangeEvent::class]?.invoke(stateChangeEvent)

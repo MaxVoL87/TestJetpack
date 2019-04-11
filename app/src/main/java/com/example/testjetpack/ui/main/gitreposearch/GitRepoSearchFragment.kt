@@ -55,9 +55,4 @@ class GitRepoSearchFragment : BaseFragment<FragmentGitreposearchBinding, GitRepo
     )
     // endregion VM events renderer
 
-    companion object {
-        @JvmStatic
-        fun newInstance() = GitRepoSearchFragment()
-    }
-
 }

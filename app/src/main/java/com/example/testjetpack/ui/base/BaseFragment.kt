@@ -2,7 +2,6 @@ package com.example.testjetpack.ui.base
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ListPopupWindow
@@ -114,16 +113,6 @@ abstract class BaseFragment<B : ViewDataBinding, T : BaseViewModel<out EventStat
                 throwable.message?.let { this@BaseFragment.showAlert(it) }
                 value = null
             }
-        }
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            android.R.id.home -> {
-                onBackPressed()
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
         }
     }
 

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_nav_graph"
+    app:startDestination="@id/gitRepoSearchFragment">
+
+    <fragment
+        android:id="@+id/gitRepoSearchFragment"
+        android:name="com.example.testjetpack.ui.main.gitreposearch.GitRepoSearchFragment"
+        android:label="GitRepoSearchFragment"
+        tools:layout="@layout/fragment_gitreposearch"/>
+    <fragment
+        android:id="@+id/myProfileFragment"
+        android:name="com.example.testjetpack.ui.main.myprofile.MyProfileFragment"
+        android:label="MyProfileFragment"
+        tools:layout="@layout/fragment_my_profile"/>
+    <fragment
+        android:id="@+id/gpsFragment"
+        android:name="com.example.testjetpack.ui.main.gps.GpsFragment"
+        android:label="GpsFragment"
+        tools:layout="@layout/fragment_gps"/>
+    <fragment
+        android:id="@+id/notificationsFragment"
+        android:name="com.example.testjetpack.ui.main.notifications.NotificationsFragment"
+        android:label="NotificationFragment"
+        tools:layout="@layout/fragment_notifications"/>
+
+    <action
+        android:id="@+id/action_global_myProfileFragment"
+        app:destination="@id/myProfileFragment"
+        app:enterAnim="@anim/enter_from_right"
+        app:exitAnim="@anim/exit_to_left"
+        app:popEnterAnim="@anim/enter_from_left"
+        app:popExitAnim="@anim/exit_to_right" />
+    <action
+        android:id="@+id/action_global_gpsFragment"
+        app:destination="@id/gpsFragment"
+        app:enterAnim="@anim/enter_from_right"
+        app:exitAnim="@anim/exit_to_left"
+        app:popEnterAnim="@anim/enter_from_left"
+        app:popExitAnim="@anim/exit_to_right" />
+    <action
+        android:id="@+id/action_global_notificationsFragment"
+        app:destination="@id/notificationsFragment"
+        app:enterAnim="@anim/enter_from_right"
+        app:exitAnim="@anim/exit_to_left"
+        app:popEnterAnim="@anim/enter_from_left"
+        app:popExitAnim="@anim/exit_to_right" />
+
+</navigation>
