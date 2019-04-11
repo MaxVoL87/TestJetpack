@@ -2,6 +2,7 @@ package com.example.testjetpack.ui.main
 
 import android.os.Bundle
 import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.ui.NavigationUI.*
 import com.example.testjetpack.R
 import com.example.testjetpack.databinding.ActivityMainBinding
@@ -51,6 +52,16 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityVM>(),
         headerBinding.picasso = picasso
 
         setSupportActionBar(toolbar)
+
+        //Listen for changes in the back stack
+        navController.addOnDestinationChangedListener { cont, dest, bundle ->
+            // hide drawer if no parent fragment
+            drawer_layout.setDrawerLockMode(
+                if (dest.id == cont.graph.startDestination) DrawerLayout.LOCK_MODE_UNLOCKED
+                else DrawerLayout.LOCK_MODE_LOCKED_CLOSED
+            )
+        }
+
         // Update action bar to reflect navigation
         setupActionBarWithNavController(this, navController, drawer_layout)
         // Tie nav graph to items in nav drawer

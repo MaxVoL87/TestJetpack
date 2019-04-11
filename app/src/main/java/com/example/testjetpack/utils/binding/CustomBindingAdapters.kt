@@ -14,9 +14,7 @@ import com.example.testjetpack.utils.withNotNull
  * Set PagedListAdapter data
  */
 @BindingAdapter("items")
-fun RecyclerView.setBaseRecyclerAdapterItems(
-    items: List<BaseRecyclerItemViewModel>?
-) {
+fun RecyclerView.setBaseRecyclerAdapterItems(items: List<BaseRecyclerItemViewModel>?) {
     withNotNull(adapter as BaseRecyclerAdapter) {
         itemViewModels = if (items.isNullOrEmpty()) mutableListOf()
         else items.toMutableList()
@@ -27,9 +25,7 @@ fun RecyclerView.setBaseRecyclerAdapterItems(
  * Set PagedListAdapter data
  */
 @BindingAdapter("items")
-fun RecyclerView.setPagedListAdapterData(
-    items: PagedList<GitRepositoryView>?
-) {
+fun RecyclerView.setPagedListAdapterData(items: PagedList<GitRepositoryView>?) {
     withNotNull(adapter as GitRepoSearchAdapter) {
         submitList(items)
     }
@@ -39,9 +35,7 @@ fun RecyclerView.setPagedListAdapterData(
  * Set PagedListAdapter networkState
  */
 @BindingAdapter("networkState")
-fun RecyclerView.setPagedListAdapterNetworkState(
-    networkState: NetworkState?
-) {
+fun RecyclerView.setPagedListAdapterNetworkState(networkState: NetworkState?) {
     withNotNull(adapter as GitRepoSearchAdapter) {
         setNetworkState(networkState)
     }
