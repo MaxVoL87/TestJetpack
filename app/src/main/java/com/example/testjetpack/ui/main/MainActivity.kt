@@ -112,17 +112,17 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityVM>(),
         }
     }
 
-    private val openNotificationsRenderer: (Any) -> Unit = { event ->
-        event as MainActivityVMEventStateChange.OpenNotifications
-        if (getCurFragment(nav_host_fragment) !is NotificationsFragment) {
-            openNotifications()
-        }
-    }
-
     private val openGpsRenderer: (Any) -> Unit = { event ->
         event as MainActivityVMEventStateChange.OpenGps
         if (getCurFragment(nav_host_fragment) !is GpsFragment) {
             openGps()
+        }
+    }
+
+    private val openNotificationsRenderer: (Any) -> Unit = { event ->
+        event as MainActivityVMEventStateChange.OpenNotifications
+        if (getCurFragment(nav_host_fragment) !is NotificationsFragment) {
+            openNotifications()
         }
     }
 

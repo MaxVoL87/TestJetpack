@@ -18,9 +18,8 @@ import kotlin.reflect.KClass
  * [IGitRepoSearchFragmentCallback] interface.
  */
 class GitRepoSearchFragment : BaseFragment<FragmentGitreposearchBinding, GitRepoSearchFragmentVM>() {
-    override val name: String = "Git Repo Search"
-    override val viewModelClass: KClass<GitRepoSearchFragmentVM> = GitRepoSearchFragmentVM::class
     override val layoutId: Int = R.layout.fragment_gitreposearch
+    override val viewModelClass: KClass<GitRepoSearchFragmentVM> = GitRepoSearchFragmentVM::class
     override val observeLiveData: GitRepoSearchFragmentVM.() -> Unit
         get() = {
         }

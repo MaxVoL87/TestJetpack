@@ -17,10 +17,8 @@ import kotlin.reflect.KClass
  * Activities containing this fragment MUST implement the [INotificationsFragmentCallback] interface.
  */
 class NotificationsFragment : BaseFragment<FragmentNotificationsBinding, NotificationsFragmentVM>() {
-
-    override val name: String = "Notifications"
-    override val viewModelClass: KClass<NotificationsFragmentVM> = NotificationsFragmentVM::class
     override val layoutId: Int = R.layout.fragment_notifications
+    override val viewModelClass: KClass<NotificationsFragmentVM> = NotificationsFragmentVM::class
     override val observeLiveData: NotificationsFragmentVM.() -> Unit
         get() = {
         }

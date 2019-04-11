@@ -14,9 +14,8 @@ import com.example.testjetpack.R
 
 
 class MyProfileFragment : BaseFragment<FragmentMyProfileBinding, MyProfileFragmentVM>() {
-    override val name: String = "My Profile"
-    override val viewModelClass: KClass<MyProfileFragmentVM> = MyProfileFragmentVM::class
     override val layoutId: Int = R.layout.fragment_my_profile
+    override val viewModelClass: KClass<MyProfileFragmentVM> = MyProfileFragmentVM::class
     override val observeLiveData: MyProfileFragmentVM.() -> Unit
         get() = {
         }

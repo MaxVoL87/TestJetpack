@@ -23,7 +23,6 @@ abstract class BaseFragment<B : ViewDataBinding, T : BaseViewModel<out EventStat
     companion object {
         private const val COROUTINE_DELAY = 1000L
     }
-    protected abstract val name: String
     protected abstract val layoutId: Int
     protected abstract val viewModelClass: KClass<T>
     protected lateinit var binding: B
@@ -106,7 +105,6 @@ abstract class BaseFragment<B : ViewDataBinding, T : BaseViewModel<out EventStat
 
     override fun onResume() {
         super.onResume()
-        getActionBar()?.let { it.title = name }
         with(viewModel.alertMessageLiveData) {
             value?.let { throwable ->
                 parseError(throwable)

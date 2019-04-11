@@ -8,22 +8,22 @@
     <fragment
         android:id="@+id/gitRepoSearchFragment"
         android:name="com.example.testjetpack.ui.main.gitreposearch.GitRepoSearchFragment"
-        android:label="GitRepoSearchFragment"
+        android:label="Git Repo Search"
         tools:layout="@layout/fragment_gitreposearch"/>
     <fragment
         android:id="@+id/myProfileFragment"
         android:name="com.example.testjetpack.ui.main.myprofile.MyProfileFragment"
-        android:label="MyProfileFragment"
+        android:label="My Profile"
         tools:layout="@layout/fragment_my_profile"/>
     <fragment
         android:id="@+id/gpsFragment"
         android:name="com.example.testjetpack.ui.main.gps.GpsFragment"
-        android:label="GpsFragment"
+        android:label="GPS"
         tools:layout="@layout/fragment_gps"/>
     <fragment
         android:id="@+id/notificationsFragment"
         android:name="com.example.testjetpack.ui.main.notifications.NotificationsFragment"
-        android:label="NotificationFragment"
+        android:label="Notifications"
         tools:layout="@layout/fragment_notifications"/>
 
     <action
