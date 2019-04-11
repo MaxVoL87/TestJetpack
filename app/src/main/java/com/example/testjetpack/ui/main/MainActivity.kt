@@ -109,18 +109,19 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityVM>(),
         showAlert("Not Implemented")
     }
 
-    // region VM events renderer
-
-    private val closeDrawerRenderer: (Any) -> Unit = { event ->
-        event as MainActivityVMEventStateChange.CloseDrawer
-        drawer_layout.closeDrawer(GravityCompat.START)
+    private fun closeDrawer(){
+        if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
+            drawer_layout.closeDrawer(GravityCompat.START)
+        }
     }
+    // region VM events renderer
 
     private val openProfileRenderer: (Any) -> Unit = { event ->
         event as MainActivityVMEventStateChange.OpenProfile
         if (getCurFragment(nav_host_fragment) !is MyProfileFragment) {
             openMyProfile()
         }
+        closeDrawer()
     }
 
     private val openGpsRenderer: (Any) -> Unit = { event ->
@@ -128,6 +129,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityVM>(),
         if (getCurFragment(nav_host_fragment) !is GpsFragment) {
             openGps()
         }
+        closeDrawer()
     }
 
     private val openNotificationsRenderer: (Any) -> Unit = { event ->
@@ -135,6 +137,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityVM>(),
         if (getCurFragment(nav_host_fragment) !is NotificationsFragment) {
             openNotifications()
         }
+        closeDrawer()
     }
 
     private val logOutRenderer: (Any) -> Unit = { event ->
@@ -146,8 +149,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityVM>(),
         MainActivityVMEventStateChange.OpenProfile::class to openProfileRenderer,
         MainActivityVMEventStateChange.OpenGps::class to openGpsRenderer,
         MainActivityVMEventStateChange.OpenNotifications::class to openNotificationsRenderer,
-        MainActivityVMEventStateChange.LogOut::class to logOutRenderer,
-        MainActivityVMEventStateChange.CloseDrawer::class to closeDrawerRenderer
+        MainActivityVMEventStateChange.LogOut::class to logOutRenderer
 
     )
     // endregion VM events renderer

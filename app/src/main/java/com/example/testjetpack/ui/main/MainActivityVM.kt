@@ -22,8 +22,6 @@ class MainActivityVM(
 
     // region OnNavigationItemSelectedListener impl
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        _events.value = Event(MainActivityVMEventStateChange.CloseDrawer)
-
         var event: MainActivityVMEventStateChange? = null
         when (item.itemId) {
             R.id.nav_my_profile -> {
@@ -71,7 +69,6 @@ class MainActivityVM(
 }
 
 sealed class MainActivityVMEventStateChange : EventStateChange {
-    object CloseDrawer : MainActivityVMEventStateChange()
     object OpenProfile : MainActivityVMEventStateChange()
     object OpenGps : MainActivityVMEventStateChange()
     object OpenNotifications : MainActivityVMEventStateChange()
