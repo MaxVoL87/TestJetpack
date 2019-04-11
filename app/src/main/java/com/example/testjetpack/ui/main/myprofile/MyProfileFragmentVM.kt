@@ -7,6 +7,7 @@ import com.example.testjetpack.ui.base.BaseViewModel
 import androidx.lifecycle.MutableLiveData
 import com.example.testjetpack.ui.base.EventStateChange
 import com.example.testjetpack.utils.livedata.Event
+import com.example.testjetpack.utils.livedata.toMutableLiveData
 import com.squareup.picasso.Picasso
 
 class MyProfileFragmentVM(
@@ -26,8 +27,8 @@ class MyProfileFragmentVM(
     val cardNumber: MutableLiveData<String?> = MutableLiveData()
 
     private val _profile: MutableLiveData<Profile?> = MutableLiveData()
-    private val _emailOnEdit: MutableLiveData<Boolean> = MutableLiveData(false)
-    private val _phoneOnEdit: MutableLiveData<Boolean> = MutableLiveData(false)
+    private val _emailOnEdit: MutableLiveData<Boolean> = false.toMutableLiveData()
+    private val _phoneOnEdit: MutableLiveData<Boolean> = false.toMutableLiveData()
 
     fun editEmail() {
         val curEditing = _emailOnEdit.value!!
