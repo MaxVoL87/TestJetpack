@@ -16,7 +16,9 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
 
         <ImageView
             android:id="@+id/toolbar"
@@ -32,8 +34,8 @@
             android:layout_alignParentStart="true"
             android:layout_marginBottom="@dimen/min_text_margin"
             android:layout_toStartOf="@+id/bSearch"
-            android:inputType="text|textNoSuggestions"
             android:imeOptions="actionDone"
+            android:inputType="text|textNoSuggestions"
             android:lines="1"
             android:text='@={viewModel.searchText}'
             app:onEditorActionListener='@{viewModel.onOk}' />

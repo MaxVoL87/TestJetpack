@@ -26,30 +26,30 @@ class GpsFragment : BaseFragment<FragmentGpsBinding, GpsFragmentVM>() {
     override val observeLiveData: GpsFragmentVM.() -> Unit
         get() = {
             isGPSOnly.observe(this@GpsFragment, Observer<Boolean> {
-                setChecked(menuItems[isGpsOnlyItemId], it)
+                setChecked(_menuItems[_isGpsOnlyItemId], it)
             })
             isLocationListenerStarted.observe(this@GpsFragment, Observer<Boolean> {
-                menuItems[isGpsOnlyItemId]?.isEnabled != it
+                _menuItems[_isGpsOnlyItemId]?.isEnabled != it
             })
             isNeedToShowDiagnostic.observe(this@GpsFragment, Observer<Boolean> {
-                setChecked(menuItems[isShowDiagnosticItemId], it)
+                setChecked(_menuItems[_isShowDiagnosticItemId], it)
             })
         }
 
-    private var callback: IGpsFragmentCallback? = null
+    private var _callback: IGpsFragmentCallback? = null
 
-    private val isGpsOnlyItemId = 1
-    private val isShowDiagnosticItemId = 2
-    private val clearDBLocationsDataItemId = 3
-    private val menuItems = mutableMapOf<Int, MenuItem>()
+    private val _isGpsOnlyItemId = 1
+    private val _isShowDiagnosticItemId = 2
+    private val _clearDBLocationsDataItemId = 3
+    private val _menuItems = mutableMapOf<Int, MenuItem>()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        callback = bindInterfaceOrThrow<IGpsFragmentCallback>(parentFragment, context)
+        _callback = bindInterfaceOrThrow<IGpsFragmentCallback>(parentFragment, context)
     }
 
     override fun onDetach() {
-        callback = null
+        _callback = null
         super.onDetach()
     }
 
@@ -69,44 +69,44 @@ class GpsFragment : BaseFragment<FragmentGpsBinding, GpsFragmentVM>() {
 
     // region options menu
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        menuItems[isGpsOnlyItemId] = menu.add(Menu.NONE, isGpsOnlyItemId, Menu.NONE, "GPS Only").apply {
+        _menuItems[_isGpsOnlyItemId] = menu.add(Menu.NONE, _isGpsOnlyItemId, Menu.NONE, "GPS Only").apply {
             setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM or MenuItem.SHOW_AS_ACTION_WITH_TEXT)
             isCheckable = true
         }
-        menuItems[isShowDiagnosticItemId] = menu.add(Menu.NONE, isShowDiagnosticItemId, Menu.NONE, "Diagnostic").apply {
+        _menuItems[_isShowDiagnosticItemId] = menu.add(Menu.NONE, _isShowDiagnosticItemId, Menu.NONE, "Diagnostic").apply {
             setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM or MenuItem.SHOW_AS_ACTION_WITH_TEXT)
             isCheckable = true
         }
-        menuItems[clearDBLocationsDataItemId] = menu.add(Menu.NONE, clearDBLocationsDataItemId, Menu.NONE, "Clear locations")
+        _menuItems[_clearDBLocationsDataItemId] = menu.add(Menu.NONE, _clearDBLocationsDataItemId, Menu.NONE, "Clear locations")
         super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
         super.onPrepareOptionsMenu(menu)
-        menuItems[isGpsOnlyItemId]?.apply {
+        _menuItems[_isGpsOnlyItemId]?.apply {
             setChecked(this, viewModel.isGPSOnly.value == true)
             isEnabled = viewModel.isLocationListenerStarted.value != true
         }
-        menuItems[isShowDiagnosticItemId]?.apply {
+        _menuItems[_isShowDiagnosticItemId]?.apply {
             setChecked(this, viewModel.isNeedToShowDiagnostic.value == true)
         }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            isGpsOnlyItemId -> {
+            _isGpsOnlyItemId -> {
                 withNotNull(viewModel.isGPSOnly.value) {
                     viewModel.isGPSOnly.value = !this
                 }
                 return true
             }
-            isShowDiagnosticItemId -> {
+            _isShowDiagnosticItemId -> {
                 withNotNull(viewModel.isNeedToShowDiagnostic.value) {
                     viewModel.isNeedToShowDiagnostic.value = !this
                 }
                 return true
             }
-            clearDBLocationsDataItemId -> {
+            _clearDBLocationsDataItemId -> {
                 viewModel.clearDBData()
                 return true
             }

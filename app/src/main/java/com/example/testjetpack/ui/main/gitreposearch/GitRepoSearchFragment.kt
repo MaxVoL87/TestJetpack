@@ -24,15 +24,15 @@ class GitRepoSearchFragment : BaseFragment<FragmentGitreposearchBinding, GitRepo
         get() = {
         }
 
-    private var callback: IGitRepoSearchFragmentCallback? = null
+    private var _callback: IGitRepoSearchFragmentCallback? = null
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        callback = bindInterfaceOrThrow<IGitRepoSearchFragmentCallback>(parentFragment, context)
+        _callback = bindInterfaceOrThrow<IGitRepoSearchFragmentCallback>(parentFragment, context)
     }
 
     override fun onDetach() {
-        callback = null
+        _callback = null
         super.onDetach()
     }
 
@@ -46,7 +46,7 @@ class GitRepoSearchFragment : BaseFragment<FragmentGitreposearchBinding, GitRepo
 
     private val openGitRepositoryRenderer: (Any) -> Unit = { event ->
         event as GitRepoSearchFragmentVMEventStateChange.OpenGitRepository
-        callback?.openGitRepository(event.repo)
+        _callback?.openGitRepository(event.repo)
     }
 
     override val RENDERERS: Map<KClass<out EventStateChange>, Function1<Any, Unit>> = mapOf(

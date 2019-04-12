@@ -54,7 +54,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityVM>(),
     private val _drawerListener = object : DrawerLayout.DrawerListener {
         override fun onDrawerStateChanged(newState: Int) {
             if (newState == DrawerLayout.STATE_IDLE && !drawer_layout.isDrawerOpen(GravityCompat.START)) {
-                drawerTask.invoke()
+                _drawerTask.invoke()
             }
         }
 
@@ -67,7 +67,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityVM>(),
         override fun onDrawerOpened(drawerView: View) {
         }
     }
-    private var drawerTask: () -> Unit = {}
+    private var _drawerTask: () -> Unit = {}
         get() {
             val task = field
             field = {} // reset
@@ -107,7 +107,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityVM>(),
         navController.removeOnDestinationChangedListener(_onDestinationChangedListener)
 
         drawer_layout.removeDrawerListener(_drawerListener)
-        drawerTask = {}
+        _drawerTask = {}
     }
 
     override fun onBackPressed() {
@@ -125,7 +125,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityVM>(),
     private fun openMyProfile() {
         closeDrawer()
         if (getCurFragment(nav_host_fragment) !is MyProfileFragment) {
-            drawerTask = { navController.navigate(R.id.action_global_myProfileFragment) }
+            _drawerTask = { navController.navigate(R.id.action_global_myProfileFragment) }
         }
 
     }
@@ -133,7 +133,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityVM>(),
     private fun openGps() {
         closeDrawer()
         if (getCurFragment(nav_host_fragment) !is GpsFragment) {
-            drawerTask = { navController.navigate(R.id.action_global_gpsFragment) }
+            _drawerTask = { navController.navigate(R.id.action_global_gpsFragment) }
         }
     }
 
@@ -145,7 +145,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityVM>(),
     private fun openNotifications() {
         closeDrawer()
         if (getCurFragment(nav_host_fragment) !is NotificationsFragment) {
-            drawerTask = { navController.navigate(R.id.action_global_notificationsFragment) }
+            _drawerTask = { navController.navigate(R.id.action_global_notificationsFragment) }
         }
     }
 

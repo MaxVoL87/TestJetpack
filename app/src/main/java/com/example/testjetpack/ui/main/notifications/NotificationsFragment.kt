@@ -24,15 +24,15 @@ class NotificationsFragment : BaseFragment<FragmentNotificationsBinding, Notific
         }
 
 
-    private var callback: INotificationsFragmentCallback? = null
+    private var _callback: INotificationsFragmentCallback? = null
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        callback = bindInterfaceOrThrow<INotificationsFragmentCallback>(parentFragment, context)
+        _callback = bindInterfaceOrThrow<INotificationsFragmentCallback>(parentFragment, context)
     }
 
     override fun onDetach() {
-        callback = null
+        _callback = null
         super.onDetach()
     }
 
@@ -51,7 +51,7 @@ class NotificationsFragment : BaseFragment<FragmentNotificationsBinding, Notific
 
     private val openNotificationRenderer: (Any) -> Unit = { event ->
         event as NotificationsFragmentVMEventStateChange.OpenNotifications
-        callback?.openNotificationDetails(event.notification)
+        _callback?.openNotificationDetails(event.notification)
     }
 
     override val RENDERERS: Map<KClass<out EventStateChange>, Function1<Any, Unit>> = mapOf(

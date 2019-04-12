@@ -20,15 +20,15 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding, MyProfileFragme
         get() = {
         }
 
-    private var callback: IMyProfileFragmentCallback? = null
+    private var _callback: IMyProfileFragmentCallback? = null
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        callback = bindInterfaceOrThrow<IMyProfileFragmentCallback>(parentFragment, context)
+        _callback = bindInterfaceOrThrow<IMyProfileFragmentCallback>(parentFragment, context)
     }
 
     override fun onDetach() {
-        callback = null
+        _callback = null
         super.onDetach()
     }
 
@@ -47,7 +47,7 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding, MyProfileFragme
 
     private val openCreditCardDetailsRenderer: (Any) -> Unit = { event ->
         event as MyProfileFragmentVMEventStateChange.OpenCreditCardDetails
-        callback?.openCreditCardDetails()
+        _callback?.openCreditCardDetails()
     }
 
     override val RENDERERS: Map<KClass<out EventStateChange>, Function1<Any, Unit>> = mapOf(
