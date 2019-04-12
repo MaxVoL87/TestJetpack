@@ -1,12 +1,14 @@
 package com.example.testjetpack.ui.main
 
 import android.os.Bundle
+import android.view.View
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.navigation.NavController
 import androidx.navigation.ui.NavigationUI.*
 import com.example.testjetpack.R
 import com.example.testjetpack.databinding.ActivityMainBinding
-import com.example.testjetpack.databinding.NavHeaderMainBinding
+import com.example.testjetpack.databinding.ItemNavHeaderMainBinding
 import com.example.testjetpack.models.git.db.GitRepositoryView
 import com.example.testjetpack.models.own.Notification
 import com.example.testjetpack.ui.base.BaseActivity
@@ -40,37 +42,72 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityVM>(),
         get() = {
         }
 
-    private val picasso: Picasso by inject()
+    private val _picasso: Picasso by inject()
+    private val _onDestinationChangedListener =
+        NavController.OnDestinationChangedListener { controller, destination, _ ->
+            // hide drawer if no parent fragment
+            drawer_layout.setDrawerLockMode(
+                if (destination.id == controller.graph.startDestination) DrawerLayout.LOCK_MODE_UNLOCKED
+                else DrawerLayout.LOCK_MODE_LOCKED_CLOSED
+            )
+        }
+    private val _drawerListener = object : DrawerLayout.DrawerListener {
+        override fun onDrawerStateChanged(newState: Int) {
+            if (newState == DrawerLayout.STATE_IDLE && !drawer_layout.isDrawerOpen(GravityCompat.START)) {
+                drawerTask.invoke()
+            }
+        }
+
+        override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
+        }
+
+        override fun onDrawerClosed(drawerView: View) {
+        }
+
+        override fun onDrawerOpened(drawerView: View) {
+        }
+    }
+    private var drawerTask: () -> Unit = {}
+        get() {
+            val task = field
+            field = {} // reset
+            return task
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val headerBinding: NavHeaderMainBinding = NavHeaderMainBinding.bind(binding.navView.getHeaderView(0))
+        val headerBinding = ItemNavHeaderMainBinding.bind(binding.navView.getHeaderView(0))
         headerBinding.lifecycleOwner = this
 
         binding.viewModel = viewModel
         headerBinding.profile = viewModel.profile
-        headerBinding.picasso = picasso
+        headerBinding.picasso = _picasso
 
         setSupportActionBar(toolbar)
-
-        //Listen for changes in the back stack
-        navController.addOnDestinationChangedListener { cont, dest, bundle ->
-            // hide drawer if no parent fragment
-            drawer_layout.setDrawerLockMode(
-                if (dest.id == cont.graph.startDestination) DrawerLayout.LOCK_MODE_UNLOCKED
-                else DrawerLayout.LOCK_MODE_LOCKED_CLOSED
-            )
-        }
 
         // Update action bar to reflect navigation
         setupActionBarWithNavController(this, navController, drawer_layout)
         // Tie nav graph to items in nav drawer
         setupWithNavController(nav_view, navController)
+
+        //Listen for changes in the back stack
+        navController.addOnDestinationChangedListener(_onDestinationChangedListener)
+
+        drawer_layout.addDrawerListener(_drawerListener)
     }
 
     override fun onStart() {
         super.onStart()
         viewModel.getProfile()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        //Listen for changes in the back stack
+        navController.removeOnDestinationChangedListener(_onDestinationChangedListener)
+
+        drawer_layout.removeDrawerListener(_drawerListener)
+        drawerTask = {}
     }
 
     override fun onBackPressed() {
@@ -86,15 +123,35 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityVM>(),
     }
 
     private fun openMyProfile() {
-        navController.navigate(R.id.action_global_myProfileFragment)
+        closeDrawer()
+        if (getCurFragment(nav_host_fragment) !is MyProfileFragment) {
+            drawerTask = { navController.navigate(R.id.action_global_myProfileFragment) }
+        }
+
     }
 
     private fun openGps() {
-        navController.navigate(R.id.action_global_gpsFragment)
+        closeDrawer()
+        if (getCurFragment(nav_host_fragment) !is GpsFragment) {
+            drawerTask = { navController.navigate(R.id.action_global_gpsFragment) }
+        }
+    }
+
+    private fun openManage() {
+        closeDrawer()
+        showAlert("Not Implemented")
     }
 
     private fun openNotifications() {
-        navController.navigate(R.id.action_global_notificationsFragment)
+        closeDrawer()
+        if (getCurFragment(nav_host_fragment) !is NotificationsFragment) {
+            drawerTask = { navController.navigate(R.id.action_global_notificationsFragment) }
+        }
+    }
+
+    private fun openFeedback() {
+        closeDrawer()
+        showAlert("Not Implemented")
     }
 
     override fun openGitRepository(repo: GitRepositoryView) {
@@ -109,7 +166,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityVM>(),
         showAlert("Not Implemented")
     }
 
-    private fun closeDrawer(){
+    private fun closeDrawer() {
         if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
             drawer_layout.closeDrawer(GravityCompat.START)
         }
@@ -118,26 +175,27 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityVM>(),
 
     private val openProfileRenderer: (Any) -> Unit = { event ->
         event as MainActivityVMEventStateChange.OpenProfile
-        if (getCurFragment(nav_host_fragment) !is MyProfileFragment) {
-            openMyProfile()
-        }
-        closeDrawer()
+        openMyProfile()
     }
 
     private val openGpsRenderer: (Any) -> Unit = { event ->
         event as MainActivityVMEventStateChange.OpenGps
-        if (getCurFragment(nav_host_fragment) !is GpsFragment) {
-            openGps()
-        }
-        closeDrawer()
+        openGps()
+    }
+
+    private val openManageRenderer: (Any) -> Unit = { event ->
+        event as MainActivityVMEventStateChange.OpenManage
+        openManage()
     }
 
     private val openNotificationsRenderer: (Any) -> Unit = { event ->
         event as MainActivityVMEventStateChange.OpenNotifications
-        if (getCurFragment(nav_host_fragment) !is NotificationsFragment) {
-            openNotifications()
-        }
-        closeDrawer()
+        openNotifications()
+    }
+
+    private val openFeedbackRenderer: (Any) -> Unit = { event ->
+        event as MainActivityVMEventStateChange.OpenFeedback
+        openFeedback()
     }
 
     private val logOutRenderer: (Any) -> Unit = { event ->
@@ -148,9 +206,10 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityVM>(),
     override val RENDERERS: Map<KClass<out EventStateChange>, Function1<Any, Unit>> = mapOf(
         MainActivityVMEventStateChange.OpenProfile::class to openProfileRenderer,
         MainActivityVMEventStateChange.OpenGps::class to openGpsRenderer,
+        MainActivityVMEventStateChange.OpenManage::class to openManageRenderer,
         MainActivityVMEventStateChange.OpenNotifications::class to openNotificationsRenderer,
+        MainActivityVMEventStateChange.OpenFeedback::class to openFeedbackRenderer,
         MainActivityVMEventStateChange.LogOut::class to logOutRenderer
-
     )
     // endregion VM events renderer
 }
