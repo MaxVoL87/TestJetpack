@@ -29,22 +29,22 @@
     <action
         android:id="@+id/action_global_myProfileFragment"
         app:destination="@id/myProfileFragment"
-        app:enterAnim="@anim/enter_from_right"
-        app:exitAnim="@anim/exit_to_left"
+        app:enterAnim="@anim/fade_in"
+        app:exitAnim="@anim/fade_out"
         app:popEnterAnim="@anim/enter_from_left"
         app:popExitAnim="@anim/exit_to_right" />
     <action
         android:id="@+id/action_global_gpsFragment"
         app:destination="@id/gpsFragment"
-        app:enterAnim="@anim/enter_from_right"
-        app:exitAnim="@anim/exit_to_left"
+        app:enterAnim="@anim/fade_in"
+        app:exitAnim="@anim/fade_out"
         app:popEnterAnim="@anim/enter_from_left"
         app:popExitAnim="@anim/exit_to_right" />
     <action
         android:id="@+id/action_global_notificationsFragment"
         app:destination="@id/notificationsFragment"
-        app:enterAnim="@anim/enter_from_right"
-        app:exitAnim="@anim/exit_to_left"
+        app:enterAnim="@anim/fade_in"
+        app:exitAnim="@anim/fade_out"
         app:popEnterAnim="@anim/enter_from_left"
         app:popExitAnim="@anim/exit_to_right" />
 
