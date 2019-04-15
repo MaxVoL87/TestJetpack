@@ -13,6 +13,7 @@ import com.example.testjetpack.ui.main.MainActivityVM
 import com.example.testjetpack.ui.main.gitreposearch.GitRepoSearchFragmentVM
 import com.example.testjetpack.ui.main.gps.GpsFragmentVM
 import com.example.testjetpack.ui.main.myprofile.MyProfileFragmentVM
+import com.example.testjetpack.ui.main.mytrip.MyTripFragmentVM
 import com.example.testjetpack.ui.main.notifications.NotificationsFragmentVM
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -77,6 +78,7 @@ val appModule = module {
     // MyViewModel ViewModel
     viewModel { MainActivityVM(get()) }
     viewModel { GitRepoSearchFragmentVM(get()) }
+    viewModel { MyTripFragmentVM() }
     viewModel { GpsFragmentVM(get(), get(), get()) }
     viewModel { MyProfileFragmentVM(get(), get()) }
     viewModel { NotificationsFragmentVM(get()) }

@@ -9,26 +9,38 @@
         android:id="@+id/gitRepoSearchFragment"
         android:name="com.example.testjetpack.ui.main.gitreposearch.GitRepoSearchFragment"
         android:label="Git Repo Search"
-        tools:layout="@layout/fragment_gitreposearch"/>
+        tools:layout="@layout/fragment_gitreposearch" />
     <fragment
         android:id="@+id/myProfileFragment"
         android:name="com.example.testjetpack.ui.main.myprofile.MyProfileFragment"
         android:label="My Profile"
-        tools:layout="@layout/fragment_my_profile"/>
+        tools:layout="@layout/fragment_my_profile" />
+    <fragment
+        android:id="@+id/myTripFragment"
+        android:name="com.example.testjetpack.ui.main.mytrip.MyTripFragment"
+        android:label="My Trip"
+        tools:layout="@layout/fragment_my_trip" />
     <fragment
         android:id="@+id/gpsFragment"
         android:name="com.example.testjetpack.ui.main.gps.GpsFragment"
         android:label="GPS"
-        tools:layout="@layout/fragment_gps"/>
+        tools:layout="@layout/fragment_gps" />
     <fragment
         android:id="@+id/notificationsFragment"
         android:name="com.example.testjetpack.ui.main.notifications.NotificationsFragment"
         android:label="Notifications"
-        tools:layout="@layout/fragment_notifications"/>
+        tools:layout="@layout/fragment_notifications" />
 
     <action
         android:id="@+id/action_global_myProfileFragment"
         app:destination="@id/myProfileFragment"
+        app:enterAnim="@anim/fade_in"
+        app:exitAnim="@anim/fade_out"
+        app:popEnterAnim="@anim/enter_from_left"
+        app:popExitAnim="@anim/exit_to_right" />
+    <action
+        android:id="@+id/action_global_myTripFragment"
+        app:destination="@id/myTripFragment"
         app:enterAnim="@anim/fade_in"
         app:exitAnim="@anim/fade_out"
         app:popEnterAnim="@anim/enter_from_left"

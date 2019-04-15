@@ -12,13 +12,13 @@
             android:icon="@drawable/ic_menu_camera"
             android:title="My Profile" />
         <item
+            android:id="@+id/nav_my_trip"
+            android:icon="@drawable/ic_menu_share"
+            android:title="My Trip" />
+        <item
             android:id="@+id/nav_gps"
             android:icon="@drawable/ic_menu_gallery"
             android:title="GPS" />
-        <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Preferences" />
 
     </group>
 
@@ -47,7 +47,7 @@
 
         <item
             android:id="@+id/nav_log_out"
-            android:icon="@drawable/ic_menu_share"
+            android:icon="@android:color/transparent"
             android:title="Log Out" />
 
     </group>

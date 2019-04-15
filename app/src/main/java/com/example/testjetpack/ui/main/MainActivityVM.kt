@@ -27,12 +27,13 @@ class MainActivityVM(
             R.id.nav_my_profile -> {
                 event = MainActivityVMEventStateChange.OpenProfile
             }
+            R.id.nav_my_trip -> {
+                event = MainActivityVMEventStateChange.OpenTrip
+            }
             R.id.nav_gps -> {
                 event = MainActivityVMEventStateChange.OpenGps
             }
-            R.id.nav_manage -> {
-                event = MainActivityVMEventStateChange.OpenManage
-            }
+
 
             R.id.nav_notifications -> {
                 event = MainActivityVMEventStateChange.OpenNotifications
@@ -70,8 +71,8 @@ class MainActivityVM(
 
 sealed class MainActivityVMEventStateChange : EventStateChange {
     object OpenProfile : MainActivityVMEventStateChange()
+    object OpenTrip : MainActivityVMEventStateChange()
     object OpenGps : MainActivityVMEventStateChange()
-    object OpenManage : MainActivityVMEventStateChange()
     object OpenNotifications : MainActivityVMEventStateChange()
     object OpenFeedback : MainActivityVMEventStateChange()
     object LogOut : MainActivityVMEventStateChange()

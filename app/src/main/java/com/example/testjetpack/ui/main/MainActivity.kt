@@ -18,6 +18,8 @@ import com.example.testjetpack.ui.main.gps.IGpsFragmentCallback
 import com.example.testjetpack.ui.main.gps.GpsFragment
 import com.example.testjetpack.ui.main.myprofile.IMyProfileFragmentCallback
 import com.example.testjetpack.ui.main.myprofile.MyProfileFragment
+import com.example.testjetpack.ui.main.mytrip.IMyTripFragmentCallback
+import com.example.testjetpack.ui.main.mytrip.MyTripFragment
 import com.example.testjetpack.ui.main.notifications.INotificationsFragmentCallback
 import com.example.testjetpack.ui.main.notifications.NotificationsFragment
 import com.example.testjetpack.utils.browseWithoutCurrentApp
@@ -32,8 +34,9 @@ import kotlin.reflect.KClass
 class MainActivity : BaseActivity<ActivityMainBinding, MainActivityVM>(),
     IGitRepoSearchFragmentCallback,
     IMyProfileFragmentCallback,
-    INotificationsFragmentCallback,
-    IGpsFragmentCallback {
+    IMyTripFragmentCallback,
+    IGpsFragmentCallback,
+    INotificationsFragmentCallback {
 
     override val viewModelClass: KClass<MainActivityVM> = MainActivityVM::class
     override val layoutId: Int = R.layout.activity_main
@@ -123,35 +126,31 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityVM>(),
     }
 
     private fun openMyProfile() {
-        closeDrawer()
-        if (getCurFragment(nav_host_fragment) !is MyProfileFragment) {
-            _drawerTask = { navController.navigate(R.id.action_global_myProfileFragment) }
-        }
+        openFragmentDrawerTask<MyProfileFragment>(R.id.action_global_myProfileFragment)
+    }
 
+    private fun openTrip() {
+        openFragmentDrawerTask<MyTripFragment>(R.id.action_global_myTripFragment)
     }
 
     private fun openGps() {
-        closeDrawer()
-        if (getCurFragment(nav_host_fragment) !is GpsFragment) {
-            _drawerTask = { navController.navigate(R.id.action_global_gpsFragment) }
-        }
-    }
-
-    private fun openManage() {
-        closeDrawer()
-        showAlert("Not Implemented")
+        openFragmentDrawerTask<GpsFragment>(R.id.action_global_gpsFragment)
     }
 
     private fun openNotifications() {
-        closeDrawer()
-        if (getCurFragment(nav_host_fragment) !is NotificationsFragment) {
-            _drawerTask = { navController.navigate(R.id.action_global_notificationsFragment) }
-        }
+        openFragmentDrawerTask<NotificationsFragment>(R.id.action_global_notificationsFragment)
     }
 
     private fun openFeedback() {
         closeDrawer()
         showAlert("Not Implemented")
+    }
+
+    private inline fun <reified T> openFragmentDrawerTask(globalTaskId: Int) {
+        closeDrawer()
+        if (getCurFragment(nav_host_fragment) !is T) {
+            _drawerTask = { navController.navigate(globalTaskId) }
+        }
     }
 
     override fun openGitRepository(repo: GitRepositoryView) {
@@ -178,14 +177,14 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityVM>(),
         openMyProfile()
     }
 
+    private val openTripRenderer: (Any) -> Unit = { event ->
+        event as MainActivityVMEventStateChange.OpenTrip
+        openTrip()
+    }
+
     private val openGpsRenderer: (Any) -> Unit = { event ->
         event as MainActivityVMEventStateChange.OpenGps
         openGps()
-    }
-
-    private val openManageRenderer: (Any) -> Unit = { event ->
-        event as MainActivityVMEventStateChange.OpenManage
-        openManage()
     }
 
     private val openNotificationsRenderer: (Any) -> Unit = { event ->
@@ -206,7 +205,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityVM>(),
     override val RENDERERS: Map<KClass<out EventStateChange>, Function1<Any, Unit>> = mapOf(
         MainActivityVMEventStateChange.OpenProfile::class to openProfileRenderer,
         MainActivityVMEventStateChange.OpenGps::class to openGpsRenderer,
-        MainActivityVMEventStateChange.OpenManage::class to openManageRenderer,
+        MainActivityVMEventStateChange.OpenTrip::class to openTripRenderer,
         MainActivityVMEventStateChange.OpenNotifications::class to openNotificationsRenderer,
         MainActivityVMEventStateChange.OpenFeedback::class to openFeedbackRenderer,
         MainActivityVMEventStateChange.LogOut::class to logOutRenderer

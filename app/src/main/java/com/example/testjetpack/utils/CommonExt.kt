@@ -5,15 +5,12 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Parcelable
 import android.util.DisplayMetrics
-import android.view.View
+import android.util.TypedValue
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import com.example.testjetpack.R
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 
 internal const val NO_FLAGS = 0
 internal const val FAKE_URL = "http://google.com"
@@ -58,22 +55,13 @@ fun Fragment.permissionsGranted(permissions: Array<String>, shouldAsk: Boolean, 
         return true
     }
 
-    val notGrantedPermissions = kotlin.collections.mutableListOf<String>()
-    permissions.forEach {
-        if (context?.checkSelfPermission(it) != android.content.pm.PackageManager.PERMISSION_GRANTED) notGrantedPermissions.add(
-            it
-        )
-    }
+    val notGrantedPermissions = permissions.filter { context?.checkSelfPermission(it) != android.content.pm.PackageManager.PERMISSION_GRANTED }
     if (notGrantedPermissions.isEmpty()) return true
 
     if (!shouldAsk) return false
 
-    val shouldShowRequestPermissionRationale = kotlin.collections.mutableListOf<String>()
-    notGrantedPermissions.forEach {
-        if (shouldShowRequestPermissionRationale(it)) shouldShowRequestPermissionRationale.add(it)
-    }
-
-    if (!shouldShowRequestPermissionRationale.isEmpty()) {
+    val shouldShowRequestPermissionRationale = notGrantedPermissions.filter { shouldShowRequestPermissionRationale(it) }
+    if (shouldShowRequestPermissionRationale.isNotEmpty()) {
         //todo: change? maybe use interface with setAction?
 //        CallbackDialog.newInstance(
 //            getString(R.string.PleaseProvidePermissionsForContinueTheApplicationWorking),
@@ -100,6 +88,18 @@ fun Context.convertDpToPixels(dp: Int): Int {
     val metrics = resources.displayMetrics
     return dp * (metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT)
 }
+
+/**
+ * Calculate ActionBar height
+ */
+fun Context.getActionBarHeightDp(): Int? {
+    val tv = TypedValue()
+    if (theme.resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
+        return TypedValue.complexToDimensionPixelSize(tv.data, resources.displayMetrics)
+    }
+    return null
+}
+
 
 /**
  * Hide soft keyboard. Do nothing if keyboard is not opened
