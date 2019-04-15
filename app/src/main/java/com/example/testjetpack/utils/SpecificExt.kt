@@ -96,7 +96,7 @@ fun GitRepository.toDBEntity(license: License?, owner: User, indexInResponse: In
         indexInResponse = indexInResponse
     )
 
-fun Location.toDBEntity(startTime: Long): com.example.testjetpack.models.gps.Location {
+fun Location.toDBEntity(startTime: Long): com.example.testjetpack.models.own.Location {
 
     var acceleration = -1F
     var satellites = -1
@@ -106,7 +106,7 @@ fun Location.toDBEntity(startTime: Long): com.example.testjetpack.models.gps.Loc
         satellites = getInt(satellites_extra, satellites)
     }
 
-    return com.example.testjetpack.models.gps.Location(
+    return com.example.testjetpack.models.own.Location(
         startTime = startTime,
         altitude = altitude,
         latitude = latitude,

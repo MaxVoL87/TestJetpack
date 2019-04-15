@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.testjetpack.dataflow.local.AppDatabase
 import com.example.testjetpack.dataflow.network.IDataApi
-import com.example.testjetpack.models.gps.Location
+import com.example.testjetpack.models.own.Location
 import com.example.testjetpack.models.own.Notification
 import com.example.testjetpack.models.own.Profile
 

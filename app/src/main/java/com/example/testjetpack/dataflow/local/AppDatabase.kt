@@ -7,7 +7,7 @@ import com.example.testjetpack.models.git.db.GitRepository
 import com.example.testjetpack.models.git.License
 import com.example.testjetpack.models.own.Notification
 import com.example.testjetpack.models.git.User
-import com.example.testjetpack.models.gps.Location
+import com.example.testjetpack.models.own.Location
 
 // https://www.youtube.com/watch?v=sU-ot_Oz3AE&feature=youtu.be
 @Database(

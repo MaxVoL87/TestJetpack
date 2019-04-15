@@ -9,7 +9,7 @@ import com.example.testjetpack.dataflow.gps.GpsLocationProvider
 import com.example.testjetpack.dataflow.gps.ILocationProviderListener
 import com.example.testjetpack.dataflow.gps.GmsLocationProvider
 import com.example.testjetpack.dataflow.repository.IDataRepository
-import com.example.testjetpack.models.gps.Location
+import com.example.testjetpack.models.own.Location
 import com.example.testjetpack.ui.base.BaseViewModel
 import com.example.testjetpack.ui.base.EventStateChange
 import com.example.testjetpack.ui.base.UnexpectedExeption

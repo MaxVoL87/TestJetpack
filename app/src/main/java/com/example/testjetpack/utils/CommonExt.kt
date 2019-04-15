@@ -16,7 +16,9 @@ internal const val NO_FLAGS = 0
 internal const val FAKE_URL = "http://google.com"
 
 inline fun <T, R> withNotNull(receiver: T?, block: T.() -> R): R? = receiver?.block()
-inline fun <T: List<*>, R> withNotNullOrEmpty(receiver: T?, block: T.() -> R): R? = if (receiver.isNullOrEmpty()) null else receiver.block()
+inline fun <T : List<*>, R> withNotNullOrEmpty(receiver: T?, block: T.() -> R): R? = if (receiver.isNullOrEmpty()) null else receiver.block()
+inline fun <A, B, R> withNotNull(arg1: A?, arg2: B?, block: (A, B) -> R): R? = if (arg1 != null && arg2 != null) block(arg1, arg2) else null
+inline fun <A, B, C, R> withNotNull(arg1: A?, arg2: B?, arg3: C?, block: (A, B, C) -> R): R? = if (arg1 != null && arg2 != null && arg3 != null) block(arg1, arg2, arg3) else null
 
 fun Context.browseWithoutCurrentApp(url: String, newTask: Boolean = false): Boolean {
     val uri = Uri.parse(url)
@@ -55,7 +57,8 @@ fun Fragment.permissionsGranted(permissions: Array<String>, shouldAsk: Boolean, 
         return true
     }
 
-    val notGrantedPermissions = permissions.filter { context?.checkSelfPermission(it) != android.content.pm.PackageManager.PERMISSION_GRANTED }
+    val notGrantedPermissions =
+        permissions.filter { context?.checkSelfPermission(it) != android.content.pm.PackageManager.PERMISSION_GRANTED }
     if (notGrantedPermissions.isEmpty()) return true
 
     if (!shouldAsk) return false
@@ -92,7 +95,7 @@ fun Context.convertDpToPixels(dp: Int): Int {
 /**
  * Calculate ActionBar height
  */
-fun Context.getActionBarHeightDp(): Int? {
+fun Context.getActionBarHeightPx(): Int? {
     val tv = TypedValue()
     if (theme.resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
         return TypedValue.complexToDimensionPixelSize(tv.data, resources.displayMetrics)

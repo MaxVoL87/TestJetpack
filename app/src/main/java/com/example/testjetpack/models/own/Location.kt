@@ -1,4 +1,4 @@
-package com.example.testjetpack.models.gps
+package com.example.testjetpack.models.own
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
