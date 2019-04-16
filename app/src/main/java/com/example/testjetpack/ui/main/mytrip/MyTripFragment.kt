@@ -125,6 +125,7 @@ class MyTripFragment : BaseFragment<FragmentMyTripBinding, MyTripFragmentVM>(), 
     }
 
     override fun onDestroyView() {
+        fragmentManager?.beginTransaction()?.remove(_mapFragment)?.commit()
         _mapFragment.onDestroyView()
         super.onDestroyView()
     }
