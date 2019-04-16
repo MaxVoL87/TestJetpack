@@ -78,7 +78,7 @@ val appModule = module {
     // MyViewModel ViewModel
     viewModel { MainActivityVM(get()) }
     viewModel { GitRepoSearchFragmentVM(get()) }
-    viewModel { MyTripFragmentVM() }
+    viewModel { MyTripFragmentVM(get()) }
     viewModel { GpsFragmentVM(get(), get(), get()) }
     viewModel { MyProfileFragmentVM(get(), get()) }
     viewModel { NotificationsFragmentVM(get()) }

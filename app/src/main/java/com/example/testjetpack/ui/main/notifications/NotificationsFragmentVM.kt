@@ -16,6 +16,7 @@ class NotificationsFragmentVM(
 ) : BaseViewModel<NotificationsFragmentVMEventStateChange>() {
 
     private val _notificationsResponse = MutableLiveData<LiveData<List<Notification>>>()
+    private val _notifications: LiveData<List<Notification>> = switchMap(_notificationsResponse) { it }
 
     val adapter = NotificationsRecyclerViewAdapter()
         .apply {
@@ -28,8 +29,8 @@ class NotificationsFragmentVM(
             })
         }
 
-    val adapterItems: LiveData<List<BaseRecyclerItemViewModel>> = switchMap(_notificationsResponse) { notifs ->
-        MutableLiveData<List<BaseRecyclerItemViewModel>>(notifs.value?.map { NotificationItemViewModel(it) })
+    val adapterItems: LiveData<List<BaseRecyclerItemViewModel>> = switchMap(_notifications) { notifs ->
+        MutableLiveData<List<BaseRecyclerItemViewModel>>(notifs.map { NotificationItemViewModel(it) })
     }
 
     fun getNotifications() {

@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import com.example.testjetpack.models.own.Location
 import com.example.testjetpack.models.own.Notification
 import com.example.testjetpack.models.own.Profile
+import com.example.testjetpack.models.own.Trip
 
 interface IDataRepository {
 
@@ -13,6 +14,7 @@ interface IDataRepository {
 
     fun insertNotificationsIntoDB(notifications: List<Notification>)
 
+    fun getTrip(): Trip
 
     fun insertLocationsIntoDB(locations: List<Location>)
 

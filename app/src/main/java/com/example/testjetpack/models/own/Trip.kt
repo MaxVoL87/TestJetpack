@@ -1,7 +1,7 @@
 package com.example.testjetpack.models.own
 
-import android.location.Location
+import com.google.android.gms.maps.model.LatLng
 
 data class Trip(
-    val locations: List<Location>
+    val locations: List<LatLng>
 )

@@ -23,6 +23,7 @@ import com.example.testjetpack.ui.main.mytrip.MyTripFragment
 import com.example.testjetpack.ui.main.notifications.INotificationsFragmentCallback
 import com.example.testjetpack.ui.main.notifications.NotificationsFragment
 import com.example.testjetpack.utils.browseWithoutCurrentApp
+import com.example.testjetpack.utils.showNotImplemented
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
@@ -143,7 +144,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityVM>(),
 
     private fun openFeedback() {
         closeDrawer()
-        showAlert("Not Implemented")
+        showNotImplemented()
     }
 
     private inline fun <reified T> openFragmentDrawerTask(globalTaskId: Int) {
@@ -158,11 +159,11 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityVM>(),
     }
 
     override fun openNotificationDetails(notification: Notification) {
-        showAlert("Not Implemented")
+        showNotImplemented()
     }
 
     override fun openCreditCardDetails() {
-        showAlert("Not Implemented")
+        showNotImplemented()
     }
 
     private fun closeDrawer() {
