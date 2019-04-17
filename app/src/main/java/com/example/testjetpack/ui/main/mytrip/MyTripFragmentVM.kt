@@ -43,7 +43,7 @@ class MyTripFragmentVM(
         GlobalScope.launch(Dispatchers.IO) {
             for (location in trip.locations) {
                 positionLD.postValue(location)
-                delay(1500)
+                delay(5000)
             }
         }
     }

@@ -11,14 +11,28 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import android.graphics.Bitmap
+import androidx.core.content.ContextCompat
+import android.graphics.drawable.Drawable
+import android.R
+import android.graphics.Canvas
+import androidx.annotation.DrawableRes
+import com.google.android.gms.maps.model.BitmapDescriptor
+
 
 internal const val NO_FLAGS = 0
 internal const val FAKE_URL = "http://google.com"
 
 inline fun <T, R> withNotNull(receiver: T?, block: T.() -> R): R? = receiver?.block()
-inline fun <T : List<*>, R> withNotNullOrEmpty(receiver: T?, block: T.() -> R): R? = if (receiver.isNullOrEmpty()) null else receiver.block()
-inline fun <A, B, R> withNotNull(arg1: A?, arg2: B?, block: (A, B) -> R): R? = if (arg1 != null && arg2 != null) block(arg1, arg2) else null
-inline fun <A, B, C, R> withNotNull(arg1: A?, arg2: B?, arg3: C?, block: (A, B, C) -> R): R? = if (arg1 != null && arg2 != null && arg3 != null) block(arg1, arg2, arg3) else null
+inline fun <T : List<*>, R> withNotNullOrEmpty(receiver: T?, block: T.() -> R): R? =
+    if (receiver.isNullOrEmpty()) null else receiver.block()
+
+inline fun <A, B, R> withNotNull(arg1: A?, arg2: B?, block: (A, B) -> R): R? =
+    if (arg1 != null && arg2 != null) block(arg1, arg2) else null
+
+inline fun <A, B, C, R> withNotNull(arg1: A?, arg2: B?, arg3: C?, block: (A, B, C) -> R): R? =
+    if (arg1 != null && arg2 != null && arg3 != null) block(arg1, arg2, arg3) else null
 
 fun Context.browseWithoutCurrentApp(url: String, newTask: Boolean = false): Boolean {
     val uri = Uri.parse(url)
@@ -118,4 +132,15 @@ fun EditText.hideKeyboard(): Boolean {
 fun EditText.showKeyboard() {
     val inputManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
     inputManager.showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
+}
+
+
+fun Context.bitmapDescriptorFromVector(@DrawableRes vectorDrawableResourceId: Int): BitmapDescriptor {
+    val vectorDrawable = ContextCompat.getDrawable(this, vectorDrawableResourceId)!!.apply {
+        setBounds(0, 0, intrinsicWidth, intrinsicHeight)
+    }
+    val bitmap = Bitmap.createBitmap(vectorDrawable.intrinsicWidth, vectorDrawable.intrinsicHeight, Bitmap.Config.ARGB_8888)
+    val canvas = Canvas(bitmap)
+    vectorDrawable.draw(canvas)
+    return BitmapDescriptorFactory.fromBitmap(bitmap)
 }

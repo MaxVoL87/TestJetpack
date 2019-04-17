@@ -24,8 +24,6 @@ import com.example.testjetpack.utils.*
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.*
 import java.util.concurrent.TimeUnit
-import kotlin.math.max
-import kotlin.math.min
 import kotlin.reflect.KClass
 
 
@@ -68,7 +66,16 @@ class MyTripFragment : BaseFragment<FragmentMyTripBinding, MyTripFragmentVM>(), 
             uiSettings.isRotateGesturesEnabled = true
         }
         initLocationState()
-       // _positionPropeller = PositionMarkerPropeller()
+        withNotNull(_map) {
+            _positionPropeller = PositionMarkerPropeller(
+                MarkerOptions()
+                    .zIndex(-1F)
+                    .icon(requireContext().bitmapDescriptorFromVector(R.drawable.ic_navigation_black_32dp))
+                    .anchor(0.5F, 0.5F)
+                    .title("Position"),
+                this
+            )
+        }
     }
 
     // region Lifecycle
@@ -194,21 +201,26 @@ class MyTripFragment : BaseFragment<FragmentMyTripBinding, MyTripFragmentVM>(), 
             }
             addPolyline(options)
 
-            moveCamera(trip.locations.first(), trip.locations.last())
+            moveCamera(*trip.locations.toTypedArray())
         }
     }
 
     private fun setPosition(position: LatLng) {
-
+        _positionPropeller?.setPosition(position)
     }
 
-    private fun moveCamera(from: LatLng, to: LatLng) {
+    private fun moveCamera(vararg markers: LatLng) {
+        val maxLat = markers.map { it.latitude }.max()
+        val maxLong = markers.map { it.longitude }.max()
+        val minLat = markers.map { it.latitude }.min()
+        val minLong = markers.map { it.longitude }.min()
+
         withNotNull(_map) {
             moveCamera(
                 CameraUpdateFactory.newLatLngBounds(
                     LatLngBounds(
-                        LatLng(min(from.latitude, to.latitude), min(from.longitude, to.longitude)),
-                        LatLng(max(from.latitude, to.latitude), max(from.longitude, to.longitude))
+                        LatLng(minLat!!, minLong!!),
+                        LatLng(maxLat!!, maxLong!!)
                     ),
                     requireContext().convertDpToPixels(DEF_MAP_CAMERA_PADDING) //todo: calculate position
                 )
@@ -231,16 +243,16 @@ class MyTripFragment : BaseFragment<FragmentMyTripBinding, MyTripFragmentVM>(), 
     // endregion VM events renderer
 
     companion object {
-        const val DEF_POS_IMAGE_TILT = -45F
+        const val DEF_POS_IMAGE_TILT = 0F
         const val MOVING_SPEED_SECONDS = 5L
-        const val DEF_MAP_CAMERA_PADDING = 70
+        const val DEF_MAP_CAMERA_PADDING = 50
     }
 
-    inner class PositionMarkerPropeller(private val markerOptions: MarkerOptions,
-                                   private val map: GoogleMap) {
+    inner class PositionMarkerPropeller(private val markerOptions: MarkerOptions, private val map: GoogleMap) {
         private var marker: Marker? = null
         private var valueAnimator: ValueAnimator? = null
         private var isPaused: Boolean = false
+        private var curPosition: LatLng? = null
 
         fun setPosition(position: LatLng) {
             when {
@@ -252,8 +264,13 @@ class MyTripFragment : BaseFragment<FragmentMyTripBinding, MyTripFragmentVM>(), 
                     setToPoint(marker!!, position)
                     isPaused = false
                 }
+                curPosition != null && curPosition != marker?.position -> {
+                    setToPoint(marker!!, curPosition!!)
+                    animateToPoint(marker!!, position)
+                }
                 else -> animateToPoint(marker!!, position)
             }
+            curPosition = position
         }
 
         fun clear() {
@@ -276,7 +293,7 @@ class MyTripFragment : BaseFragment<FragmentMyTripBinding, MyTripFragmentVM>(), 
         private fun moveFromTo(marker: Marker, from: LatLng, to: LatLng) {
             val angle = getRotationAngle(from, to)
             valueAnimator = ValueAnimator.ofFloat(0F, 1F)
-            valueAnimator!!.duration =  TimeUnit.SECONDS.toMillis(MOVING_SPEED_SECONDS)
+            valueAnimator!!.duration = TimeUnit.SECONDS.toMillis(MOVING_SPEED_SECONDS)
             valueAnimator!!.interpolator = LinearInterpolator()
             valueAnimator!!.addUpdateListener { v ->
                 val value = v.animatedFraction
