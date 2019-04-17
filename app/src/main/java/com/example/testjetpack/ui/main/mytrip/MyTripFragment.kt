@@ -23,7 +23,7 @@ import com.example.testjetpack.ui.base.EventStateChange
 import com.example.testjetpack.utils.*
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.*
-import java.util.concurrent.TimeUnit
+import java.util.*
 import kotlin.reflect.KClass
 
 
@@ -66,16 +66,7 @@ class MyTripFragment : BaseFragment<FragmentMyTripBinding, MyTripFragmentVM>(), 
             uiSettings.isRotateGesturesEnabled = true
         }
         initLocationState()
-        withNotNull(_map) {
-            _positionPropeller = PositionMarkerPropeller(
-                MarkerOptions()
-                    .zIndex(-1F)
-                    .icon(requireContext().bitmapDescriptorFromVector(R.drawable.ic_navigation_black_32dp))
-                    .anchor(0.5F, 0.5F)
-                    .title("Position"),
-                this
-            )
-        }
+        initPositionPropeller()
     }
 
     // region Lifecycle
@@ -135,6 +126,7 @@ class MyTripFragment : BaseFragment<FragmentMyTripBinding, MyTripFragmentVM>(), 
     override fun onStop() {
         _mapFragment.onStop()
         super.onStop()
+        _positionPropeller?.clear()
     }
 
     override fun onDestroyView() {
@@ -191,11 +183,12 @@ class MyTripFragment : BaseFragment<FragmentMyTripBinding, MyTripFragmentVM>(), 
                 showAlert("Empty Trip")
                 return
             }
-            addMarker(MarkerOptions().position(trip.locations.first()).title("A"))
-            addMarker(MarkerOptions().position(trip.locations.last()).title("B"))
+            addMarker(getPointMarkerOpt().position(trip.locations.first()).title("A"))
+            addMarker(getPointMarkerOpt().position(trip.locations.last()).title("B"))
             val options = PolylineOptions().apply {
+                zIndex(TRIP_POLY_ZIND)
                 color(ContextCompat.getColor(requireContext(), R.color.colorPrimary))
-                width(10f)
+                width(TRIP_POLY_WIDTH)
                 visible(true)
                 addAll(trip.locations)
             }
@@ -228,6 +221,15 @@ class MyTripFragment : BaseFragment<FragmentMyTripBinding, MyTripFragmentVM>(), 
         }
     }
 
+    private fun initPositionPropeller() {
+        withNotNull(_map) {
+            _positionPropeller = PositionMarkerPropeller(
+                this,
+                getPositionMarkerOpt().title("Position")
+            )
+        }
+    }
+
     private fun getRotationAngle(from: LatLng, to: LatLng): Float {
         val a = to.latitude - from.latitude
         val b = to.longitude - from.longitude
@@ -236,6 +238,16 @@ class MyTripFragment : BaseFragment<FragmentMyTripBinding, MyTripFragmentVM>(), 
         return angle + DEF_POS_IMAGE_TILT
     }
 
+    private fun getPointMarkerOpt(): MarkerOptions {
+        return MarkerOptions().zIndex(PIN_MARKER_ZIND)
+    }
+
+    private fun getPositionMarkerOpt(): MarkerOptions {
+        return MarkerOptions()
+            .zIndex(POSITION_MARKER_ZIND)
+            .icon(requireContext().bitmapDescriptorFromVector(R.drawable.ic_navigation_black_32dp))
+            .anchor(0.5F, 0.5F)
+    }
     // region VM events renderer
 
     override val RENDERERS: Map<KClass<out EventStateChange>, Function1<Any, Unit>> = mapOf(
@@ -243,16 +255,29 @@ class MyTripFragment : BaseFragment<FragmentMyTripBinding, MyTripFragmentVM>(), 
     // endregion VM events renderer
 
     companion object {
-        const val DEF_POS_IMAGE_TILT = 0F
-        const val MOVING_SPEED_SECONDS = 5L
-        const val DEF_MAP_CAMERA_PADDING = 50
+        private const val DEF_POS_IMAGE_TILT = 0F
+        private const val MOVING_SPEED_MILLIS = 5000L
+        private const val DEF_MAP_CAMERA_PADDING = 50
+
+        private const val TRIP_POLY_WIDTH = 10F
+        private const val TRIP_POLY_ZIND = 80F
+
+        private const val POSITION_MARKER_ZIND = 90F
+        private const val PIN_MARKER_ZIND = 100F
     }
 
-    inner class PositionMarkerPropeller(private val markerOptions: MarkerOptions, private val map: GoogleMap) {
+    inner class PositionMarkerPropeller(
+        private val map: GoogleMap,
+        private val markerOptions: MarkerOptions
+    ) {
         private var marker: Marker? = null
-        private var valueAnimator: ValueAnimator? = null
+        private val valueAnimator: ValueAnimator = ValueAnimator.ofFloat(0F, 1F).apply {
+            interpolator = LinearInterpolator()
+        }
+        private var animatorUpdateListener: ValueAnimator.AnimatorUpdateListener? = null
         private var isPaused: Boolean = false
         private var curPosition: LatLng? = null
+        private var lastPositionTime: Long = 0
 
         fun setPosition(position: LatLng) {
             when {
@@ -261,6 +286,7 @@ class MyTripFragment : BaseFragment<FragmentMyTripBinding, MyTripFragmentVM>(), 
                     marker = map.addMarker(markerOptions)
                 }
                 isPaused -> {
+                    marker = map.addMarker(markerOptions)
                     setToPoint(marker!!, position)
                     isPaused = false
                 }
@@ -274,7 +300,7 @@ class MyTripFragment : BaseFragment<FragmentMyTripBinding, MyTripFragmentVM>(), 
         }
 
         fun clear() {
-            valueAnimator?.cancel()
+            valueAnimator.cancel()
             isPaused = true
         }
 
@@ -291,11 +317,11 @@ class MyTripFragment : BaseFragment<FragmentMyTripBinding, MyTripFragmentVM>(), 
         }
 
         private fun moveFromTo(marker: Marker, from: LatLng, to: LatLng) {
+            valueAnimator.cancel()
+            animatorUpdateListener?.let { valueAnimator.removeUpdateListener(it) }
+
             val angle = getRotationAngle(from, to)
-            valueAnimator = ValueAnimator.ofFloat(0F, 1F)
-            valueAnimator!!.duration = TimeUnit.SECONDS.toMillis(MOVING_SPEED_SECONDS)
-            valueAnimator!!.interpolator = LinearInterpolator()
-            valueAnimator!!.addUpdateListener { v ->
+            animatorUpdateListener = ValueAnimator.AnimatorUpdateListener { v ->
                 val value = v.animatedFraction
                 val lng = from.longitude * (1 - value) + to.longitude * value
                 val lat = from.latitude * (1 - value) + to.latitude * value
@@ -303,7 +329,11 @@ class MyTripFragment : BaseFragment<FragmentMyTripBinding, MyTripFragmentVM>(), 
                 marker.position = intermediatePoint
                 marker.rotation = angle
             }
-            valueAnimator!!.start()
+            val time = Calendar.getInstance().timeInMillis
+            valueAnimator.duration = if(lastPositionTime in 1 until time) time - lastPositionTime else MOVING_SPEED_MILLIS
+            valueAnimator.addUpdateListener(animatorUpdateListener)
+            valueAnimator.start()
+            lastPositionTime = time
         }
     }
 }
