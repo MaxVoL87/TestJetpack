@@ -32,9 +32,7 @@ class GitDataRepository(
      */
     override fun searchGitRepositories(page: GitPage): Listing<GitRepositoryView> {
 
-        appDatabase.runInTransaction {
-            appDatabase.clearAllGitData()
-        }
+        appDatabase.clearAllGitData()
 
         val mPage = AtomicReference(page)
 
@@ -57,9 +55,7 @@ class GitDataRepository(
 
             GlobalScope.launch(Dispatchers.IO) {
                 boundaryCallback.reset()
-                appDatabase.runInTransaction {
-                    appDatabase.clearAllGitData()
-                }
+                appDatabase.clearAllGitData()
             }
             refreshState.value = NetworkState.LOADED // for hide refresh layout because of on recycler implemented
         }

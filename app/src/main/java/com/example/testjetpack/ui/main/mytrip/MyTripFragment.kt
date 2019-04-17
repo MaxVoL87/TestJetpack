@@ -17,6 +17,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import com.example.testjetpack.R
 import com.example.testjetpack.databinding.FragmentMyTripBinding
+import com.example.testjetpack.models.own.Location
 import com.example.testjetpack.models.own.Trip
 import com.example.testjetpack.ui.base.BaseFragment
 import com.example.testjetpack.ui.base.EventStateChange
@@ -38,7 +39,7 @@ class MyTripFragment : BaseFragment<FragmentMyTripBinding, MyTripFragmentVM>(), 
     override val observeLiveData: MyTripFragmentVM.() -> Unit
         get() = {
             trip.observe(this@MyTripFragment, Observer<Trip>(::setTrip))
-            position.observe(this@MyTripFragment, Observer<LatLng>(::setPosition))
+            position.observe(this@MyTripFragment, Observer<Location>(::setPosition))
         }
 
     private var _callback: IMyTripFragmentCallback? = null
@@ -126,7 +127,7 @@ class MyTripFragment : BaseFragment<FragmentMyTripBinding, MyTripFragmentVM>(), 
     override fun onStop() {
         _mapFragment.onStop()
         super.onStop()
-        _positionPropeller?.clear()
+        _positionPropeller?.stop()
     }
 
     override fun onDestroyView() {
@@ -177,28 +178,29 @@ class MyTripFragment : BaseFragment<FragmentMyTripBinding, MyTripFragmentVM>(), 
 
     private fun setTrip(trip: Trip) {
         withNotNull(_map) {
-            clear()
+            clearMap()
 
             if (trip.locations.size < 2) {
                 showAlert("Empty Trip")
                 return
             }
-            addMarker(getPointMarkerOpt().position(trip.locations.first()).title("A"))
-            addMarker(getPointMarkerOpt().position(trip.locations.last()).title("B"))
+            val latLngs = trip.locations.map { it.latLng }
+            _markers.add(addMarker(getPointMarkerOpt().position(latLngs.first()).title("A")))
+            _markers.add(addMarker(getPointMarkerOpt().position(latLngs.last()).title("B")))
             val options = PolylineOptions().apply {
                 zIndex(TRIP_POLY_ZIND)
                 color(ContextCompat.getColor(requireContext(), R.color.colorPrimary))
                 width(TRIP_POLY_WIDTH)
                 visible(true)
-                addAll(trip.locations)
+                addAll(latLngs)
             }
-            addPolyline(options)
+            _polylines.add(addPolyline(options))
 
-            moveCamera(*trip.locations.toTypedArray())
+            moveCamera(*latLngs.toTypedArray())
         }
     }
 
-    private fun setPosition(position: LatLng) {
+    private fun setPosition(position: Location) {
         _positionPropeller?.setPosition(position)
     }
 
@@ -248,6 +250,16 @@ class MyTripFragment : BaseFragment<FragmentMyTripBinding, MyTripFragmentVM>(), 
             .icon(requireContext().bitmapDescriptorFromVector(R.drawable.ic_navigation_black_32dp))
             .anchor(0.5F, 0.5F)
     }
+
+    private fun clearMap() {
+        _map?.clear()
+        _markers.clear()
+        _polylines.clear()
+    }
+
+    private val _markers = ObservableNoDuplicateList<Marker>()
+    private val _polylines = ObservableNoDuplicateList<Polyline>()
+
     // region VM events renderer
 
     override val RENDERERS: Map<KClass<out EventStateChange>, Function1<Any, Unit>> = mapOf(
@@ -276,30 +288,32 @@ class MyTripFragment : BaseFragment<FragmentMyTripBinding, MyTripFragmentVM>(), 
         }
         private var animatorUpdateListener: ValueAnimator.AnimatorUpdateListener? = null
         private var isPaused: Boolean = false
-        private var curPosition: LatLng? = null
+        private var curPosition: Location? = null
         private var lastPositionTime: Long = 0
 
-        fun setPosition(position: LatLng) {
+        fun setPosition(position: Location) {
+            val needToInitMarker = !_markers.contains(marker)
             when {
-                isMarkerInit() -> {
-                    markerOptions.position(position)
+                needToInitMarker || isMarkerInit() -> {
+                    markerOptions.position(position.latLng)
                     marker = map.addMarker(markerOptions)
-                }
-                isPaused -> {
-                    marker = map.addMarker(markerOptions)
-                    setToPoint(marker!!, position)
                     isPaused = false
                 }
-                curPosition != null && curPosition != marker?.position -> {
-                    setToPoint(marker!!, curPosition!!)
-                    animateToPoint(marker!!, position)
+                isPaused -> {
+                    setToPoint(marker!!, position.latLng)
+                    isPaused = false
                 }
-                else -> animateToPoint(marker!!, position)
+                curPosition != null && curPosition!!.latLng != marker?.position -> {
+                    setToPoint(marker!!, curPosition!!.latLng)
+                    animateToPoint(marker!!, position.latLng)
+                }
+                else -> animateToPoint(marker!!, position.latLng)
             }
+            if (needToInitMarker) _markers.add(marker!!)
             curPosition = position
         }
 
-        fun clear() {
+        fun stop() {
             valueAnimator.cancel()
             isPaused = true
         }
@@ -309,10 +323,12 @@ class MyTripFragment : BaseFragment<FragmentMyTripBinding, MyTripFragmentVM>(), 
         }
 
         private fun animateToPoint(marker: Marker, to: LatLng) {
+            if (marker.position == to) return
             moveFromTo(marker, marker.position, to)
         }
 
         private fun setToPoint(marker: Marker, to: LatLng) {
+            if (marker.position == to) return
             marker.position = to
         }
 
@@ -330,7 +346,8 @@ class MyTripFragment : BaseFragment<FragmentMyTripBinding, MyTripFragmentVM>(), 
                 marker.rotation = angle
             }
             val time = Calendar.getInstance().timeInMillis
-            valueAnimator.duration = if(lastPositionTime in 1 until time) time - lastPositionTime else MOVING_SPEED_MILLIS
+            valueAnimator.duration =
+                if (lastPositionTime in 1 until time) time - lastPositionTime else MOVING_SPEED_MILLIS
             valueAnimator.addUpdateListener(animatorUpdateListener)
             valueAnimator.start()
             lastPositionTime = time

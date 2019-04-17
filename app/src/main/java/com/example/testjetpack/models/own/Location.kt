@@ -1,9 +1,7 @@
 package com.example.testjetpack.models.own
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.Index
-import androidx.room.PrimaryKey
+import androidx.room.*
+import com.google.android.gms.maps.model.LatLng
 
 @Entity(tableName = "location_table", indices = [Index(value = ["id"]), Index(value = ["start_time"])])
 data class Location(
@@ -25,4 +23,6 @@ data class Location(
     val satellites: Int
 ){
     @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") var id: Int = 0
+
+    @delegate:Ignore val latLng: LatLng by lazy { LatLng(latitude, longitude) }
 }

@@ -2,6 +2,7 @@ package com.example.testjetpack.dataflow.local
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import androidx.room.Transaction
 import com.example.testjetpack.models.git.db.GitRepositoryView
 import com.example.testjetpack.models.git.db.GitRepository
 import com.example.testjetpack.models.git.License
@@ -31,7 +32,7 @@ abstract class AppDatabase : RoomDatabase() {
 
     abstract fun getLocationDao(): ILocationDao
 
-
+    @Transaction
     fun clearAllGitData() {
         getGitRepositoryDao().clearAll()
         getGitLicenseDao().clearAll()

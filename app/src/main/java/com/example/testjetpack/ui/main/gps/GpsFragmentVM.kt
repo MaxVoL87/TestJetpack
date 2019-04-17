@@ -120,7 +120,7 @@ class GpsFragmentVM(
 
     fun clearDBData() {
         processCallAsync(
-            call = { dataRepository.removeAllLocationsfromDB() },
+            call = { dataRepository.removeAllLocationsFromDB() },
             onSuccess = {},
             onError = {
                 onError(it)
