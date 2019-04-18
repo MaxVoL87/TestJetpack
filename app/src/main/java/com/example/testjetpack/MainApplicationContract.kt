@@ -15,5 +15,5 @@ object MainApplicationContract {
 
     const val DEFAULT_NETWORK_PAGE_SIZE = 10
 
-    const val NETWORK_TAG = "Network"
+    const val NETWORK_TAG = "LOG_Network"
 }

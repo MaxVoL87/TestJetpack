@@ -20,7 +20,6 @@ import com.google.gson.GsonBuilder
 import com.squareup.picasso.OkHttp3Downloader
 import com.squareup.picasso.Picasso
 import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.core.qualifier.named
@@ -37,10 +36,8 @@ val appModule = module {
     }
 
     single<Picasso> {
-        val client = OkHttpClient.Builder()
-        //.addInterceptor(ServiceGenerator.createOAuth2Interceptor())
-        if (BuildConfig.DEBUG) {
-            client.addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
+        val client = OkHttpClient.Builder().apply {
+            if (BuildConfig.DEBUG) addNetworkInterceptor(get())
         }
         val okHttp3Downloader = OkHttp3Downloader(client.build())
         Picasso.Builder(androidContext())
