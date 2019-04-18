@@ -283,16 +283,30 @@ class MyTripFragment : BaseFragment<FragmentMyTripBinding, MyTripFragmentVM>(), 
         private val markerOptions: MarkerOptions
     ) {
         private var marker: Marker? = null
+        private var animatorUpdateListener = ValueAnimator.AnimatorUpdateListener { v ->
+            withNotNull(marker, fromPosition, toPosition){ m, f, t ->
+                val from = f.latLng
+                val to = t.latLng
+
+                val value = v.animatedFraction
+                val lng = from.longitude * (1 - value) + to.longitude * value
+                val lat = from.latitude * (1 - value) + to.latitude * value
+                m.position = LatLng(lat, lng)
+            }
+        }
         private val valueAnimator: ValueAnimator = ValueAnimator.ofFloat(0F, 1F).apply {
             interpolator = LinearInterpolator()
+            addUpdateListener(animatorUpdateListener)
         }
-        private var animatorUpdateListener: ValueAnimator.AnimatorUpdateListener? = null
         private var isPaused: Boolean = false
-        private var curPosition: Location? = null
+        private var fromPosition: Location? = null
+        private var toPosition: Location? = null
         private var lastPositionTime: Long = 0
 
         fun setPosition(position: Location) {
             val needToInitMarker = !_markers.contains(marker)
+            fromPosition = toPosition
+            toPosition = position
             when {
                 needToInitMarker || isMarkerInit() -> {
                     markerOptions.position(position.latLng)
@@ -303,14 +317,9 @@ class MyTripFragment : BaseFragment<FragmentMyTripBinding, MyTripFragmentVM>(), 
                     setToPoint(marker!!, position.latLng)
                     isPaused = false
                 }
-                curPosition != null && curPosition!!.latLng != marker?.position -> {
-                    setToPoint(marker!!, curPosition!!.latLng)
-                    animateToPoint(marker!!, position.latLng)
-                }
                 else -> animateToPoint(marker!!, position.latLng)
             }
             if (needToInitMarker) _markers.add(marker!!)
-            curPosition = position
         }
 
         fun stop() {
@@ -324,7 +333,7 @@ class MyTripFragment : BaseFragment<FragmentMyTripBinding, MyTripFragmentVM>(), 
 
         private fun animateToPoint(marker: Marker, to: LatLng) {
             if (marker.position == to) return
-            moveFromTo(marker, marker.position, to)
+            moveFromTo(marker, to)
         }
 
         private fun setToPoint(marker: Marker, to: LatLng) {
@@ -332,25 +341,17 @@ class MyTripFragment : BaseFragment<FragmentMyTripBinding, MyTripFragmentVM>(), 
             marker.position = to
         }
 
-        private fun moveFromTo(marker: Marker, from: LatLng, to: LatLng) {
+        @Synchronized
+        private fun moveFromTo(marker: Marker, to: LatLng) {
             valueAnimator.cancel()
-            animatorUpdateListener?.let { valueAnimator.removeUpdateListener(it) }
 
-            val angle = getRotationAngle(from, to)
-            animatorUpdateListener = ValueAnimator.AnimatorUpdateListener { v ->
-                val value = v.animatedFraction
-                val lng = from.longitude * (1 - value) + to.longitude * value
-                val lat = from.latitude * (1 - value) + to.latitude * value
-                val intermediatePoint = LatLng(lat, lng)
-                marker.position = intermediatePoint
-                marker.rotation = angle
-            }
             val time = Calendar.getInstance().timeInMillis
-            valueAnimator.duration =
-                if (lastPositionTime in 1 until time) time - lastPositionTime else MOVING_SPEED_MILLIS
-            valueAnimator.addUpdateListener(animatorUpdateListener)
-            valueAnimator.start()
+            valueAnimator.duration = if (lastPositionTime in 1 until time) time - lastPositionTime else MOVING_SPEED_MILLIS
             lastPositionTime = time
+
+            marker.rotation = getRotationAngle(marker.position, to)
+
+            valueAnimator.start()
         }
     }
 }
