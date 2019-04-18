@@ -23,6 +23,11 @@ android {
         enabled = true
     }
 
+    packagingOptions {
+        exclude 'META-INF/atomicfu.kotlin_module'
+        exclude 'META-INF/xxx'
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -45,7 +50,7 @@ dependencies {
 
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.1.1"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.2.0"
     api "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
 
     // Koin
@@ -65,8 +70,6 @@ dependencies {
 
     // DataBinding
     kapt "com.android.databinding:compiler:$gradle_version"
-
-    implementation 'com.jakewharton.timber:timber:4.7.0'
 
     // Architecture components
     def arch_version = '2.1.0-alpha04'
@@ -92,25 +95,24 @@ dependencies {
     implementation "androidx.paging:paging-runtime-ktx:$paging_version"
 
     // WorkManager
-    def work_version = "2.0.0"
+    def work_version = "2.0.1"
     implementation "androidx.work:work-runtime-ktx:$work_version"
 
     // Retrofit
-    def retrofit_version = '2.2.0'
+    def retrofit_version = '2.5.0'
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
-    implementation 'com.jakewharton.retrofit:retrofit2-kotlin-coroutines-experimental-adapter:1.0.0'
+    implementation 'com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2'
 
     // Ok http
-    def ok_http_version = '3.8.1'
+    def ok_http_version = '3.12.1'
     implementation "com.squareup.okhttp3:logging-interceptor:$ok_http_version"
 
-    kapt 'com.google.guava:guava:24.1-jre' // add above dagger-compiler
+    implementation 'com.jakewharton.timber:timber:4.7.1'
 
     // Picasso
-    implementation 'com.squareup.picasso:picasso:2.5.2'
-    implementation 'com.jakewharton.picasso:picasso2-okhttp3-downloader:1.1.0'
+    implementation 'com.squareup.picasso:picasso:2.71828'
 
     // Location
     implementation 'com.google.android.gms:play-services-location:16.0.0'
@@ -119,6 +121,6 @@ dependencies {
     implementation 'com.google.android.gms:play-services-maps:16.1.0'
 
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.1.2-alpha02'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0-alpha02'
+    androidTestImplementation 'androidx.test:runner:1.2.0-alpha03'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0-alpha03'
 }

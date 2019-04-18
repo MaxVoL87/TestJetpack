@@ -17,7 +17,7 @@ import com.example.testjetpack.ui.main.mytrip.MyTripFragmentVM
 import com.example.testjetpack.ui.main.notifications.NotificationsFragmentVM
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.jakewharton.picasso.OkHttp3Downloader
+import com.squareup.picasso.OkHttp3Downloader
 import com.squareup.picasso.Picasso
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
