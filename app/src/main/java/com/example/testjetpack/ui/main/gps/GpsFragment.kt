@@ -27,12 +27,15 @@ class GpsFragment : BaseFragment<FragmentGpsBinding, GpsFragmentVM>() {
         get() = {
             isGPSOnly.observe(this@GpsFragment, Observer<Boolean> {
                 setChecked(_menuItems[_isGpsOnlyItemId], it)
+                invalidateOptionsMenu()
             })
             isLocationListenerStarted.observe(this@GpsFragment, Observer<Boolean> {
                 _menuItems[_isGpsOnlyItemId]?.isEnabled != it
+                invalidateOptionsMenu()
             })
             isNeedToShowDiagnostic.observe(this@GpsFragment, Observer<Boolean> {
                 setChecked(_menuItems[_isShowDiagnosticItemId], it)
+                invalidateOptionsMenu()
             })
         }
 
@@ -119,7 +122,7 @@ class GpsFragment : BaseFragment<FragmentGpsBinding, GpsFragmentVM>() {
         withNotNull(item) {
             isChecked = checked
             title = SpannableString(title).also {
-                it.setSpan(ForegroundColorSpan(if (checked) Color.RED else Color.BLACK), 0, it.length, 0)
+                it.setSpan(ForegroundColorSpan(if (checked) Color.BLACK else Color.LTGRAY), 0, it.length, 0)
             }
         }
     }

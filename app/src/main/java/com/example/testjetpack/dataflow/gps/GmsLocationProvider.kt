@@ -2,6 +2,7 @@ package com.example.testjetpack.dataflow.gps
 
 import android.content.Context
 import android.location.Location
+import android.os.Bundle
 import android.os.Looper
 import androidx.annotation.RequiresPermission
 import com.example.testjetpack.utils.calculateAcceleration
@@ -106,6 +107,7 @@ class GmsLocationProvider(context: Context) {
                     if (lastCalcLocation != null) location.calculateAcceleration(lastCalcLocation.speed, lastCalcLocation.time)
                     else 0.0F
 
+                if(location.extras == null) location.extras = Bundle.EMPTY
                 location.extras.putFloat(acceleration_extra, acceleration)
                 location.extras.putInt(satellites_extra, location.extras.getInt("satellites", -1))
 

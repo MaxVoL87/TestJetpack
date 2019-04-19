@@ -23,6 +23,7 @@ abstract class BaseFragment<B : ViewDataBinding, T : BaseViewModel<out EventStat
     companion object {
         private const val COROUTINE_DELAY = 1000L
     }
+
     protected abstract val layoutId: Int
     protected abstract val viewModelClass: KClass<T>
     protected lateinit var binding: B
@@ -37,7 +38,6 @@ abstract class BaseFragment<B : ViewDataBinding, T : BaseViewModel<out EventStat
     protected fun addCoroutine(coroutine: Deferred<*>) {
         coroutines.add(coroutine)
     }
-
 
 
     protected open fun observeBaseLiveData() = with(viewModel) {
@@ -164,6 +164,8 @@ abstract class BaseFragment<B : ViewDataBinding, T : BaseViewModel<out EventStat
             }
         })
     }
+
+    protected fun invalidateOptionsMenu() = activity?.invalidateOptionsMenu()
 
     protected fun getActionBar() = (activity as? BaseActivity<*, *>)?.supportActionBar
 
