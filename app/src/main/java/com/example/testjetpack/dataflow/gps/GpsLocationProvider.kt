@@ -89,6 +89,7 @@ class GpsLocationProvider(mContext: Context) {
                     if (lastCalcLocation != null) location.calculateAcceleration(lastCalcLocation.speed, lastCalcLocation.time)
                     else 0.0F
 
+                if(location.extras == null) location.extras = Bundle.EMPTY
                 location.extras.putFloat(acceleration_extra, acceleration)
                 location.extras.putInt(satellites_extra, location.extras.getInt("satellites", -1))
 
