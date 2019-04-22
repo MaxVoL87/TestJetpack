@@ -15,11 +15,10 @@ import com.example.testjetpack.R
 import com.example.testjetpack.utils.livedata.EventObserver
 import kotlinx.coroutines.*
 import org.koin.android.viewmodel.ext.android.getViewModel
-import retrofit2.HttpException
-import timber.log.Timber
+import kotlin.coroutines.CoroutineContext
 import kotlin.reflect.KClass
 
-abstract class BaseFragment<B : ViewDataBinding, T : BaseViewModel<out EventStateChange>> : Fragment() {
+abstract class BaseFragment<B : ViewDataBinding, T : BaseViewModel<out EventStateChange>> : Fragment(), CoroutineScope {
     companion object {
         private const val COROUTINE_DELAY = 1000L
     }
@@ -32,19 +31,18 @@ abstract class BaseFragment<B : ViewDataBinding, T : BaseViewModel<out EventStat
     var popupWindow: ListPopupWindow? = null
 
     private var canBeClicked = true
-    private val coroutines = mutableListOf<Deferred<*>>()
 
-    @Suppress("MemberVisibilityCanPrivate")
-    protected fun addCoroutine(coroutine: Deferred<*>) {
-        coroutines.add(coroutine)
-    }
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.Main + job
+
+    private lateinit var job: Job
 
 
     protected open fun observeBaseLiveData() = with(viewModel) {
 
         alertMessageLiveData.observe(this@BaseFragment, Observer {
             it?.let { throwable ->
-                parseError(throwable)
+                //todo: Main.parseError(throwable)
                 throwable.message?.let { message -> this@BaseFragment.showAlert(message) }
                 alertMessageLiveData.value = null
             }
@@ -62,22 +60,6 @@ abstract class BaseFragment<B : ViewDataBinding, T : BaseViewModel<out EventStat
         observeLiveData()
     }
 
-    fun parseError(it: Throwable) {
-        if (it is HttpException) {
-            when ((it).code()) {
-//                HttpURLConnection.HTTP_BAD_REQUEST -> context?.toast("Error: ${it.message()}")
-//                HttpURLConnection.HTTP_UNAUTHORIZED -> startActivity(Intent(this, LoginActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK))
-//                HttpURLConnection.HTTP_FORBIDDEN -> startActivity(Intent(this, LoginActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK))
-//                HttpURLConnection.HTTP_NOT_FOUND -> ServerErrorDialog().showDialog(this)
-//                HttpURLConnection.HTTP_INTERNAL_ERROR -> ServerErrorDialog().showDialog(this)
-//                else -> ServerErrorDialog().showDialog(this)
-            }
-        } else {
-            Timber.e("Error: $it")
-//            ServerErrorDialog().showDialog(this)
-        }
-    }
-
     protected abstract val observeLiveData: T.() -> Unit
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -93,13 +75,13 @@ abstract class BaseFragment<B : ViewDataBinding, T : BaseViewModel<out EventStat
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        job = Job()
         setHasOptionsMenu(true)
         canBeClicked = true
     }
 
     override fun onDestroy() {
-        coroutines.forEach { it.cancel() }
-        coroutines.clear()
+        job.cancel()
         super.onDestroy()
     }
 
@@ -107,22 +89,22 @@ abstract class BaseFragment<B : ViewDataBinding, T : BaseViewModel<out EventStat
         super.onResume()
         with(viewModel.alertMessageLiveData) {
             value?.let { throwable ->
-                parseError(throwable)
+                //todo: Main.parseError(throwable)
                 throwable.message?.let { this@BaseFragment.showAlert(it) }
                 value = null
             }
         }
     }
 
-    fun showAlert(text: String) {
+    open fun showAlert(text: String) {
         Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
     }
 
-    fun showProgress(text: String?) {
+    open fun showProgress(text: String?) {
         //todo
     }
 
-    fun hideProgress() {
+    open fun hideProgress() {
         //todo
     }
 
@@ -130,14 +112,14 @@ abstract class BaseFragment<B : ViewDataBinding, T : BaseViewModel<out EventStat
         delay: Long = MainApplicationContract.DEFAULT_UI_DELAY,
         action: () -> Unit
     ) {
-        addCoroutine(GlobalScope.async(Dispatchers.Main) {
+        async {
             withContext(Dispatchers.IO) {
                 delay(delay)
             }
             if (isActive) {
                 action.invoke()
             }
-        })
+        }
     }
 
     protected inline fun <reified T> bindInterfaceOrThrow(vararg objects: Any?): T =
@@ -154,7 +136,7 @@ abstract class BaseFragment<B : ViewDataBinding, T : BaseViewModel<out EventStat
 
     // This is something like debounce in rxBinding, but better :)
     private fun debounceClick() {
-        addCoroutine(GlobalScope.async(Dispatchers.Main) {
+        async {
             canBeClicked = false
             withContext(Dispatchers.Default) {
                 delay(COROUTINE_DELAY)
@@ -162,7 +144,7 @@ abstract class BaseFragment<B : ViewDataBinding, T : BaseViewModel<out EventStat
             if (isActive) {
                 canBeClicked = true
             }
-        })
+        }
     }
 
     protected fun invalidateOptionsMenu() = activity?.invalidateOptionsMenu()

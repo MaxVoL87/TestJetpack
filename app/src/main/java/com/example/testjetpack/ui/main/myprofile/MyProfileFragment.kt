@@ -43,6 +43,14 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding, MyProfileFragme
         viewModel.getProfile()
     }
 
+    override fun showProgress(text: String?) {
+        _callback?.showProgress(text)
+    }
+
+    override fun hideProgress() {
+        _callback?.hideProgress()
+    }
+
     // region VM renderers
 
     private val openCreditCardDetailsRenderer: (Any) -> Unit = { event ->

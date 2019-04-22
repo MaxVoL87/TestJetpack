@@ -1,4 +1,6 @@
 package com.example.testjetpack.ui.main.mytrip
 
-interface IMyTripFragmentCallback {
+import com.example.testjetpack.ui.base.ICallback
+
+interface IMyTripFragmentCallback : ICallback {
 }

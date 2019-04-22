@@ -56,7 +56,7 @@ class MainActivityVM(
 
     fun getProfile() {
         processCallAsync(
-            call = { repository.getProfile() },
+            call = {  repository.getProfile() },
             onSuccess = { profile ->
                 _profile.postValue(profile)
             },

@@ -47,6 +47,14 @@ class NotificationsFragment : BaseFragment<FragmentNotificationsBinding, Notific
         viewModel.getNotifications()
     }
 
+    override fun showProgress(text: String?) {
+        _callback?.showProgress(text)
+    }
+
+    override fun hideProgress() {
+        _callback?.hideProgress()
+    }
+
     // region VM renderers
 
     private val openNotificationRenderer: (Any) -> Unit = { event ->

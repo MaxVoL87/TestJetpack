@@ -15,10 +15,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import com.example.testjetpack.R
 import org.koin.android.viewmodel.ext.android.getViewModel
 
 
-abstract class BaseActivity<B : ViewDataBinding, T : BaseViewModel<out EventStateChange>> : AppCompatActivity() {
+abstract class BaseActivity<B : ViewDataBinding, T : BaseViewModel<out EventStateChange>> : AppCompatActivity(), ICallback {
     protected abstract val layoutId: Int
     protected abstract val navControllerId: Int
     protected abstract val viewModelClass: KClass<T>
@@ -48,7 +49,8 @@ abstract class BaseActivity<B : ViewDataBinding, T : BaseViewModel<out EventStat
         }
     }
 
-    fun parseError(it: Throwable) {
+    private fun parseError(it: Throwable) {
+        //todo:
         var message = it.localizedMessage
         if (it is HttpException) {
             when ((it).code()) {
@@ -69,11 +71,11 @@ abstract class BaseActivity<B : ViewDataBinding, T : BaseViewModel<out EventStat
 
     private fun observeBaseLiveData() = with(viewModel) {
         showProgressLiveData.observe(this@BaseActivity, Observer { showProgress ->
-            showProgress?.let { if (it) showProgress() else hideProgress() }
+            showProgress?.let { if (it) this@BaseActivity.showProgress(getString(R.string.loadingWithThreeDots)) else this@BaseActivity.hideProgress() }
         })
         alertMessageLiveData.observe(this@BaseActivity, Observer { alertMessage ->
             alertMessage?.let {
-                parseError(it)
+                this@BaseActivity.parseError(it)
                 alertMessageLiveData.value = null
             }
         })
@@ -83,11 +85,11 @@ abstract class BaseActivity<B : ViewDataBinding, T : BaseViewModel<out EventStat
         observeLiveData()
     }
 
-    fun showProgress() {
+    override fun showProgress(text: String?) {
         // nothing
     }
 
-    fun hideProgress() {
+    override fun hideProgress() {
         // nothing
     }
 

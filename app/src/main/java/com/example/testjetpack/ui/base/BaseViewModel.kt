@@ -6,8 +6,9 @@ import androidx.lifecycle.ViewModel
 import com.example.testjetpack.utils.livedata.Event
 import kotlinx.coroutines.*
 import timber.log.Timber
+import kotlin.coroutines.CoroutineContext
 
-abstract class BaseViewModel<S : EventStateChange> : ViewModel() {
+abstract class BaseViewModel<S : EventStateChange> : ViewModel(), CoroutineScope {
 
     val showProgressLiveData = MutableLiveData<Boolean>()
     val alertMessageLiveData = MutableLiveData<Throwable?>()
@@ -15,29 +16,25 @@ abstract class BaseViewModel<S : EventStateChange> : ViewModel() {
     val events: LiveData<Event<S>>
         get() = _events
 
-
     protected val _events = MutableLiveData<Event<S>>()
     protected val tag: String = javaClass.simpleName
-    private val coroutines = mutableListOf<Deferred<*>>()
 
-    protected fun addCoroutine(coroutine: Deferred<*>): Deferred<*> {
-        coroutines.add(coroutine)
-        return coroutine
-    }
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.Main + job
+
+    private val job: Job = Job()
 
     override fun onCleared() {
-        coroutines.forEach { it.cancel() }
-        coroutines.clear()
+        job.cancel()
         super.onCleared()
     }
 
-
-    fun showProgress() {
-        showProgressLiveData.postValue(true)
+    protected fun showProgress() {
+        showProgressLiveData.value = true
     }
 
-    fun hideProgress() {
-        showProgressLiveData.postValue(false)
+    protected fun hideProgress() {
+        showProgressLiveData.value = false
     }
 
     fun <T : Any?> processCallAsync(
@@ -47,12 +44,12 @@ abstract class BaseViewModel<S : EventStateChange> : ViewModel() {
         showProgress: Boolean = false
     ): Deferred<*> {
 
-        return addCoroutine(GlobalScope.async(Dispatchers.Main) {
+        return async {
             if (showProgress) {
                 showProgress()
             }
 
-            val jobResult = GlobalScope.async(Dispatchers.IO) {
+            val jobResult = async(Dispatchers.IO) {
                 call()
             }
 
@@ -67,7 +64,7 @@ abstract class BaseViewModel<S : EventStateChange> : ViewModel() {
             if (showProgress) {
                 hideProgress()
             }
-        })
+        }
     }
 
     protected fun onError(throwable: Throwable?) {

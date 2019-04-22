@@ -133,10 +133,8 @@ class GpsFragment : BaseFragment<FragmentGpsBinding, GpsFragmentVM>() {
     private val requestLocationUpdatesPermissions: (Any) -> Unit = { event ->
         event as GpsFragmentVMEventStateChange.RequestLocationUpdatesPermissions
         if (permissionsGranted(
-                arrayOf(
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
-                ), true
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION),
+                true
             )
         ) {
             viewModel.onPermissionSuccess()

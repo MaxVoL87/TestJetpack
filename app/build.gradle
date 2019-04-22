@@ -124,6 +124,18 @@ dependencies {
     implementation 'com.google.android.gms:play-services-maps:16.1.0'
 
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.2.0-alpha03'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0-alpha03'
+
+    // AndroidJUnitRunner and JUnit Rules
+    def junit_version = '1.2.0-alpha04'
+    androidTestImplementation "androidx.test:runner:$junit_version"
+    androidTestImplementation "androidx.test:rules:$junit_version"
+
+    // Assertions
+    androidTestImplementation 'androidx.test.ext:junit:1.1.0'
+
+    // Espresso dependencies
+    def espresso_version = '3.2.0-alpha04'
+    androidTestImplementation"androidx.test.espresso:espresso-core:$espresso_version"
+    androidTestImplementation"androidx.test.espresso:espresso-contrib:$espresso_version"
+    androidTestImplementation "androidx.test.espresso.idling:idling-concurrent:$espresso_version"
 }
