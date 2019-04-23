@@ -17,6 +17,7 @@ class DataRepository(
 
     override fun getProfile(): Profile {
         //todo: change with api
+        Thread.sleep(1500)
         return Profile(
             "https://picsum.photos/200/200/?random",
             "Benjamin",

@@ -122,11 +122,6 @@ abstract class BaseFragment<B : ViewDataBinding, T : BaseViewModel<out EventStat
         }
     }
 
-    protected inline fun <reified T> bindInterfaceOrThrow(vararg objects: Any?): T =
-        objects.find { it is T }?.let { it as T }
-            ?: throw NotImplementedInterfaceException(T::class.java)
-
-
     protected fun invokeIfCanAccepted(withDebounce: Boolean = false, invoke: () -> Unit) {
         if (canBeClicked) {
             if (withDebounce) debounceClick()

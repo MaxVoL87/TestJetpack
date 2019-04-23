@@ -2,7 +2,6 @@ package com.example.testjetpack.ui.main.gps
 
 
 import android.Manifest
-import android.content.Context
 import android.graphics.Color
 import android.location.LocationManager
 import android.os.Bundle
@@ -12,17 +11,18 @@ import android.view.*
 import androidx.core.content.ContextCompat.getSystemService
 import com.example.testjetpack.R
 import com.example.testjetpack.databinding.FragmentGpsBinding
-import com.example.testjetpack.ui.base.BaseFragment
 import com.example.testjetpack.ui.base.EventStateChange
 import com.example.testjetpack.utils.permissionsGranted
 import com.example.testjetpack.utils.withNotNull
 import androidx.lifecycle.Observer
+import com.example.testjetpack.ui.base.BaseFragmentWithCallback
 import kotlin.reflect.KClass
 
 
-class GpsFragment : BaseFragment<FragmentGpsBinding, GpsFragmentVM>() {
+class GpsFragment : BaseFragmentWithCallback<FragmentGpsBinding, GpsFragmentVM, IGpsFragmentCallback>() {
     override val layoutId: Int = R.layout.fragment_gps
     override val viewModelClass: KClass<GpsFragmentVM> = GpsFragmentVM::class
+    override val callbackClass: KClass<IGpsFragmentCallback> = IGpsFragmentCallback::class
     override val observeLiveData: GpsFragmentVM.() -> Unit
         get() = {
             isGPSOnly.observe(this@GpsFragment, Observer<Boolean> {
@@ -39,22 +39,10 @@ class GpsFragment : BaseFragment<FragmentGpsBinding, GpsFragmentVM>() {
             })
         }
 
-    private var _callback: IGpsFragmentCallback? = null
-
     private val _isGpsOnlyItemId = 1
     private val _isShowDiagnosticItemId = 2
     private val _clearDBLocationsDataItemId = 3
     private val _menuItems = mutableMapOf<Int, MenuItem>()
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        _callback = bindInterfaceOrThrow<IGpsFragmentCallback>(parentFragment, context)
-    }
-
-    override fun onDetach() {
-        _callback = null
-        super.onDetach()
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = super.onCreateView(inflater, container, savedInstanceState)

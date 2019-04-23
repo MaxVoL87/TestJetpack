@@ -8,6 +8,7 @@ import com.example.testjetpack.dataflow.repository.DataRepository
 import com.example.testjetpack.dataflow.repository.GitDataRepository
 import com.example.testjetpack.dataflow.repository.IDataRepository
 import com.example.testjetpack.dataflow.repository.IGitDataRepository
+import com.example.testjetpack.ui.dialog.progress.ProgressDialogFragmentVM
 import com.example.testjetpack.workers.NotificationDownloadWorker
 import com.example.testjetpack.ui.main.MainActivityVM
 import com.example.testjetpack.ui.main.gitreposearch.GitRepoSearchFragmentVM
@@ -73,7 +74,10 @@ val appModule = module {
 //    }
 
     // MyViewModel ViewModel
+    viewModel { ProgressDialogFragmentVM() }
+
     viewModel { MainActivityVM(get()) }
+
     viewModel { GitRepoSearchFragmentVM(get()) }
     viewModel { MyTripFragmentVM(get()) }
     viewModel { GpsFragmentVM(get(), get(), get()) }

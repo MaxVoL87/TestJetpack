@@ -18,6 +18,7 @@ import android.graphics.drawable.Drawable
 import android.R
 import android.graphics.Canvas
 import androidx.annotation.DrawableRes
+import com.example.testjetpack.ui.base.NotImplementedInterfaceException
 import com.google.android.gms.maps.model.BitmapDescriptor
 
 
@@ -144,3 +145,7 @@ fun Context.bitmapDescriptorFromVector(@DrawableRes vectorDrawableResourceId: In
     vectorDrawable.draw(canvas)
     return BitmapDescriptorFactory.fromBitmap(bitmap)
 }
+
+inline fun <reified T> bindInterfaceOrThrow(vararg objects: Any?): T =
+    objects.find { it is T }?.let { it as T }
+        ?: throw NotImplementedInterfaceException(T::class.java)

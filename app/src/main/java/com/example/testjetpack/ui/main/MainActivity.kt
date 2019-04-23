@@ -13,6 +13,7 @@ import com.example.testjetpack.models.git.db.GitRepositoryView
 import com.example.testjetpack.models.own.Notification
 import com.example.testjetpack.ui.base.BaseActivity
 import com.example.testjetpack.ui.base.EventStateChange
+import com.example.testjetpack.ui.dialog.progress.IProgressDialogFragmentCallback
 import com.example.testjetpack.ui.main.gitreposearch.IGitRepoSearchFragmentCallback
 import com.example.testjetpack.ui.main.gps.IGpsFragmentCallback
 import com.example.testjetpack.ui.main.gps.GpsFragment
@@ -33,6 +34,7 @@ import kotlin.reflect.KClass
 
 
 class MainActivity : BaseActivity<ActivityMainBinding, MainActivityVM>(),
+    IProgressDialogFragmentCallback,
     IGitRepoSearchFragmentCallback,
     IMyProfileFragmentCallback,
     IMyTripFragmentCallback,
@@ -87,7 +89,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityVM>(),
         headerBinding.profile = viewModel.profile
         headerBinding.picasso = _picasso
 
-        setSupportActionBar(toolbar)
+        setSupportActionBar(cToolbar)
 
         // Update action bar to reflect navigation
         setupActionBarWithNavController(this, navController, drawer_layout)

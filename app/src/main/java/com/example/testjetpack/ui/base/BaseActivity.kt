@@ -16,10 +16,12 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.example.testjetpack.R
+import com.example.testjetpack.ui.dialog.progress.ProgressDialogFragment
 import org.koin.android.viewmodel.ext.android.getViewModel
 
 
-abstract class BaseActivity<B : ViewDataBinding, T : BaseViewModel<out EventStateChange>> : AppCompatActivity(), ICallback {
+abstract class BaseActivity<B : ViewDataBinding, T : BaseViewModel<out EventStateChange>> : AppCompatActivity(),
+    ICallback {
     protected abstract val layoutId: Int
     protected abstract val navControllerId: Int
     protected abstract val viewModelClass: KClass<T>
@@ -27,6 +29,8 @@ abstract class BaseActivity<B : ViewDataBinding, T : BaseViewModel<out EventStat
     protected val navController: NavController by lazy(LazyThreadSafetyMode.NONE) { Navigation.findNavController(this, navControllerId) }
     protected val viewModel: T by lazy(LazyThreadSafetyMode.NONE) { getViewModel(viewModelClass) }
     protected abstract val observeLiveData: T.() -> Unit
+
+    private val progressBar: ProgressDialogFragment by lazy(LazyThreadSafetyMode.NONE) { ProgressDialogFragment() }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -86,11 +90,15 @@ abstract class BaseActivity<B : ViewDataBinding, T : BaseViewModel<out EventStat
     }
 
     override fun showProgress(text: String?) {
-        // nothing
+        progressBar
+            .setText(text)
+            .setPBVisible(true)
+            .setIsCancelable(false)
+            .show(supportFragmentManager, ProgressDialogFragment::class.java.name)
     }
 
     override fun hideProgress() {
-        // nothing
+        progressBar.dismiss()
     }
 
     fun showAlert(text: String) {
@@ -98,7 +106,7 @@ abstract class BaseActivity<B : ViewDataBinding, T : BaseViewModel<out EventStat
     }
 
     fun getCurFragment(@IdRes containerId: Int) = supportFragmentManager.findFragmentById(containerId)
-    fun getCurFragment(navHostFragment: Fragment) : Fragment = navHostFragment.childFragmentManager.fragments[0]
+    fun getCurFragment(navHostFragment: Fragment): Fragment = navHostFragment.childFragmentManager.fragments[0]
 
     private fun render(stateChangeEvent: EventStateChange) {
         RENDERERS[stateChangeEvent::class]?.invoke(stateChangeEvent)

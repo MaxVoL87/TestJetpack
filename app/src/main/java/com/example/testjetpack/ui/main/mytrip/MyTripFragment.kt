@@ -19,7 +19,7 @@ import com.example.testjetpack.R
 import com.example.testjetpack.databinding.FragmentMyTripBinding
 import com.example.testjetpack.models.own.Location
 import com.example.testjetpack.models.own.Trip
-import com.example.testjetpack.ui.base.BaseFragment
+import com.example.testjetpack.ui.base.BaseFragmentWithCallback
 import com.example.testjetpack.ui.base.EventStateChange
 import com.example.testjetpack.utils.*
 import com.google.android.gms.maps.*
@@ -33,16 +33,16 @@ import kotlin.reflect.KClass
  * [IMyTripFragmentCallback] interface to handle interaction events.
  *
  */
-class MyTripFragment : BaseFragment<FragmentMyTripBinding, MyTripFragmentVM>(), OnMapReadyCallback {
+class MyTripFragment : BaseFragmentWithCallback<FragmentMyTripBinding, MyTripFragmentVM, IMyTripFragmentCallback>(), OnMapReadyCallback {
     override val layoutId: Int = R.layout.fragment_my_trip
     override val viewModelClass: KClass<MyTripFragmentVM> = MyTripFragmentVM::class
+    override val callbackClass: KClass<IMyTripFragmentCallback> = IMyTripFragmentCallback::class
     override val observeLiveData: MyTripFragmentVM.() -> Unit
         get() = {
             trip.observe(this@MyTripFragment, Observer<Trip>(::setTrip))
             position.observe(this@MyTripFragment, Observer<Location>(::setPosition))
         }
 
-    private var _callback: IMyTripFragmentCallback? = null
     private var _mapFragment: SupportMapFragment = SupportMapFragment.newInstance(
         GoogleMapOptions()
             .mapType(GoogleMap.MAP_TYPE_NORMAL)
@@ -73,12 +73,11 @@ class MyTripFragment : BaseFragment<FragmentMyTripBinding, MyTripFragmentVM>(), 
     // region Lifecycle
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        _callback = bindInterfaceOrThrow<IMyTripFragmentCallback>(parentFragment, context)
         _mapFragment.onAttach(context)
     }
 
     override fun onDetach() {
-        _callback = null
+        _mapFragment.onDetach()
         super.onDetach()
     }
 
@@ -131,7 +130,7 @@ class MyTripFragment : BaseFragment<FragmentMyTripBinding, MyTripFragmentVM>(), 
     }
 
     override fun onDestroyView() {
-        fragmentManager?.beginTransaction()?.remove(_mapFragment)?.commit()
+        fragmentManager?.beginTransaction()?.remove(_mapFragment)?.commitAllowingStateLoss()
         _mapFragment.onDestroyView()
         super.onDestroyView()
     }
