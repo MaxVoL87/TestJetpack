@@ -29,14 +29,6 @@ abstract class BaseViewModel<S : EventStateChange> : ViewModel(), CoroutineScope
         super.onCleared()
     }
 
-    protected fun showProgress() {
-        showProgressLiveData.value = true
-    }
-
-    protected fun hideProgress() {
-        showProgressLiveData.value = false
-    }
-
     fun <T : Any?> processCallAsync(
         call: () -> T,
         onSuccess: (T) -> Unit = { /* nothing by default*/ },
@@ -46,7 +38,7 @@ abstract class BaseViewModel<S : EventStateChange> : ViewModel(), CoroutineScope
 
         return async {
             if (showProgress) {
-                showProgress()
+                showProgressLiveData.value = true
             }
 
             val jobResult = async(Dispatchers.IO) {
@@ -62,7 +54,7 @@ abstract class BaseViewModel<S : EventStateChange> : ViewModel(), CoroutineScope
             }
 
             if (showProgress) {
-                hideProgress()
+                showProgressLiveData.value = false
             }
         }
     }

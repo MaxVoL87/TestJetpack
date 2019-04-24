@@ -1,4 +1,4 @@
-package com.example.testjetpack.ui
+package com.example.testjetpack.ui.main
 
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
@@ -6,7 +6,6 @@ import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.ActivityTestRule
 import com.example.testjetpack.R
-import com.example.testjetpack.ui.main.MainActivity
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -17,20 +16,26 @@ import android.view.Gravity
 import androidx.annotation.IdRes
 import androidx.test.espresso.contrib.DrawerMatchers.isClosed
 import androidx.test.espresso.contrib.DrawerMatchers.isOpen
+import androidx.test.platform.app.InstrumentationRegistry
+import com.example.testjetpack.ui.base.TestBase
+import org.junit.Assert
 
 
 @RunWith(AndroidJUnit4::class)
-class MainActivityTest {
-
-    private val initSleepTime = 2000L
+class MainActivityTest : TestBase() {
 
     @get:Rule
     var activityTestRule: ActivityTestRule<MainActivity> = ActivityTestRule(MainActivity::class.java)
 
     @Test
-    fun checkInitializedState() {
-        Thread.sleep(initSleepTime) // skip init requests
+    fun useAppContext() {
+        // Context of the app under test.
+        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
+        Assert.assertEquals("com.example.testjetpack", appContext.packageName)
+    }
 
+    @Test
+    fun checkInitializedState() {
         // checkToolbarIsDisplayed
         onView(withId(R.id.cToolbar)).check(matches(isDisplayed()))
 
@@ -65,8 +70,6 @@ class MainActivityTest {
     }
 
     private fun checkNavDrawerAction(@IdRes actionId: Int, @IdRes fragmentRootId: Int, delay: Long){
-        Thread.sleep(initSleepTime) // skip init requests
-
         // Open Drawer to click on navigation.
         onView(withId(R.id.drawer_layout))
             .check(matches(isClosed(Gravity.LEFT))) // Left Drawer should be closed.
@@ -86,7 +89,5 @@ class MainActivityTest {
         onView(withId(R.id.drawer_layout))
             .check(matches(isClosed(Gravity.LEFT)))
     }
-
-    //todo: check progress bar is not showing?
 
 }
