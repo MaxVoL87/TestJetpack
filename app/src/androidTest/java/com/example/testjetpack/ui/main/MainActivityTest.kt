@@ -14,11 +14,11 @@ import androidx.test.espresso.contrib.NavigationViewActions
 import androidx.test.espresso.contrib.DrawerActions
 import android.view.Gravity
 import androidx.annotation.IdRes
+import androidx.test.espresso.Espresso
+import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.contrib.DrawerMatchers.isClosed
 import androidx.test.espresso.contrib.DrawerMatchers.isOpen
-import androidx.test.platform.app.InstrumentationRegistry
 import com.example.testjetpack.ui.base.TestBase
-import org.junit.Assert
 
 
 @RunWith(AndroidJUnit4::class)
@@ -28,13 +28,6 @@ class MainActivityTest : TestBase() {
     var activityTestRule: ActivityTestRule<MainActivity> = ActivityTestRule(MainActivity::class.java)
 
     @Test
-    fun useAppContext() {
-        // Context of the app under test.
-        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        Assert.assertEquals("com.example.testjetpack", appContext.packageName)
-    }
-
-    @Test
     fun checkInitializedState() {
         // checkToolbarIsDisplayed
         onView(withId(R.id.cToolbar)).check(matches(isDisplayed()))
@@ -42,8 +35,10 @@ class MainActivityTest : TestBase() {
         // checkNavigationIsClosed
         onView(withId(R.id.drawer_layout)).check(matches(isClosed(Gravity.LEFT)))
 
-        // check default Fragment is showing
-        onView(withId(R.id.fGitreposearchRoot)).check(matches(isDisplayed()))
+        checkDefaultFragmentIsShowing()
+
+        // progress dialog not showing
+        onView(withId(R.id.pdRoot)).check(doesNotExist())
     }
 
     @Test
@@ -85,9 +80,25 @@ class MainActivityTest : TestBase() {
         // Check that fragment was opened.
         onView(withId(fragmentRootId)).check(matches(isDisplayed()))
 
-        // Check Left Drawer should be closed.
+        // Check Nav Drawer should be closed.
         onView(withId(R.id.drawer_layout))
             .check(matches(isClosed(Gravity.LEFT)))
+
+        //todo: check naw drawer can't be opened
+
+        // progress dialog not showing
+        onView(withId(R.id.pdRoot)).check(doesNotExist())
+
+        // not working todo: check back button is displayed
+        // onView(withId(android.R.id.home)).check(matches(isDisplayed()))
+
+        Espresso.pressBack()
+
+        checkDefaultFragmentIsShowing()
     }
 
+    private fun checkDefaultFragmentIsShowing(){
+        // check default Fragment is showing
+        onView(withId(R.id.fGitreposearchRoot)).check(matches(isDisplayed()))
+    }
 }

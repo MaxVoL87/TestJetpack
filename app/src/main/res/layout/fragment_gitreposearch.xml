@@ -22,11 +22,11 @@
         android:focusable="true"
         android:focusableInTouchMode="true">
 
-        <ImageView
-            android:id="@+id/toolbar"
+        <RelativeLayout
+            android:id="@+id/toolbarPlaceHolder"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:srcCompat="@color/colorPrimary" />
+            android:background="@color/colorPrimary" />
 
         <EditText
             android:id="@+id/etTextToSearch"
@@ -36,6 +36,7 @@
             android:layout_alignParentStart="true"
             android:layout_marginBottom="@dimen/min_text_margin"
             android:layout_toStartOf="@+id/bSearch"
+            android:hint="@string/hint_repo_to_search"
             android:imeOptions="actionDone"
             android:inputType="text|textNoSuggestions"
             android:lines="1"
@@ -47,7 +48,7 @@
             style="@style/ButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/toolbar"
+            android:layout_below="@id/toolbarPlaceHolder"
             android:layout_alignParentEnd="true"
             android:layout_marginTop="@dimen/text_margin"
             android:onClick='@{viewModel::searchRepos}'

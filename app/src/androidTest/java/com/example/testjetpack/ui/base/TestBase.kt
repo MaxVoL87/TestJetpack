@@ -1,15 +1,14 @@
 package com.example.testjetpack.ui.base
 
+import com.example.testjetpack.TestingContract.START_DELAY_MILLIS
 import org.junit.Before
 
 
 abstract class TestBase {
 
-    private val initSleepTime = 1700L
-
     @Before
-    open fun setUp() {
-        Thread.sleep(initSleepTime)
+    open fun before() {
+        Thread.sleep(START_DELAY_MILLIS)
     }
 
 }
