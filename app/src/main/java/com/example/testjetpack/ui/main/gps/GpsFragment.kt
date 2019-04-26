@@ -60,15 +60,15 @@ class GpsFragment : BaseFragmentWithCallback<FragmentGpsBinding, GpsFragmentVM, 
 
     // region options menu
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        _menuItems[_isGpsOnlyItemId] = menu.add(Menu.NONE, _isGpsOnlyItemId, Menu.NONE, "GPS Only").apply {
+        _menuItems[_isGpsOnlyItemId] = menu.add(Menu.NONE, _isGpsOnlyItemId, Menu.NONE, getString(R.string.menu_item_gps_only)).apply {
             setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM or MenuItem.SHOW_AS_ACTION_WITH_TEXT)
             isCheckable = true
         }
-        _menuItems[_isShowDiagnosticItemId] = menu.add(Menu.NONE, _isShowDiagnosticItemId, Menu.NONE, "Diagnostic").apply {
+        _menuItems[_isShowDiagnosticItemId] = menu.add(Menu.NONE, _isShowDiagnosticItemId, Menu.NONE, getString(R.string.menu_item_diagnostic)).apply {
             setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM or MenuItem.SHOW_AS_ACTION_WITH_TEXT)
             isCheckable = true
         }
-        _menuItems[_clearDBLocationsDataItemId] = menu.add(Menu.NONE, _clearDBLocationsDataItemId, Menu.NONE, "Clear locations")
+        _menuItems[_clearDBLocationsDataItemId] = menu.add(Menu.NONE, _clearDBLocationsDataItemId, Menu.NONE, getString(R.string.menu_item_clear_locations))
         super.onCreateOptionsMenu(menu, inflater)
     }
 

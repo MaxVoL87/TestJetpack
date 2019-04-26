@@ -104,6 +104,11 @@ class MyProfileFragmentTest : TestBase() {
             .check(matches(isClickable()))
             .check(matches(withDrawableId(R.drawable.ic_edit_36dp)))
 
+        // Check separator is displayed
+        onView(withId(R.id.separator02))
+            .check(matches(isDisplayed()))
+            .check(matches(hasBackgroundColor(R.color.colorSeparator)))
+
         // check no card label, displayed by default
         checkLabel(R.id.lNoCard, R.string.you_currently_have_no_credit_card)
 

@@ -18,10 +18,11 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <ImageView
+        <RelativeLayout
+            android:id="@+id/toolbarPlaceHolder"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:srcCompat="@color/colorPrimary" />
+            android:background="@color/colorPrimary" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/list"

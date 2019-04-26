@@ -27,6 +27,9 @@
     <string name="nav_header_desc">Navigation menu</string>
 
     // Gps
+    <string name="menu_item_gps_only">GPS Only</string>
+    <string name="menu_item_diagnostic">Diagnostic</string>
+    <string name="menu_item_clear_locations">Clear locations</string>
     <string name="location_listener_started">Listener Started</string>
     <string name="location_listener_stopped">Listener Stopped</string>
     <string name="location_listener_start">Start</string>
@@ -34,6 +37,21 @@
     <string name="gps_diagnostic_switch">diagnostic</string>
     <string name="no_value">none</string>
 
+    // My Trip
     <string name="title_activity_maps">Map</string>
+    <string name="latitude__">latitude (°):</string>
+    <string name="longitude__">longitude (°):</string>
+    <string name="altitude__">altitude (m):</string>
+    <string name="bearing__">bearing (°):</string>
+    <string name="speed__">speed (m/c):</string>
+    <string name="accuracy__">accuracy (m):</string>
+    <string name="vertical_accuracy__">vertical accuracy (m):</string>
+    <string name="speed_accuracy__">speed accuracy (m/c):</string>
+    <string name="bearing_accuracy__">bearing accuracy (°):</string>
+    <string name="time__millis__">time (millis):</string>
+    <string name="elapsed_real_time__">elapsed real-time (nanos):</string>
+    <string name="acceleration__">acceleration (m/c²):</string>
+    <string name="satellites__">satellites:</string>
+
 
 </resources>

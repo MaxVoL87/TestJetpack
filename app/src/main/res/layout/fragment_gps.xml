@@ -17,21 +17,20 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/toolbar"
+        <RelativeLayout
+            android:id="@+id/toolbarPlaceHolder"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:layout_alignParentTop="true"
-            app:srcCompat="@color/colorPrimary"
-            tools:ignore="ContentDescription" />
+            android:background="@color/colorPrimary" />
 
         <ImageView
             android:id="@+id/isListenerStarted"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignStart="@id/toolbar"
-            android:layout_alignTop="@id/toolbar"
-            android:layout_alignBottom="@id/toolbar"
+            android:layout_alignStart="@id/toolbarPlaceHolder"
+            android:layout_alignTop="@id/toolbarPlaceHolder"
+            android:layout_alignBottom="@id/toolbarPlaceHolder"
             android:layout_marginStart="45dp"
             android:src='@{safeUnbox(viewModel.isLocationListenerStarted()) ? @drawable/ic_gps_fixed_red_48dp : @drawable/ic_gps_not_fixed_grey_48dp}'
             tools:ignore="ContentDescription" />
@@ -39,7 +38,7 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/toolbar"
+            android:layout_below="@id/toolbarPlaceHolder"
             android:layout_alignParentBottom="true"
             android:scrollbarAlwaysDrawVerticalTrack="true">
 
@@ -55,7 +54,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/text_margin"
-                    android:text="latitude (°):"
+                    android:text="@string/latitude__"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -82,7 +81,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/text_margin"
-                    android:text="longitude (°):"
+                    android:text="@string/longitude__"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/lLatitude" />
 
@@ -109,7 +108,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/text_margin"
-                    android:text="altitude (m):"
+                    android:text="@string/altitude__"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/lLongitude" />
 
@@ -136,7 +135,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/text_margin"
-                    android:text="bearing (°):"
+                    android:text="@string/bearing__"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/lAltitude" />
 
@@ -163,7 +162,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/text_margin"
-                    android:text="speed (m/c):"
+                    android:text="@string/speed__"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/lBearing" />
 
@@ -190,7 +189,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/text_margin"
-                    android:text="accuracy (m):"
+                    android:text="@string/accuracy__"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/lSpeed" />
 
@@ -217,7 +216,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/text_margin"
-                    android:text="vertical accuracy (m):"
+                    android:text="@string/vertical_accuracy__"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/lAccuracy" />
 
@@ -244,7 +243,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/text_margin"
-                    android:text="speed accuracy (m/c):"
+                    android:text="@string/speed_accuracy__"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/lVerticalAccuracy" />
 
@@ -271,7 +270,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/text_margin"
-                    android:text="bearing accuracy (°):"
+                    android:text="@string/bearing_accuracy__"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/lSpeedAccuracy" />
 
@@ -298,7 +297,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/text_margin"
-                    android:text="time (millis):"
+                    android:text="@string/time__millis__"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/lBearingAccuracy" />
 
@@ -325,7 +324,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/text_margin"
-                    android:text="elapsed real-time (nanos):"
+                    android:text="@string/elapsed_real_time__"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/lTime" />
 
@@ -360,7 +359,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/text_margin"
-                    android:text="acceleration (m/c²):"
+                    android:text="@string/acceleration__"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/separator" />
 
@@ -382,28 +381,28 @@
                     tools:text="0" />
 
                 <TextView
-                    android:id="@+id/lDeceleration"
+                    android:id="@+id/lSatellites"
                     style="@style/HeaderText2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/text_margin"
-                    android:text="satellites:"
+                    android:text="@string/satellites__"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/lAcceleration" />
 
                 <TextView
-                    android:id="@+id/tvDeceleration"
+                    android:id="@+id/tvSatellites"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/text_margin"
                     android:layout_marginEnd="@dimen/text_margin"
                     app:changeColor='@{true}'
                     app:isAvailable='@{viewModel.isLocationAvailable}'
-                    app:layout_constraintBottom_toBottomOf="@+id/lDeceleration"
+                    app:layout_constraintBottom_toBottomOf="@+id/lSatellites"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toEndOf="@+id/lDeceleration"
-                    app:layout_constraintTop_toTopOf="@+id/lDeceleration"
+                    app:layout_constraintStart_toEndOf="@+id/lSatellites"
+                    app:layout_constraintTop_toTopOf="@+id/lSatellites"
                     app:notAvailableText='@{@string/no_value}'
                     app:text='@{viewModel.satellites}'
                     tools:text="0" />

@@ -17,6 +17,7 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.example.testjetpack.R
 import com.example.testjetpack.ui.dialog.progress.ProgressDialogFragment
+import com.example.testjetpack.utils.withNotNull
 import org.koin.android.viewmodel.ext.android.getViewModel
 
 
@@ -26,11 +27,16 @@ abstract class BaseActivity<B : ViewDataBinding, T : BaseViewModel<out EventStat
     protected abstract val navControllerId: Int
     protected abstract val viewModelClass: KClass<T>
     protected lateinit var binding: B
-    protected val navController: NavController by lazy(LazyThreadSafetyMode.NONE) { Navigation.findNavController(this, navControllerId) }
+    protected val navController: NavController
+            by lazy(LazyThreadSafetyMode.NONE) { Navigation.findNavController(this, navControllerId) }
     protected val viewModel: T by lazy(LazyThreadSafetyMode.NONE) { getViewModel(viewModelClass) }
     protected abstract val observeLiveData: T.() -> Unit
 
-    private val progressBar: ProgressDialogFragment by lazy(LazyThreadSafetyMode.NONE) { ProgressDialogFragment() }
+    private var progressDialog: ProgressDialogFragment? = null
+        get() {
+            if (field == null) field = ProgressDialogFragment()
+            return field
+        }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,6 +57,14 @@ abstract class BaseActivity<B : ViewDataBinding, T : BaseViewModel<out EventStat
                 value = null
             }
         }
+    }
+
+    override fun onDestroy() {
+        withNotNull(progressDialog) {
+            dismiss()
+            progressDialog = null
+        }
+        super.onDestroy()
     }
 
     private fun parseError(it: Throwable) {
@@ -90,15 +104,16 @@ abstract class BaseActivity<B : ViewDataBinding, T : BaseViewModel<out EventStat
     }
 
     override fun showProgress(text: String?) {
-        progressBar
-            .setText(text)
-            .setPBVisible(true)
-            .setIsCancelable(false)
-            .show(supportFragmentManager, ProgressDialogFragment::class.java.name)
+        withNotNull(progressDialog) {
+            setText(text)
+            setPBVisible(true)
+            setIsCancelable(false)
+            show(supportFragmentManager, ProgressDialogFragment::class.java.name)
+        }
     }
 
     override fun hideProgress() {
-        progressBar.dismiss()
+        progressDialog?.dismiss()
     }
 
     fun showAlert(text: String) {

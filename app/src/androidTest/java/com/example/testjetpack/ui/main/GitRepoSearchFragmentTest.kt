@@ -31,10 +31,7 @@ class GitRepoSearchFragmentTest : TestBase() {
         // Check that fragment was opened.
         onView(withId(R.id.fGitreposearchRoot)).check(matches(isDisplayed()))
 
-        // Check toolbar place holder is showing
-        onView(withId(R.id.toolbarPlaceHolder))
-            .check(matches(isDisplayed()))
-            .check(matches(hasBackgroundColor(R.color.colorPrimary)))
+        checkToolbarPlaceholder()
 
         onView(withId(R.id.etTextToSearch))
             .check(matches(isDisplayed()))
