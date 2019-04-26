@@ -38,4 +38,10 @@ abstract class AppDatabase : RoomDatabase() {
         getGitLicenseDao().clearAll()
         getGitUserDao().clearAll()
     }
+
+    @Transaction
+    fun clearAllData() {
+        getNotificationDao().clearAll()
+        getLocationDao().clearAll()
+    }
 }

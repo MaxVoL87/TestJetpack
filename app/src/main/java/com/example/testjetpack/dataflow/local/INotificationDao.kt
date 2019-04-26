@@ -15,6 +15,9 @@ interface INotificationDao {
     @Delete
     fun delete(vararg notifications: Notification)
 
+    @Query("DELETE FROM notification_table")
+    fun clearAll()
+
     @Query("SELECT * FROM notification_table")
     fun loadAll(): List<Notification>
 
