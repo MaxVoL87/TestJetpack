@@ -4,6 +4,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.paging.toLiveData
 import com.example.testjetpack.dataflow.SearchGitReposPListBoundaryCallback
 import com.example.testjetpack.dataflow.local.AppDatabase
+import com.example.testjetpack.dataflow.local.IGitLicenseDao
+import com.example.testjetpack.dataflow.local.IGitRepositoryDao
+import com.example.testjetpack.dataflow.local.IGitUserDao
 import com.example.testjetpack.dataflow.network.IGitApi
 import com.example.testjetpack.models.Listing
 import com.example.testjetpack.models.NetworkState
@@ -23,16 +26,20 @@ import kotlinx.coroutines.launch
 import java.util.concurrent.atomic.AtomicReference
 
 class GitDataRepository(
-    private val gitApi: IGitApi,
-    private val appDatabase: AppDatabase
+    private val _gitApi: IGitApi,
+    private val _appDatabase: AppDatabase
 ) : IGitDataRepository {
+
+    private val _gitRepositoryDao: IGitRepositoryDao by lazy { _appDatabase.getGitRepositoryDao() }
+    private val _gitLicenseDao: IGitLicenseDao by lazy { _appDatabase.getGitLicenseDao() }
+    private val _gitGitUserDao: IGitUserDao by lazy { _appDatabase.getGitUserDao() }
 
     /**
      * Returns a Listing for the given page.
      */
     override fun searchGitRepositories(page: GitPage): Listing<GitRepositoryView> {
 
-        appDatabase.clearAllGitData()
+        _appDatabase.clearAllGitData()
 
         val mPage = AtomicReference(page)
 
@@ -40,7 +47,7 @@ class GitDataRepository(
         // the list and update the database with extra data.
         val boundaryCallback = SearchGitReposPListBoundaryCallback(
             _curPage = mPage,
-            _webservice = gitApi,
+            _webservice = _gitApi,
             _handleResponseAsync = this::insertGitResultIntoDb,
             _skipIfFail = false
         )
@@ -55,13 +62,13 @@ class GitDataRepository(
 
             GlobalScope.launch(Dispatchers.IO) {
                 boundaryCallback.reset()
-                appDatabase.clearAllGitData()
+                _appDatabase.clearAllGitData()
             }
             refreshState.value = NetworkState.LOADED // for hide refresh layout because of on recycler implemented
         }
 
         // We use toLiveData Kotlin extension function here, you could also use LivePagedListBuilder
-        val livePagedList = appDatabase.getGitDao().getAllGitRepositoriesSortedByRespIndex().toLiveData(
+        val livePagedList = _appDatabase.getGitDao().getAllGitRepositoriesSortedByRespIndex().toLiveData(
             pageSize = page.perPage.getPartOfOrCurrent(0.6),
             boundaryCallback = boundaryCallback
         )
@@ -88,21 +95,21 @@ class GitDataRepository(
             val licenses = mutableListOf<License>()
             val owners = mutableListOf<User>()
 
-            appDatabase.runInTransaction {
+            _appDatabase.runInTransaction {
                 withNotNullOrEmpty(rRepos) {
-                    val start = appDatabase.getGitRepositoryDao().getNextIndex()
+                    val start = _gitRepositoryDao.getNextIndex()
                     val repos = mapIndexed { index, child ->
                         child.license?.let { license -> licenses.add(license) }
                         owners.add(child.owner)
                         return@mapIndexed child.toDBEntity(child.license, child.owner, start + index)
                     }
-                    appDatabase.getGitRepositoryDao().insert(*repos.toTypedArray())
+                    _gitRepositoryDao.insert(*repos.toTypedArray())
                 }
                 withNotNullOrEmpty(licenses) {
-                    appDatabase.getGitLicenseDao().insert(*toTypedArray())
+                    _gitLicenseDao.insert(*toTypedArray())
                 }
                 withNotNullOrEmpty(owners) {
-                    appDatabase.getGitUserDao().insert(*toTypedArray())
+                    _gitGitUserDao.insert(*toTypedArray())
                 }
             }
         }

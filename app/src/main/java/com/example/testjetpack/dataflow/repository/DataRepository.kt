@@ -1,6 +1,8 @@
 package com.example.testjetpack.dataflow.repository
 
 import com.example.testjetpack.dataflow.local.AppDatabase
+import com.example.testjetpack.dataflow.local.ILocationDao
+import com.example.testjetpack.dataflow.local.INotificationDao
 import com.example.testjetpack.dataflow.network.IDataApi
 import com.example.testjetpack.mock.locations
 import com.example.testjetpack.mock.profile
@@ -10,9 +12,13 @@ import com.example.testjetpack.models.own.Profile
 import com.example.testjetpack.models.own.Trip
 
 class DataRepository(
-    private val dataApi: IDataApi,
-    private val appDatabase: AppDatabase
+    private val _dataApi: IDataApi,
+    private val _appDatabase: AppDatabase
 ) : IDataRepository {
+
+    private val _notificationDao: INotificationDao by lazy { _appDatabase.getNotificationDao() }
+    private val _locationDao: ILocationDao by lazy { _appDatabase.getLocationDao() }
+
 
     override fun getProfile(): Profile {
         //todo: change with api
@@ -21,24 +27,24 @@ class DataRepository(
     }
 
     override fun getNotifications(): List<Notification> {
-        return appDatabase.getNotificationDao().loadAllByID()
+        return _notificationDao.loadAllByID()
     }
 
     override fun insertNotificationsIntoDB(notifications: List<Notification>) {
-        appDatabase.getNotificationDao().insert(*notifications.toTypedArray())
+        _notificationDao.insert(*notifications.toTypedArray())
     }
 
     override fun getTrip(): Trip {
-        var tripLocations = appDatabase.getLocationDao().getLastTrip()
+        var tripLocations = _locationDao.getLastTrip()
         if (tripLocations.isEmpty()) tripLocations = locations // init with mock data
         return Trip(tripLocations)
     }
 
     override fun insertLocationsIntoDB(locations: List<Location>) {
-        appDatabase.getLocationDao().insert(*locations.toTypedArray())
+        _locationDao.insert(*locations.toTypedArray())
     }
 
     override fun removeAllLocationsFromDB() {
-        appDatabase.getLocationDao().clearAll()
+        _locationDao.clearAll()
     }
 }

@@ -14,7 +14,7 @@ import timber.log.Timber
 
 class MainApplication : Application() {
 
-    private val notificationDownloadWork: PeriodicWorkRequest by inject(named<NotificationDownloadWorker>())
+    private val _notificationDownloadWork: PeriodicWorkRequest by inject(named<NotificationDownloadWorker>())
 
     override fun onCreate() {
         super.onCreate()
@@ -40,6 +40,6 @@ class MainApplication : Application() {
         }
 
         WorkManager.getInstance().cancelAllWork()
-        WorkManager.getInstance().enqueue(notificationDownloadWork)
+        WorkManager.getInstance().enqueue(_notificationDownloadWork)
     }
 }

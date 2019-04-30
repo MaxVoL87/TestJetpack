@@ -18,7 +18,7 @@ import com.example.testjetpack.utils.withNotNull
  */
 class GpsLocationProvider(mContext: Context) {
 
-    private val locationManager: LocationManager = mContext.getSystemService(LOCATION_SERVICE) as LocationManager
+    private val _locationManager: LocationManager = mContext.getSystemService(LOCATION_SERVICE) as LocationManager
 
     private var _gpsStatus: GpsStatus? = null
     private var _gnssStatusCallback: GnssStatus.Callback? = null
@@ -38,17 +38,17 @@ class GpsLocationProvider(mContext: Context) {
 
     @RequiresPermission(ACCESS_FINE_LOCATION)
     fun requestLocationUpdates(listener: ILocationProviderListener) {
-        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) throw Exception("GPS not enabled")
+        if (!_locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) throw Exception("GPS not enabled")
         _listener = listener
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            locationManager.registerGnssStatusCallback(getGnssCallback())
+            _locationManager.registerGnssStatusCallback(getGnssCallback())
         } else {
-            locationManager.addGpsStatusListener(getGpsListener())
-            locationManager.getGpsStatus(null)
+            _locationManager.addGpsStatusListener(getGpsListener())
+            _locationManager.getGpsStatus(null)
         }
 
-        locationManager.requestLocationUpdates(
+        _locationManager.requestLocationUpdates(
             LocationManager.GPS_PROVIDER,
             _interval,
             _minDistanceChangeForUpdates,
@@ -58,11 +58,11 @@ class GpsLocationProvider(mContext: Context) {
 
     fun stopLocationUpdates() {
         _listener = null
-        locationManager.removeUpdates(_locationListener)
+        _locationManager.removeUpdates(_locationListener)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            locationManager.unregisterGnssStatusCallback(_gnssStatusCallback)
+            _locationManager.unregisterGnssStatusCallback(_gnssStatusCallback)
         } else {
-            locationManager.removeGpsStatusListener(_gpsListener)
+            _locationManager.removeGpsStatusListener(_gpsListener)
         }
         resetCalculations()
     }
@@ -155,7 +155,7 @@ class GpsLocationProvider(mContext: Context) {
                 GPS_EVENT_FIRST_FIX -> {
                 }
                 GPS_EVENT_SATELLITE_STATUS -> {
-                    _gpsStatus = locationManager.getGpsStatus(_gpsStatus)
+                    _gpsStatus = _locationManager.getGpsStatus(_gpsStatus)
                     val satellites = _gpsStatus!!.satellites.toList()
                     _satellitesInView = satellites.size
                     _satellitesInUse = satellites.count { it.usedInFix() }

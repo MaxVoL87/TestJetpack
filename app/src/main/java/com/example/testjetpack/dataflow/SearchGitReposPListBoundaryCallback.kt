@@ -43,7 +43,7 @@ class SearchGitReposPListBoundaryCallback(
     private val _helper = PagingRequestHelper()
     val networkState = _helper.createStatusLiveData()
 
-    private val gson: Gson by inject()
+    private val _gson: Gson by inject()
 
     fun retry() {
         _helper.retryAllFailed()
@@ -136,7 +136,7 @@ class SearchGitReposPListBoundaryCallback(
 
                     // case error in response
                     if (response.body() == null && response.errorBody() != null) {
-                        val error = gson
+                        val error = _gson
                             .fromJson<ErrorGitListingWithDoc<GitFieldError>>(response.errorBody()?.charStream())
 
                         resp = error
