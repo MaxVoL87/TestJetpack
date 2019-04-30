@@ -13,46 +13,43 @@ import org.koin.core.inject
 @RunWith(AndroidJUnit4::class)
 class NotificationDaoTest : KoinComponent {
 
-    private val appDatabase: AppDatabase by inject()
-    private val notificationDao: INotificationDao
-        get() {
-           return appDatabase.getNotificationDao()
-        }
+    private val _appDatabase: AppDatabase by inject()
+    private val _notificationDao: INotificationDao by lazy { _appDatabase.getNotificationDao() }
 
     @Test
     fun checkAddUpdateRemove() {
-        notificationDao.clearAll()
-        assertThat("notifications empty", notificationDao.loadAll().isEmpty())
+        _notificationDao.clearAll()
+        assertThat("notifications empty", _notificationDao.loadAll().isEmpty())
 
-        notificationDao.insert(notifications.first())
-        val dbNotifications = notificationDao.loadAll()
+        _notificationDao.insert(notifications.first())
+        val dbNotifications = _notificationDao.loadAll()
         assertThat("notification inserted", dbNotifications.size == 1)
         assertThat("notification inserted correctly", dbNotifications.first() == notifications.first())
 
         val mNotif = dbNotifications.first().copy(text = "test")
-        notificationDao.update(mNotif)
-        assertThat("notification updated correctly", notificationDao.loadAll().first() == mNotif)
+        _notificationDao.update(mNotif)
+        assertThat("notification updated correctly", _notificationDao.loadAll().first() == mNotif)
 
-        notificationDao.delete(mNotif)
-        assertThat("notification deleted", notificationDao.loadAll().isEmpty())
+        _notificationDao.delete(mNotif)
+        assertThat("notification deleted", _notificationDao.loadAll().isEmpty())
 
-        notificationDao.insert(*notifications.toTypedArray())
-        assertThat("notifications inserted correctly", notificationDao.loadAll().size == notifications.size)
+        _notificationDao.insert(*notifications.toTypedArray())
+        assertThat("notifications inserted correctly", _notificationDao.loadAll().size == notifications.size)
 
-        notificationDao.clearAll()
+        _notificationDao.clearAll()
     }
 
     @Test
     fun checkLoadById(){
-        notificationDao.clearAll()
+        _notificationDao.clearAll()
 
-        notificationDao.insert(*notifications.toTypedArray())
+        _notificationDao.insert(*notifications.toTypedArray())
 
-        val dbNotifications = notificationDao.loadAllByID()
+        val dbNotifications = _notificationDao.loadAllByID()
         val isSortedById = dbNotifications.zip(dbNotifications.drop(1)).all { (a, b) -> a.id <= b.id } // check notifications was sorted by id
         assertThat("notifications inserted correctly", isSortedById)
 
-        notificationDao.clearAll()
+        _notificationDao.clearAll()
     }
 
 }

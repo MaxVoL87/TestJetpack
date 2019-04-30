@@ -11,5 +11,5 @@ class GitRepositoryTest : KoinComponent {
 
     private val gitRepository: IGitDataRepository by inject()
 
-    //todo: what to test?
+    //todo: need to create mock data for testing
 }
