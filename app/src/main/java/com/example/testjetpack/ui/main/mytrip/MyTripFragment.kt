@@ -33,7 +33,8 @@ import kotlin.reflect.KClass
  * [IMyTripFragmentCallback] interface to handle interaction events.
  *
  */
-class MyTripFragment : BaseFragmentWithCallback<FragmentMyTripBinding, MyTripFragmentVM, IMyTripFragmentCallback>(), OnMapReadyCallback {
+class MyTripFragment : BaseFragmentWithCallback<FragmentMyTripBinding, MyTripFragmentVM, IMyTripFragmentCallback>(),
+    OnMapReadyCallback {
     override val layoutId: Int = R.layout.fragment_my_trip
     override val viewModelClass: KClass<MyTripFragmentVM> = MyTripFragmentVM::class
     override val callbackClass: KClass<IMyTripFragmentCallback> = IMyTripFragmentCallback::class
@@ -282,73 +283,74 @@ class MyTripFragment : BaseFragmentWithCallback<FragmentMyTripBinding, MyTripFra
         private val markerOptions: MarkerOptions
     ) {
         private var marker: Marker? = null
-        private var animatorUpdateListener = ValueAnimator.AnimatorUpdateListener { v ->
-            withNotNull(marker, fromPosition, toPosition){ m, f, t ->
-                val from = f.latLng
-                val to = t.latLng
+        private var animatorUpdateListener = object : ValueAnimator.AnimatorUpdateListener {
+            private var from: Location? = null
+            private var to: Location? = null
 
-                val value = v.animatedFraction
-                val lng = from.longitude * (1 - value) + to.longitude * value
-                val lat = from.latitude * (1 - value) + to.latitude * value
-                m.position = LatLng(lat, lng)
+            @Synchronized
+            fun setTo(location: Location) {
+                from = to
+                to = location
+            }
+
+            override fun onAnimationUpdate(v: ValueAnimator) {
+                withNotNull(marker, from, to) { m, f, t ->
+                    val fromPos = f.latLng
+                    val toPos = t.latLng
+
+                    val value = v.animatedFraction
+                    val lng = fromPos.longitude * (1 - value) + toPos.longitude * value
+                    val lat = fromPos.latitude * (1 - value) + toPos.latitude * value
+                    m.position = LatLng(lat, lng)
+                }
             }
         }
         private val valueAnimator: ValueAnimator = ValueAnimator.ofFloat(0F, 1F).apply {
             interpolator = LinearInterpolator()
             addUpdateListener(animatorUpdateListener)
         }
-        private var isPaused: Boolean = false
-        private var fromPosition: Location? = null
-        private var toPosition: Location? = null
+        private var isStopped: Boolean = false
         private var lastPositionTime: Long = 0
 
-        fun setPosition(position: Location) {
-            val needToInitMarker = !_markers.contains(marker)
-            fromPosition = toPosition
-            toPosition = position
-            when {
-                needToInitMarker || isMarkerInit() -> {
-                    markerOptions.position(position.latLng)
-                    marker = map.addMarker(markerOptions)
-                    isPaused = false
-                }
-                isPaused -> {
-                    setToPoint(marker!!, position.latLng)
-                    isPaused = false
-                }
-                else -> animateToPoint(marker!!, position.latLng)
+        fun setPosition(location: Location) {
+            animatorUpdateListener.setTo(location)
+
+            if (isMarkerInit()) {
+                initMarker(location)
             }
-            if (needToInitMarker) _markers.add(marker!!)
+            else {
+                moveMarker(location)
+            }
+
+            isStopped = false
         }
 
         fun stop() {
             valueAnimator.cancel()
-            isPaused = true
+            isStopped = true
         }
 
         private fun isMarkerInit(): Boolean {
-            return marker == null
+            with(marker) {
+                return this == null || !_markers.contains(this)
+            }
         }
 
-        private fun animateToPoint(marker: Marker, to: LatLng) {
-            if (marker.position == to) return
-            moveFromTo(marker, to)
+        private fun initMarker(location: Location) {
+            markerOptions.position(location.latLng)
+            marker = map.addMarker(markerOptions)
+            _markers.add(marker!!)
         }
 
-        private fun setToPoint(marker: Marker, to: LatLng) {
-            if (marker.position == to) return
-            marker.position = to
-        }
-
-        @Synchronized
-        private fun moveFromTo(marker: Marker, to: LatLng) {
+        private fun moveMarker(to: Location) = with(marker) {
+            if (this == null || position == to.latLng) return
             valueAnimator.cancel()
 
             val time = Calendar.getInstance().timeInMillis
             valueAnimator.duration = if (lastPositionTime in 1 until time) time - lastPositionTime else MOVING_SPEED_MILLIS
             lastPositionTime = time
 
-            marker.rotation = getRotationAngle(marker.position, to)
+            rotation = getRotationAngle(position, to.latLng)
 
             valueAnimator.start()
         }
