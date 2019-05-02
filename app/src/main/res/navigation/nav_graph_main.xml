@@ -26,6 +26,11 @@
         android:label="GPS"
         tools:layout="@layout/fragment_gps" />
     <fragment
+        android:id="@+id/myStatusFragment"
+        android:name="com.example.testjetpack.ui.main.mystatus.MyStatusFragment"
+        android:label="fragment_my_status"
+        tools:layout="@layout/fragment_my_status" />
+    <fragment
         android:id="@+id/notificationsFragment"
         android:name="com.example.testjetpack.ui.main.notifications.NotificationsFragment"
         android:label="Notifications"
@@ -48,6 +53,13 @@
     <action
         android:id="@+id/action_global_gpsFragment"
         app:destination="@id/gpsFragment"
+        app:enterAnim="@anim/fade_in"
+        app:exitAnim="@anim/fade_out"
+        app:popEnterAnim="@anim/enter_from_left"
+        app:popExitAnim="@anim/exit_to_right" />
+    <action
+        android:id="@+id/action_global_myStatusFragment"
+        app:destination="@id/myStatusFragment"
         app:enterAnim="@anim/fade_in"
         app:exitAnim="@anim/fade_out"
         app:popEnterAnim="@anim/enter_from_left"

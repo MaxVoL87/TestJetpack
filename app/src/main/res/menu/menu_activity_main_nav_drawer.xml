@@ -20,6 +20,10 @@
             android:icon="@drawable/ic_menu_gallery"
             android:title="GPS" />
 
+        <item
+            android:id="@+id/nav_my_status"
+            android:icon="@drawable/ic_gps_not_fixed_grey_48dp"
+            android:title="My Status" />
     </group>
 
     <item android:title="Communicate">

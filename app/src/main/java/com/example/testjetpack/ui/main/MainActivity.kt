@@ -6,6 +6,7 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.ui.NavigationUI.*
+import com.example.testjetpack.MainApplicationContract
 import com.example.testjetpack.R
 import com.example.testjetpack.databinding.ActivityMainBinding
 import com.example.testjetpack.databinding.ItemNavHeaderMainBinding
@@ -19,6 +20,8 @@ import com.example.testjetpack.ui.main.gps.IGpsFragmentCallback
 import com.example.testjetpack.ui.main.gps.GpsFragment
 import com.example.testjetpack.ui.main.myprofile.IMyProfileFragmentCallback
 import com.example.testjetpack.ui.main.myprofile.MyProfileFragment
+import com.example.testjetpack.ui.main.mystatus.IMyStatusFragmentCallback
+import com.example.testjetpack.ui.main.mystatus.MyStatusFragment
 import com.example.testjetpack.ui.main.mytrip.IMyTripFragmentCallback
 import com.example.testjetpack.ui.main.mytrip.MyTripFragment
 import com.example.testjetpack.ui.main.notifications.INotificationsFragmentCallback
@@ -39,6 +42,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityVM>(),
     IMyProfileFragmentCallback,
     IMyTripFragmentCallback,
     IGpsFragmentCallback,
+    IMyStatusFragmentCallback,
     INotificationsFragmentCallback {
 
     override val viewModelClass: KClass<MainActivityVM> = MainActivityVM::class
@@ -140,6 +144,10 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityVM>(),
         openFragmentDrawerTask<GpsFragment>(R.id.action_global_gpsFragment)
     }
 
+    private fun openStatus() {
+        openFragmentDrawerTask<MyStatusFragment>(R.id.action_global_myStatusFragment)
+    }
+
     private fun openNotifications() {
         openFragmentDrawerTask<NotificationsFragment>(R.id.action_global_notificationsFragment)
     }
@@ -190,6 +198,11 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityVM>(),
         openGps()
     }
 
+    private val openStatusRenderer: (Any) -> Unit = { event ->
+        event as MainActivityVMEventStateChange.OpenStatus
+        openStatus()
+    }
+
     private val openNotificationsRenderer: (Any) -> Unit = { event ->
         event as MainActivityVMEventStateChange.OpenNotifications
         openNotifications()
@@ -207,8 +220,9 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityVM>(),
 
     override val RENDERERS: Map<KClass<out EventStateChange>, Function1<Any, Unit>> = mapOf(
         MainActivityVMEventStateChange.OpenProfile::class to openProfileRenderer,
-        MainActivityVMEventStateChange.OpenGps::class to openGpsRenderer,
         MainActivityVMEventStateChange.OpenTrip::class to openTripRenderer,
+        MainActivityVMEventStateChange.OpenGps::class to openGpsRenderer,
+        MainActivityVMEventStateChange.OpenStatus::class to openStatusRenderer,
         MainActivityVMEventStateChange.OpenNotifications::class to openNotificationsRenderer,
         MainActivityVMEventStateChange.OpenFeedback::class to openFeedbackRenderer,
         MainActivityVMEventStateChange.LogOut::class to logOutRenderer

@@ -52,5 +52,4 @@ class MyTripFragmentVM(
     }
 }
 
-sealed class MyTripFragmentVMEventStateChange : EventStateChange {
-}
+sealed class MyTripFragmentVMEventStateChange : EventStateChange
