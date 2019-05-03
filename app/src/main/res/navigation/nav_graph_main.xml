@@ -28,7 +28,7 @@
     <fragment
         android:id="@+id/myStatusFragment"
         android:name="com.example.testjetpack.ui.main.mystatus.MyStatusFragment"
-        android:label="fragment_my_status"
+        android:label="My Status"
         tools:layout="@layout/fragment_my_status" />
     <fragment
         android:id="@+id/notificationsFragment"
