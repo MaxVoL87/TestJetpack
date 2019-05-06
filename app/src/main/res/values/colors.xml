@@ -19,4 +19,12 @@
     <color name="colorBlack">#000000</color>
     <color name="colorGrey">#95989A</color>
     <color name="colorRed">#FFFF0000</color>
+
+    <color name="arch_chart_sector_0">#767D4D</color>
+    <color name="arch_chart_sector_1">#819DAD</color>
+    <color name="arch_chart_sector_2">#871C3B</color>
+    <color name="arch_chart_sector_3">#1C4252</color>
+    <color name="arch_chart_sector_4">#A65222</color>
+    <color name="arch_chart_sector_5">#B3A391</color>
+
 </resources>
