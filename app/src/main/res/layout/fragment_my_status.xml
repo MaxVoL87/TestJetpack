@@ -17,10 +17,10 @@
         android:layout_height="match_parent">
 
         <com.christophesmet.android.views.maskableframelayout.MaskableFrameLayout
-            android:layout_width="208dp"
-            android:layout_height="208dp"
-            android:paddingTop="3.6dp"
-            android:paddingStart="3.8dp"
+            android:layout_width="295dp"
+            android:layout_height="295dp"
+            android:paddingTop="5.2dp"
+            android:paddingStart="5.2dp"
             app:layout_constraintBottom_toTopOf="@+id/rlCloud"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -31,14 +31,14 @@
 
             <com.neo.arcchartview.ArcChartView
                 android:id="@+id/acvStatus"
-                android:layout_width="200dp"
-                android:layout_height="200dp"
+                android:layout_width="285dp"
+                android:layout_height="285dp"
                 app:acv_allow_animations_on_set_values="false"
                 app:acv_icon_size="0dp"
                 app:acv_lines_count="100"
                 app:acv_lines_space="0dp"
-                app:acv_lines_width="1dp"
-                app:acv_mid_start_extra_offset="50dp"
+                app:acv_lines_width="1.2dp"
+                app:acv_mid_start_extra_offset="60dp"
                 app:acv_sections_count="6"
                 app:acv_sections_space="5dp"
                 app:acv_start_degree_offset="270" />
@@ -47,8 +47,8 @@
 
         <RelativeLayout
             android:id="@+id/rlCloud"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="250dp"
+            android:layout_height="180dp"
             android:layout_margin="@dimen/activity_vertical_margin"
             android:onClick='@{(v) -> viewModel.calculatePercents()}'
             app:layout_constraintBottom_toBottomOf="parent"
@@ -56,16 +56,16 @@
             app:layout_constraintStart_toStartOf="parent">
 
             <FrameLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_centerInParent="true"
                 android:alpha="0.4"
                 android:background="@drawable/cloud" />
 
             <FrameLayout
                 android:id="@+id/cloud"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_centerInParent="true"
                 android:background="@drawable/cloud" />
 
@@ -75,7 +75,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="65dp"
+                android:layout_marginTop="85dp"
                 android:text='@{String.format("%,.2f%%", safeUnbox(viewModel.somePercents)*100F)}'
                 android:textColor="#FFFFFFFF"
                 tools:text="10%" />
