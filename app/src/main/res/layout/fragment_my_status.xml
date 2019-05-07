@@ -17,10 +17,10 @@
         android:layout_height="match_parent">
 
         <com.christophesmet.android.views.maskableframelayout.MaskableFrameLayout
-            android:layout_width="210dp"
-            android:layout_height="210dp"
-            android:paddingTop="5dp"
-            android:paddingStart="8dp"
+            android:layout_width="208dp"
+            android:layout_height="208dp"
+            android:paddingTop="3.6dp"
+            android:paddingStart="3.8dp"
             app:layout_constraintBottom_toTopOf="@+id/rlCloud"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"

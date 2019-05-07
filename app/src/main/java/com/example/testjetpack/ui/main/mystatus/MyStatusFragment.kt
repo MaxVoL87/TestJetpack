@@ -84,7 +84,7 @@ class MyStatusFragment :
         archSectorColors.forEach {
             val color = ContextCompat.getColor(requireContext(), it.value)
             acvStatus.setFilldeColor(it.key, color)
-            acvStatus.setUnFilldeColor(it.key, ColorUtils.setAlphaComponent(color,  0x40))
+            acvStatus.setUnFilldeColor(it.key, ColorUtils.setAlphaComponent(color,  0x60))
         }
 
         sector0ArcSectorValueSetuper = ArcChartSectorValueSetuper(acvStatus, 0)
