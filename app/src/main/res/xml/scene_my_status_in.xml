@@ -1,0 +1,480 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto">
+
+    <Transition
+        android:id="@+id/tr_in"
+        motion:constraintSetEnd="@+id/end"
+        motion:constraintSetStart="@+id/start"
+        motion:duration="1000"
+        motion:motionInterpolator="linear">
+
+
+        <KeyFrameSet>
+            <KeyAttribute
+                android:scaleX="1.5"
+                android:scaleY="1.5"
+                motion:framePosition="90"
+                motion:motionTarget="@id/vHeart" />
+
+            <KeyPosition
+                motion:framePosition="20"
+                motion:keyPositionType="parentRelative"
+                motion:motionTarget="@+id/vHeart"
+                motion:percentX="0.10" />
+
+            <KeyPosition
+                motion:framePosition="90"
+                motion:keyPositionType="parentRelative"
+                motion:motionTarget="@+id/vHeart"
+                motion:percentY="0.3425" />
+
+            <KeyAttribute
+                android:scaleX="1.5"
+                android:scaleY="1.5"
+                motion:framePosition="90"
+                motion:motionTarget="@id/vTime" />
+
+            <KeyPosition
+                motion:framePosition="10"
+                motion:keyPositionType="parentRelative"
+                motion:motionTarget="@+id/vTime"
+                motion:percentX="0.10" />
+
+            <KeyPosition
+                motion:framePosition="90"
+                motion:keyPositionType="parentRelative"
+                motion:motionTarget="@+id/vTime"
+                motion:percentX="0.3625"
+                motion:percentY="0.3525" />
+
+            <KeyAttribute
+                android:scaleX="1.5"
+                android:scaleY="1.5"
+                motion:framePosition="90"
+                motion:motionTarget="@id/vFire" />
+
+            <KeyPosition
+                motion:framePosition="3"
+                motion:keyPositionType="parentRelative"
+                motion:motionTarget="@+id/vFire"
+                motion:percentX="0.15" />
+
+            <KeyPosition
+                motion:framePosition="6"
+                motion:keyPositionType="parentRelative"
+                motion:motionTarget="@+id/vFire"
+                motion:percentX="0.11" />
+
+            <KeyPosition
+                motion:framePosition="70"
+                motion:keyPositionType="parentRelative"
+                motion:motionTarget="@+id/vFire"
+                motion:percentX="0.1525"
+                motion:percentY="0.3525" />
+
+            <KeyAttribute
+                android:scaleX="1.5"
+                android:scaleY="1.5"
+                motion:framePosition="90"
+                motion:motionTarget="@id/vWind" />
+
+            <KeyPosition
+                motion:framePosition="3"
+                motion:keyPositionType="parentRelative"
+                motion:motionTarget="@+id/vWind"
+                motion:percentX="0.85" />
+
+            <KeyPosition
+                motion:framePosition="6"
+                motion:keyPositionType="parentRelative"
+                motion:motionTarget="@+id/vWind"
+                motion:percentX="0.89" />
+
+            <KeyPosition
+                motion:framePosition="70"
+                motion:keyPositionType="parentRelative"
+                motion:motionTarget="@+id/vWind"
+                motion:percentX="0.8575"
+                motion:percentY="0.3525" />
+
+            <KeyAttribute
+                android:scaleX="1.5"
+                android:scaleY="1.5"
+                motion:framePosition="90"
+                motion:motionTarget="@id/vEarth" />
+
+            <KeyPosition
+                motion:framePosition="10"
+                motion:keyPositionType="parentRelative"
+                motion:motionTarget="@+id/vEarth"
+                motion:percentX="0.90" />
+
+            <KeyPosition
+                motion:framePosition="76"
+                motion:keyPositionType="parentRelative"
+                motion:motionTarget="@+id/vEarth"
+                motion:percentX="0.6775"
+                motion:percentY="0.3525" />
+
+            <KeyAttribute
+                android:scaleX="1.5"
+                android:scaleY="1.5"
+                motion:framePosition="90"
+                motion:motionTarget="@id/vEat" />
+
+            <KeyPosition
+                motion:framePosition="10"
+                motion:keyPositionType="parentRelative"
+                motion:motionTarget="@+id/vEat"
+                motion:percentX="0.90" />
+
+            <KeyPosition
+                motion:framePosition="40"
+                motion:keyPositionType="parentRelative"
+                motion:motionTarget="@+id/vEat"
+                motion:percentX="1.10" />
+
+            <KeyPosition
+                motion:framePosition="75"
+                motion:keyPositionType="parentRelative"
+                motion:motionTarget="@+id/vEat"
+                motion:percentX="1.10"
+                motion:percentY="0.12" />
+
+            <KeyPosition
+                motion:framePosition="90"
+                motion:keyPositionType="parentRelative"
+                motion:motionTarget="@+id/vEat"
+                motion:percentX="0.50"
+                motion:percentY="0.08" />
+
+        </KeyFrameSet>
+
+    </Transition>
+
+    <ConstraintSet android:id="@+id/start">
+
+        <Constraint
+            android:id="@+id/vUser"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintVertical_bias="0.345" />
+
+        <Constraint
+            android:id="@+id/vHeart"
+            android:layout_width="23dp"
+            android:layout_height="23dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginBottom="8dp"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintVertical_bias="1.0" />
+
+        <Constraint
+            android:id="@+id/vTime"
+            android:layout_width="23dp"
+            android:layout_height="23dp"
+            android:layout_marginStart="39dp"
+            android:layout_marginBottom="8dp"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintStart_toEndOf="@id/vHeart"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintVertical_bias="1.0" />
+
+        <Constraint
+            android:id="@+id/vFire"
+            android:layout_width="23dp"
+            android:layout_height="23dp"
+            android:layout_marginStart="39dp"
+            android:layout_marginBottom="8dp"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintStart_toEndOf="@id/vTime"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintVertical_bias="1.0" />
+
+        <Constraint
+            android:id="@+id/vWind"
+            android:layout_width="23dp"
+            android:layout_height="23dp"
+            android:layout_marginStart="39dp"
+            android:layout_marginBottom="8dp"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintStart_toEndOf="@id/vFire"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintVertical_bias="1.0" />
+
+        <Constraint
+            android:id="@+id/vEarth"
+            android:layout_width="23dp"
+            android:layout_height="23dp"
+            android:layout_marginStart="39dp"
+            android:layout_marginBottom="8dp"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintStart_toEndOf="@id/vWind"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintVertical_bias="1.0" />
+
+        <Constraint
+            android:id="@+id/vEat"
+            android:layout_width="23dp"
+            android:layout_height="23dp"
+            android:layout_marginStart="39dp"
+            android:layout_marginBottom="8dp"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintStart_toEndOf="@id/vEarth"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintVertical_bias="1.0" />
+
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/end">
+
+        <Constraint
+            android:id="@+id/vUser"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintVertical_bias="0.337" />
+
+        <Constraint
+            android:id="@+id/vHeart"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginEnd="110dp"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintVertical_bias="0.50" />
+
+        <Constraint
+            android:id="@+id/vTime"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="110dp"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintVertical_bias="0.50" />
+
+        <Constraint
+            android:id="@+id/vFire"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="60dp"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintVertical_bias="0.35" />
+
+        <Constraint
+            android:id="@+id/vWind"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginEnd="60dp"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintVertical_bias="0.35" />
+
+        <Constraint
+            android:id="@+id/vEarth"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginEnd="110dp"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintVertical_bias="0.18" />
+
+        <Constraint
+            android:id="@+id/vEat"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="110dp"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintVertical_bias="0.18" />
+
+    </ConstraintSet>
+
+// not working
+    <!--<Transition-->
+        <!--android:id="@+id/tr_slide"-->
+        <!--motion:constraintSetStart="@+id/end_slide"-->
+        <!--motion:constraintSetEnd="@+id/start_slide"-->
+        <!--motion:duration="1000"-->
+        <!--motion:motionInterpolator="linear">-->
+
+        <!--<OnSwipe-->
+            <!--motion:dragDirection="dragUp"-->
+            <!--motion:touchAnchorId="@+id/vWind"-->
+            <!--motion:touchAnchorSide="top" />-->
+
+    <!--</Transition>-->
+
+
+    <!--<ConstraintSet android:id="@+id/start_slide">-->
+
+        <!--<Constraint-->
+            <!--android:id="@+id/vUser"-->
+            <!--android:layout_width="48dp"-->
+            <!--android:layout_height="48dp"-->
+            <!--motion:layout_constraintBottom_toBottomOf="parent"-->
+            <!--motion:layout_constraintEnd_toEndOf="parent"-->
+            <!--motion:layout_constraintStart_toStartOf="parent"-->
+            <!--motion:layout_constraintTop_toTopOf="parent"-->
+            <!--motion:layout_constraintVertical_bias="0.337" />-->
+
+        <!--<Constraint-->
+            <!--android:id="@+id/vHeart"-->
+            <!--android:layout_width="32dp"-->
+            <!--android:layout_height="32dp"-->
+            <!--android:layout_marginEnd="110dp"-->
+            <!--motion:layout_constraintBottom_toBottomOf="parent"-->
+            <!--motion:layout_constraintEnd_toEndOf="parent"-->
+            <!--motion:layout_constraintTop_toTopOf="parent"-->
+            <!--motion:layout_constraintVertical_bias="0.50" />-->
+
+        <!--<Constraint-->
+            <!--android:id="@+id/vTime"-->
+            <!--android:layout_width="32dp"-->
+            <!--android:layout_height="32dp"-->
+            <!--android:layout_marginStart="110dp"-->
+            <!--motion:layout_constraintBottom_toBottomOf="parent"-->
+            <!--motion:layout_constraintStart_toStartOf="parent"-->
+            <!--motion:layout_constraintTop_toTopOf="parent"-->
+            <!--motion:layout_constraintVertical_bias="0.50" />-->
+
+        <!--<Constraint-->
+            <!--android:id="@+id/vFire"-->
+            <!--android:layout_width="32dp"-->
+            <!--android:layout_height="32dp"-->
+            <!--android:layout_marginStart="60dp"-->
+            <!--motion:layout_constraintBottom_toBottomOf="parent"-->
+            <!--motion:layout_constraintStart_toStartOf="parent"-->
+            <!--motion:layout_constraintTop_toTopOf="parent"-->
+            <!--motion:layout_constraintVertical_bias="0.35" />-->
+
+        <!--<Constraint-->
+            <!--android:id="@+id/vWind"-->
+            <!--android:layout_width="32dp"-->
+            <!--android:layout_height="32dp"-->
+            <!--android:layout_marginEnd="60dp"-->
+            <!--motion:layout_constraintBottom_toBottomOf="parent"-->
+            <!--motion:layout_constraintEnd_toEndOf="parent"-->
+            <!--motion:layout_constraintTop_toTopOf="parent"-->
+            <!--motion:layout_constraintVertical_bias="0.35" />-->
+
+        <!--<Constraint-->
+            <!--android:id="@+id/vEarth"-->
+            <!--android:layout_width="32dp"-->
+            <!--android:layout_height="32dp"-->
+            <!--android:layout_marginEnd="110dp"-->
+            <!--motion:layout_constraintBottom_toBottomOf="parent"-->
+            <!--motion:layout_constraintEnd_toEndOf="parent"-->
+            <!--motion:layout_constraintTop_toTopOf="parent"-->
+            <!--motion:layout_constraintVertical_bias="0.18" />-->
+
+        <!--<Constraint-->
+            <!--android:id="@+id/vEat"-->
+            <!--android:layout_width="32dp"-->
+            <!--android:layout_height="32dp"-->
+            <!--android:layout_marginStart="110dp"-->
+            <!--motion:layout_constraintBottom_toBottomOf="parent"-->
+            <!--motion:layout_constraintStart_toStartOf="parent"-->
+            <!--motion:layout_constraintTop_toTopOf="parent"-->
+            <!--motion:layout_constraintVertical_bias="0.18" />-->
+
+    <!--</ConstraintSet>-->
+
+    <!--<ConstraintSet android:id="@+id/end_slide">-->
+
+        <!--<Constraint-->
+            <!--android:id="@+id/vUser"-->
+            <!--android:layout_width="28dp"-->
+            <!--android:layout_height="28dp"-->
+            <!--motion:layout_constraintBottom_toBottomOf="parent"-->
+            <!--motion:layout_constraintEnd_toEndOf="parent"-->
+            <!--motion:layout_constraintStart_toStartOf="parent"-->
+            <!--motion:layout_constraintTop_toTopOf="parent"-->
+            <!--motion:layout_constraintVertical_bias="0.345" />-->
+
+        <!--<Constraint-->
+            <!--android:id="@+id/vHeart"-->
+            <!--android:layout_width="23dp"-->
+            <!--android:layout_height="23dp"-->
+            <!--android:layout_marginStart="16dp"-->
+            <!--android:layout_marginBottom="8dp"-->
+            <!--motion:layout_constraintBottom_toBottomOf="parent"-->
+            <!--motion:layout_constraintStart_toStartOf="parent"-->
+            <!--motion:layout_constraintTop_toTopOf="parent"-->
+            <!--motion:layout_constraintVertical_bias="0.08" />-->
+
+        <!--<Constraint-->
+            <!--android:id="@+id/vTime"-->
+            <!--android:layout_width="23dp"-->
+            <!--android:layout_height="23dp"-->
+            <!--android:layout_marginStart="39dp"-->
+            <!--android:layout_marginBottom="8dp"-->
+            <!--motion:layout_constraintBottom_toBottomOf="parent"-->
+            <!--motion:layout_constraintStart_toEndOf="@id/vHeart"-->
+            <!--motion:layout_constraintTop_toTopOf="parent"-->
+            <!--motion:layout_constraintVertical_bias="0.08" />-->
+
+        <!--<Constraint-->
+            <!--android:id="@+id/vFire"-->
+            <!--android:layout_width="23dp"-->
+            <!--android:layout_height="23dp"-->
+            <!--android:layout_marginStart="39dp"-->
+            <!--android:layout_marginBottom="8dp"-->
+            <!--motion:layout_constraintBottom_toBottomOf="parent"-->
+            <!--motion:layout_constraintStart_toEndOf="@id/vTime"-->
+            <!--motion:layout_constraintTop_toTopOf="parent"-->
+            <!--motion:layout_constraintVertical_bias="0.08" />-->
+
+        <!--<Constraint-->
+            <!--android:id="@+id/vWind"-->
+            <!--android:layout_width="23dp"-->
+            <!--android:layout_height="23dp"-->
+            <!--android:layout_marginStart="39dp"-->
+            <!--android:layout_marginBottom="8dp"-->
+            <!--motion:layout_constraintBottom_toBottomOf="parent"-->
+            <!--motion:layout_constraintStart_toEndOf="@id/vFire"-->
+            <!--motion:layout_constraintTop_toTopOf="parent"-->
+            <!--motion:layout_constraintVertical_bias="0.08" />-->
+
+        <!--<Constraint-->
+            <!--android:id="@+id/vEarth"-->
+            <!--android:layout_width="23dp"-->
+            <!--android:layout_height="23dp"-->
+            <!--android:layout_marginStart="39dp"-->
+            <!--android:layout_marginBottom="8dp"-->
+            <!--motion:layout_constraintBottom_toBottomOf="parent"-->
+            <!--motion:layout_constraintStart_toEndOf="@id/vWind"-->
+            <!--motion:layout_constraintTop_toTopOf="parent"-->
+            <!--motion:layout_constraintVertical_bias="0.08" />-->
+
+        <!--<Constraint-->
+            <!--android:id="@+id/vEat"-->
+            <!--android:layout_width="23dp"-->
+            <!--android:layout_height="23dp"-->
+            <!--android:layout_marginStart="39dp"-->
+            <!--android:layout_marginBottom="8dp"-->
+            <!--motion:layout_constraintBottom_toBottomOf="parent"-->
+            <!--motion:layout_constraintStart_toEndOf="@id/vEarth"-->
+            <!--motion:layout_constraintTop_toTopOf="parent"-->
+            <!--motion:layout_constraintVertical_bias="0.08" />-->
+
+    <!--</ConstraintSet>-->
+
+</MotionScene>

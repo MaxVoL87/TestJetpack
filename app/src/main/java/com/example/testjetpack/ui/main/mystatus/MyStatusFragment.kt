@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.LinearInterpolator
+import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import androidx.lifecycle.Observer
@@ -84,7 +85,7 @@ class MyStatusFragment :
         archSectorColors.forEach {
             val color = ContextCompat.getColor(requireContext(), it.value)
             acvStatus.setFilldeColor(it.key, color)
-            acvStatus.setUnFilldeColor(it.key, ColorUtils.setAlphaComponent(color,  0x40))
+            acvStatus.setUnFilldeColor(it.key, ColorUtils.setAlphaComponent(color, 0x40))
         }
 
         sector0ArcSectorValueSetuper = ArcChartSectorValueSetuper(acvStatus, 0)
@@ -93,9 +94,27 @@ class MyStatusFragment :
         sector3ArcSectorValueSetuper = ArcChartSectorValueSetuper(acvStatus, 3)
         sector4ArcSectorValueSetuper = ArcChartSectorValueSetuper(acvStatus, 4)
         sector5ArcSectorValueSetuper = ArcChartSectorValueSetuper(acvStatus, 5)
+
+        motionLayout.setTransitionListener(object : MotionLayout.TransitionListener{
+            override fun onTransitionTrigger(p0: MotionLayout?, p1: Int, p2: Boolean, p3: Float) {
+            }
+
+            override fun onTransitionStarted(p0: MotionLayout?, p1: Int, p2: Int) {
+            }
+
+            override fun onTransitionChange(p0: MotionLayout?, p1: Int, p2: Int, p3: Float) {
+            }
+
+            override fun onTransitionCompleted(p0: MotionLayout?, p1: Int) {
+                // because of scene with multiple transitions not working properly
+                // this also working bad
+                motionLayout.loadLayoutDescription(R.xml.scene_my_status_slide)
+            }
+
+        })
     }
 
-    private fun setArcChartRandomValues(){
+    private fun setArcChartRandomValues() {
         sector0ArcSectorValueSetuper.setValue(Random.nextFloat())
         sector1ArcSectorValueSetuper.setValue(Random.nextFloat())
         sector2ArcSectorValueSetuper.setValue(Random.nextFloat())
@@ -104,6 +123,24 @@ class MyStatusFragment :
         sector5ArcSectorValueSetuper.setValue(Random.nextFloat())
     }
 
+    override fun onStart() {
+        super.onStart()
+        motionLayout.postDelayed(motionLayout::transitionToEnd, 1000)
+        //motionLayout.layoutTransition = LayoutTransition(motionLayout.definedTransitions[1]).se
+    }
+
+    override fun onStop() {
+        sector0ArcSectorValueSetuper.cancel()
+        sector1ArcSectorValueSetuper.cancel()
+        sector2ArcSectorValueSetuper.cancel()
+        sector3ArcSectorValueSetuper.cancel()
+        sector4ArcSectorValueSetuper.cancel()
+        sector5ArcSectorValueSetuper.cancel()
+
+        cloudAnimator.cancel()
+
+        super.onStop()
+    }
 
     // region VM events renderer
 
@@ -121,7 +158,7 @@ class MyStatusFragment :
         5 to R.color.arch_chart_sector_5
     )
 
-    private class ArcChartSectorValueSetuper(private val view: ArcChartView, private val sector: Int){
+    private class ArcChartSectorValueSetuper(private val view: ArcChartView, private val sector: Int) {
         private val arcChartScaleAnimListener = object : ValueAnimator.AnimatorUpdateListener {
             private var sectorFrom = 0.0F
             private var sectorTo = 0.0F
@@ -144,10 +181,14 @@ class MyStatusFragment :
             addUpdateListener(arcChartScaleAnimListener)
         }
 
-        fun setValue(value: Float){
+        fun setValue(value: Float) {
             arcChartAnimator.cancel()
             arcChartScaleAnimListener.setTo(value)
             arcChartAnimator.start()
+        }
+
+        fun cancel() {
+            arcChartAnimator.cancel()
         }
     }
 }
