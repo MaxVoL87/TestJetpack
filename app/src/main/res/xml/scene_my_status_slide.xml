@@ -139,10 +139,10 @@
             android:id="@+id/vWind"
             android:layout_width="@dimen/status_life_button_reduced_width"
             android:layout_height="@dimen/status_life_button_reduced_height"
-            android:layout_marginStart="39dp"
+            android:layout_marginEnd="39dp"
             android:layout_marginBottom="8dp"
             motion:layout_constraintBottom_toBottomOf="parent"
-            motion:layout_constraintStart_toEndOf="@id/vFire"
+            motion:layout_constraintEnd_toStartOf="@id/vEarth"
             motion:layout_constraintTop_toTopOf="parent"
             motion:layout_constraintVertical_bias="0.08" />
 
@@ -150,10 +150,10 @@
             android:id="@+id/vEarth"
             android:layout_width="@dimen/status_life_button_reduced_width"
             android:layout_height="@dimen/status_life_button_reduced_height"
-            android:layout_marginStart="39dp"
+            android:layout_marginEnd="39dp"
             android:layout_marginBottom="8dp"
             motion:layout_constraintBottom_toBottomOf="parent"
-            motion:layout_constraintStart_toEndOf="@id/vWind"
+            motion:layout_constraintEnd_toStartOf="@id/vEat"
             motion:layout_constraintTop_toTopOf="parent"
             motion:layout_constraintVertical_bias="0.08" />
 
@@ -161,10 +161,10 @@
             android:id="@+id/vEat"
             android:layout_width="@dimen/status_life_button_reduced_width"
             android:layout_height="@dimen/status_life_button_reduced_height"
-            android:layout_marginStart="39dp"
+            android:layout_marginEnd="16dp"
             android:layout_marginBottom="8dp"
             motion:layout_constraintBottom_toBottomOf="parent"
-            motion:layout_constraintStart_toEndOf="@id/vEarth"
+            motion:layout_constraintEnd_toEndOf="parent"
             motion:layout_constraintTop_toTopOf="parent"
             motion:layout_constraintVertical_bias="0.08" />
 
