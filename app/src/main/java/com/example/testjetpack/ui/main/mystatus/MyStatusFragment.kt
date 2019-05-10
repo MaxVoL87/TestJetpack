@@ -8,10 +8,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.LinearInterpolator
-import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import androidx.lifecycle.Observer
+import com.example.testjetpack.MainApplicationContract
 
 import com.example.testjetpack.R
 import com.example.testjetpack.databinding.FragmentMyStatusBinding
@@ -94,24 +94,6 @@ class MyStatusFragment :
         sector3ArcSectorValueSetuper = ArcChartSectorValueSetuper(acvStatus, 3)
         sector4ArcSectorValueSetuper = ArcChartSectorValueSetuper(acvStatus, 4)
         sector5ArcSectorValueSetuper = ArcChartSectorValueSetuper(acvStatus, 5)
-
-        motionLayout.setTransitionListener(object : MotionLayout.TransitionListener{
-            override fun onTransitionTrigger(p0: MotionLayout?, p1: Int, p2: Boolean, p3: Float) {
-            }
-
-            override fun onTransitionStarted(p0: MotionLayout?, p1: Int, p2: Int) {
-            }
-
-            override fun onTransitionChange(p0: MotionLayout?, p1: Int, p2: Int, p3: Float) {
-            }
-
-            override fun onTransitionCompleted(p0: MotionLayout?, p1: Int) {
-                // because of scene with multiple transitions not working properly
-                // this also working bad
-                motionLayout.loadLayoutDescription(R.xml.scene_my_status_slide)
-            }
-
-        })
     }
 
     private fun setArcChartRandomValues() {
@@ -126,7 +108,12 @@ class MyStatusFragment :
     override fun onStart() {
         super.onStart()
         motionLayout.postDelayed(motionLayout::transitionToEnd, 1000)
-        //motionLayout.layoutTransition = LayoutTransition(motionLayout.definedTransitions[1]).se
+        motionLayout.postDelayed({
+            // because of scene with multiple transitions not working properly
+            // this also working bad
+            motionLayout.loadLayoutDescription(R.xml.scene_my_status_slide)
+            viewModel.calculatePercents()
+        }, 2000 + MainApplicationContract.DEFAULT_UI_DELAY) //update after first scene completed
     }
 
     override fun onStop() {

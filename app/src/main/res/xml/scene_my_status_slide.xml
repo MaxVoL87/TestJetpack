@@ -3,15 +3,16 @@
     xmlns:motion="http://schemas.android.com/apk/res-auto">
 
     <Transition
-        motion:constraintSetStart="@+id/end_slide"
+        motion:constraintSetStart="@id/end_slide"
         motion:constraintSetEnd="@+id/start_slide"
         motion:duration="1000"
         motion:motionInterpolator="linear">
 
         <OnSwipe
             motion:dragDirection="dragUp"
-            motion:touchAnchorId="@+id/vWind"
-            motion:touchAnchorSide="top" />
+            motion:touchAnchorId="@+id/vHeart"
+            motion:touchAnchorSide="top"
+            motion:onTouchUp="decelerateAndComplete"/>
 
     </Transition>
 
@@ -29,8 +30,8 @@
 
         <Constraint
             android:id="@+id/vHeart"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="@dimen/status_life_button_width"
+            android:layout_height="@dimen/status_life_button_height"
             android:layout_marginEnd="110dp"
             motion:layout_constraintBottom_toBottomOf="parent"
             motion:layout_constraintEnd_toEndOf="parent"
@@ -39,8 +40,8 @@
 
         <Constraint
             android:id="@+id/vTime"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="@dimen/status_life_button_width"
+            android:layout_height="@dimen/status_life_button_height"
             android:layout_marginStart="110dp"
             motion:layout_constraintBottom_toBottomOf="parent"
             motion:layout_constraintStart_toStartOf="parent"
@@ -50,7 +51,7 @@
         <Constraint
             android:id="@+id/vFire"
             android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_height="@dimen/status_life_button_height"
             android:layout_marginStart="60dp"
             motion:layout_constraintBottom_toBottomOf="parent"
             motion:layout_constraintStart_toStartOf="parent"
@@ -59,8 +60,8 @@
 
         <Constraint
             android:id="@+id/vWind"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="@dimen/status_life_button_width"
+            android:layout_height="@dimen/status_life_button_height"
             android:layout_marginEnd="60dp"
             motion:layout_constraintBottom_toBottomOf="parent"
             motion:layout_constraintEnd_toEndOf="parent"
@@ -69,8 +70,8 @@
 
         <Constraint
             android:id="@+id/vEarth"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="@dimen/status_life_button_width"
+            android:layout_height="@dimen/status_life_button_height"
             android:layout_marginEnd="110dp"
             motion:layout_constraintBottom_toBottomOf="parent"
             motion:layout_constraintEnd_toEndOf="parent"
@@ -79,8 +80,8 @@
 
         <Constraint
             android:id="@+id/vEat"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="@dimen/status_life_button_width"
+            android:layout_height="@dimen/status_life_button_height"
             android:layout_marginStart="110dp"
             motion:layout_constraintBottom_toBottomOf="parent"
             motion:layout_constraintStart_toStartOf="parent"
@@ -103,8 +104,8 @@
 
         <Constraint
             android:id="@+id/vHeart"
-            android:layout_width="23dp"
-            android:layout_height="23dp"
+            android:layout_width="@dimen/status_life_button_reduced_width"
+            android:layout_height="@dimen/status_life_button_reduced_height"
             android:layout_marginStart="16dp"
             android:layout_marginBottom="8dp"
             motion:layout_constraintBottom_toBottomOf="parent"
@@ -114,8 +115,8 @@
 
         <Constraint
             android:id="@+id/vTime"
-            android:layout_width="23dp"
-            android:layout_height="23dp"
+            android:layout_width="@dimen/status_life_button_reduced_width"
+            android:layout_height="@dimen/status_life_button_reduced_height"
             android:layout_marginStart="39dp"
             android:layout_marginBottom="8dp"
             motion:layout_constraintBottom_toBottomOf="parent"
@@ -125,8 +126,8 @@
 
         <Constraint
             android:id="@+id/vFire"
-            android:layout_width="23dp"
-            android:layout_height="23dp"
+            android:layout_width="@dimen/status_life_button_reduced_width"
+            android:layout_height="@dimen/status_life_button_reduced_height"
             android:layout_marginStart="39dp"
             android:layout_marginBottom="8dp"
             motion:layout_constraintBottom_toBottomOf="parent"
@@ -136,8 +137,8 @@
 
         <Constraint
             android:id="@+id/vWind"
-            android:layout_width="23dp"
-            android:layout_height="23dp"
+            android:layout_width="@dimen/status_life_button_reduced_width"
+            android:layout_height="@dimen/status_life_button_reduced_height"
             android:layout_marginStart="39dp"
             android:layout_marginBottom="8dp"
             motion:layout_constraintBottom_toBottomOf="parent"
@@ -147,8 +148,8 @@
 
         <Constraint
             android:id="@+id/vEarth"
-            android:layout_width="23dp"
-            android:layout_height="23dp"
+            android:layout_width="@dimen/status_life_button_reduced_width"
+            android:layout_height="@dimen/status_life_button_reduced_height"
             android:layout_marginStart="39dp"
             android:layout_marginBottom="8dp"
             motion:layout_constraintBottom_toBottomOf="parent"
@@ -158,8 +159,8 @@
 
         <Constraint
             android:id="@+id/vEat"
-            android:layout_width="23dp"
-            android:layout_height="23dp"
+            android:layout_width="@dimen/status_life_button_reduced_width"
+            android:layout_height="@dimen/status_life_button_reduced_height"
             android:layout_marginStart="39dp"
             android:layout_marginBottom="8dp"
             motion:layout_constraintBottom_toBottomOf="parent"

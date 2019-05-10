@@ -20,11 +20,12 @@
         tools:showPaths="true">
 
         <com.christophesmet.android.views.maskableframelayout.MaskableFrameLayout
+            android:id="@+id/lMask"
             android:layout_width="295dp"
             android:layout_height="295dp"
+            android:layout_marginTop="@dimen/status_top_margin"
             android:paddingStart="5.2dp"
             android:paddingTop="5.2dp"
-            app:layout_constraintBottom_toTopOf="@+id/rlCloud"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -50,8 +51,8 @@
 
         <RelativeLayout
             android:id="@+id/rlCloud"
-            android:layout_width="250dp"
-            android:layout_height="180dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_margin="@dimen/activity_vertical_margin"
             android:onClick='@{(v) -> viewModel.calculatePercents()}'
             app:layout_constraintBottom_toBottomOf="parent"
@@ -59,21 +60,23 @@
             app:layout_constraintStart_toStartOf="parent">
 
             <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:id="@+id/cloudBackground"
+                android:layout_width="@dimen/status_cloud_width"
+                android:layout_height="@dimen/status_cloud_height"
                 android:layout_centerInParent="true"
                 android:alpha="0.4"
                 android:background="@drawable/cloud" />
 
             <FrameLayout
                 android:id="@+id/cloud"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_width="@dimen/status_cloud_width"
+                android:layout_height="@dimen/status_cloud_height"
                 android:layout_centerInParent="true"
                 android:background="@drawable/cloud" />
 
 
             <TextView
+                android:id="@+id/tvCloudValue"
                 style="@style/HeaderText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -89,55 +92,54 @@
             android:id="@+id/vUser"
             android:layout_width="32dp"
             android:layout_height="32dp"
-            android:foreground="@drawable/ic_user_32dp"
-            android:focusable="true"
             android:clickable="true"
-            android:onClick='@{(v) -> viewModel.calculatePercents()}'/>
+            android:focusable="true"
+            android:foreground="@drawable/ic_user_32dp" />
 
         <View
             android:id="@+id/vHeart"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="@dimen/status_life_button_width"
+            android:layout_height="@dimen/status_life_button_height"
             android:background="@drawable/circle"
             android:backgroundTint="@color/arch_chart_sector_2"
             android:foreground="@drawable/ic_heart_24dp" />
 
         <View
             android:id="@+id/vTime"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="@dimen/status_life_button_width"
+            android:layout_height="@dimen/status_life_button_height"
             android:background="@drawable/circle"
             android:backgroundTint="@color/arch_chart_sector_3"
             android:foreground="@drawable/ic_time_24dp" />
 
         <View
             android:id="@+id/vFire"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="@dimen/status_life_button_width"
+            android:layout_height="@dimen/status_life_button_height"
             android:background="@drawable/circle"
             android:backgroundTint="@color/arch_chart_sector_4"
             android:foreground="@drawable/ic_fire_24dp" />
 
         <View
             android:id="@+id/vWind"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="@dimen/status_life_button_width"
+            android:layout_height="@dimen/status_life_button_height"
             android:background="@drawable/circle"
             android:backgroundTint="@color/arch_chart_sector_1"
             android:foreground="@drawable/ic_wind_24dp" />
 
         <View
             android:id="@+id/vEarth"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="@dimen/status_life_button_width"
+            android:layout_height="@dimen/status_life_button_height"
             android:background="@drawable/circle"
             android:backgroundTint="@color/arch_chart_sector_0"
             android:foreground="@drawable/ic_earth_24dp" />
 
         <View
             android:id="@+id/vEat"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="@dimen/status_life_button_width"
+            android:layout_height="@dimen/status_life_button_height"
             android:background="@drawable/circle"
             android:backgroundTint="@color/arch_chart_sector_5"
             android:foreground="@drawable/ic_eat_24dp" />

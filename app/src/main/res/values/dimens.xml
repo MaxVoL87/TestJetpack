@@ -12,7 +12,7 @@
 
     <dimen name="min_text_margin">7dp</dimen>
 
-    <!-- Profile -->
+    <!-- My Profile -->
     <dimen name="profile_start_margin">36dp</dimen>
     <dimen name="profile_end_margin">36dp</dimen>
     <dimen name="profile_top_margin">20dp</dimen>
@@ -20,5 +20,13 @@
     <dimen name="profile_text_size">14sp</dimen>
     <dimen name="text_margin">16dp</dimen>
 
+    <!-- My Status -->
+    <dimen name="status_top_margin">85dp</dimen>
+    <dimen name="status_cloud_width">250dp</dimen>
+    <dimen name="status_cloud_height">180dp</dimen>
+    <dimen name="status_life_button_width">32dp</dimen>
+    <dimen name="status_life_button_height">32dp</dimen>
 
+    <dimen name="status_life_button_reduced_width">23dp</dimen>
+    <dimen name="status_life_button_reduced_height">23dp</dimen>
 </resources>
