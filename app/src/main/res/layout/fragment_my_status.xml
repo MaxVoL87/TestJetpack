@@ -16,133 +16,14 @@
         android:id="@+id/motionLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layoutDescription="@xml/scene_my_status_in"
+        app:layoutDescription="@xml/scene_my_status_slide"
         tools:showPaths="true">
 
-        <com.christophesmet.android.views.maskableframelayout.MaskableFrameLayout
-            android:id="@+id/lMask"
-            android:layout_width="295dp"
-            android:layout_height="295dp"
-            android:layout_marginTop="@dimen/status_top_margin"
-            android:paddingStart="5.2dp"
-            android:paddingTop="5.2dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:mask="@drawable/arc_chart_mask"
-            app:porterduffxfermode="DST_IN"
-            tools:ignore="RtlSymmetry">
-
-            <com.neo.arcchartview.ArcChartView
-                android:id="@+id/acvStatus"
-                android:layout_width="285dp"
-                android:layout_height="285dp"
-                app:acv_allow_animations_on_set_values="false"
-                app:acv_icon_size="0dp"
-                app:acv_lines_count="100"
-                app:acv_lines_space="0dp"
-                app:acv_lines_width="1.2dp"
-                app:acv_mid_start_extra_offset="60dp"
-                app:acv_sections_count="6"
-                app:acv_sections_space="5dp"
-                app:acv_start_degree_offset="270" />
-
-        </com.christophesmet.android.views.maskableframelayout.MaskableFrameLayout>
-
-        <RelativeLayout
-            android:id="@+id/rlCloud"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/activity_vertical_margin"
-            android:onClick='@{(v) -> viewModel.calculatePercents()}'
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
-
-            <FrameLayout
-                android:id="@+id/cloudBackground"
-                android:layout_width="@dimen/status_cloud_width"
-                android:layout_height="@dimen/status_cloud_height"
-                android:layout_centerInParent="true"
-                android:alpha="0.4"
-                android:background="@drawable/cloud" />
-
-            <FrameLayout
-                android:id="@+id/cloud"
-                android:layout_width="@dimen/status_cloud_width"
-                android:layout_height="@dimen/status_cloud_height"
-                android:layout_centerInParent="true"
-                android:background="@drawable/cloud" />
-
-
-            <TextView
-                android:id="@+id/tvCloudValue"
-                style="@style/HeaderText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="85dp"
-                android:text='@{String.format("%,.2f%%", safeUnbox(viewModel.somePercents)*100F)}'
-                android:textColor="#FFFFFFFF"
-                tools:text="10%" />
-
-        </RelativeLayout>
-
-        <View
-            android:id="@+id/vUser"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:foreground="@drawable/ic_user_32dp" />
-
-        <View
-            android:id="@+id/vHeart"
-            android:layout_width="@dimen/status_life_button_width"
-            android:layout_height="@dimen/status_life_button_height"
-            android:background="@drawable/circle"
-            android:backgroundTint="@color/arch_chart_sector_2"
-            android:foreground="@drawable/ic_heart_24dp" />
-
-        <View
-            android:id="@+id/vTime"
-            android:layout_width="@dimen/status_life_button_width"
-            android:layout_height="@dimen/status_life_button_height"
-            android:background="@drawable/circle"
-            android:backgroundTint="@color/arch_chart_sector_3"
-            android:foreground="@drawable/ic_time_24dp" />
-
-        <View
-            android:id="@+id/vFire"
-            android:layout_width="@dimen/status_life_button_width"
-            android:layout_height="@dimen/status_life_button_height"
-            android:background="@drawable/circle"
-            android:backgroundTint="@color/arch_chart_sector_4"
-            android:foreground="@drawable/ic_fire_24dp" />
-
-        <View
-            android:id="@+id/vWind"
-            android:layout_width="@dimen/status_life_button_width"
-            android:layout_height="@dimen/status_life_button_height"
-            android:background="@drawable/circle"
-            android:backgroundTint="@color/arch_chart_sector_1"
-            android:foreground="@drawable/ic_wind_24dp" />
-
-        <View
-            android:id="@+id/vEarth"
-            android:layout_width="@dimen/status_life_button_width"
-            android:layout_height="@dimen/status_life_button_height"
-            android:background="@drawable/circle"
-            android:backgroundTint="@color/arch_chart_sector_0"
-            android:foreground="@drawable/ic_earth_24dp" />
-
-        <View
-            android:id="@+id/vEat"
-            android:layout_width="@dimen/status_life_button_width"
-            android:layout_height="@dimen/status_life_button_height"
-            android:background="@drawable/circle"
-            android:backgroundTint="@color/arch_chart_sector_5"
-            android:foreground="@drawable/ic_eat_24dp" />
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/vpStatus"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:adapter='@{viewModel.vpAdapter}' />
 
     </androidx.constraintlayout.motion.widget.MotionLayout>
 </layout>
