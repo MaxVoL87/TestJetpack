@@ -9,14 +9,82 @@
         motion:duration="1000"
         motion:motionInterpolator="linear">
 
+        <KeyFrameSet>
+            <KeyAttribute
+                android:alpha="0"
+                motion:framePosition="0"
+                motion:motionTarget="@id/previousButton" />
+
+            <KeyAttribute
+                android:alpha="1"
+                motion:framePosition="20"
+                motion:motionTarget="@id/previousButton" />
+        </KeyFrameSet>
+
     </Transition>
 
     <ConstraintSet android:id="@+id/start_slide">
+        <Constraint
+            android:id="@id/vpRoot"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <Constraint
+            android:id="@id/previousButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:alpha="0.0"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintStart_toStartOf="parent" />
+
+        <Constraint
+            android:id="@id/nextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:translationY="0dp"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintEnd_toEndOf="parent" />
+
+        <Constraint
+            android:id="@id/finishButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:translationX="70dp"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintEnd_toEndOf="parent" />
 
     </ConstraintSet>
 
     <ConstraintSet android:id="@+id/end_slide">
 
+        <Constraint
+            android:id="@id/vpRoot"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <Constraint
+            android:id="@id/previousButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:alpha="1.0"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintStart_toStartOf="parent" />
+
+        <Constraint
+            android:id="@id/nextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:translationY="50dp"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintEnd_toEndOf="parent" />
+
+        <Constraint
+            android:id="@id/finishButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:translationX="0dp"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintEnd_toEndOf="parent" />
     </ConstraintSet>
 
 </MotionScene>

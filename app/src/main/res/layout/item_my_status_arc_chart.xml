@@ -15,6 +15,7 @@
         android:id="@+id/motionLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:progress='@{viewModel.animationProgress}'
         app:layoutDescription="@xml/scene_my_status_arc_chart_in"
         tools:showPaths="true">
 

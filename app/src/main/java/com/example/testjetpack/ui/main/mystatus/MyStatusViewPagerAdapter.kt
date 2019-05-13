@@ -14,6 +14,7 @@ import androidx.lifecycle.Observer
 import com.example.testjetpack.MainApplicationContract
 import com.example.testjetpack.R
 import com.example.testjetpack.databinding.ItemMyStatusArcChartBinding
+import com.example.testjetpack.databinding.ItemMyStatusInfoBinding
 import com.example.testjetpack.ui.base.BaseRecyclerAdapter
 import com.example.testjetpack.ui.base.BaseRecyclerItemViewHolder
 import com.example.testjetpack.ui.base.BaseRecyclerItemViewModel
@@ -30,14 +31,14 @@ class MyStatusViewPagerAdapter : BaseRecyclerAdapter() {
 
     companion object {
         const val VIEW_TYPE_ARC_CHART_ITEM = 1
+        const val VIEW_TYPE_INFO_ITEM = 2
     }
 
-    override val HOLDERS: Map<Int, Pair<Int, KFunction1<@ParameterName(name = "itemView") View, BaseRecyclerItemViewHolder<out ViewDataBinding, out BaseRecyclerItemViewModel>>>> = mapOf(
-        VIEW_TYPE_ARC_CHART_ITEM to Pair(
-            R.layout.item_my_status_arc_chart,
-            ::ArcChartItemHolder
+    override val HOLDERS: Map<Int, Pair<Int, KFunction1<@ParameterName(name = "itemView") View, BaseRecyclerItemViewHolder<out ViewDataBinding, out BaseRecyclerItemViewModel>>>> =
+        mapOf(
+            VIEW_TYPE_ARC_CHART_ITEM to Pair(R.layout.item_my_status_arc_chart, ::ArcChartItemHolder),
+            VIEW_TYPE_INFO_ITEM to Pair(R.layout.item_my_status_info, ::InfoItemHolder)
         )
-    )
 }
 
 class ArcChartItemHolder(itemView: View) : BaseRecyclerItemViewHolder<ItemMyStatusArcChartBinding, ArcCharItemViewModel>(itemView) {
@@ -45,7 +46,7 @@ class ArcChartItemHolder(itemView: View) : BaseRecyclerItemViewHolder<ItemMyStat
     private val acvStatus: ArcChartView = itemView.findViewById(R.id.acvStatus)
     private val cloud: FrameLayout = itemView.findViewById(R.id.cloud)
 
-    private val percentsObserver =  Observer<Float> {
+    private val percentsObserver = Observer<Float> {
         cloudAnimator.cancel()
         cloudScaleAnimListener.setTo(it)
         cloudAnimator.start()
@@ -69,17 +70,20 @@ class ArcChartItemHolder(itemView: View) : BaseRecyclerItemViewHolder<ItemMyStat
         sector4ArcSectorValueSetuper = ArcChartSectorValueSetuper(acvStatus, 4)
         sector5ArcSectorValueSetuper = ArcChartSectorValueSetuper(acvStatus, 5)
 
-        withNotNull(viewModel){
+        withNotNull(viewModel) {
             somePercents.observe(this@ArcChartItemHolder, percentsObserver)
         }
 
         motionLayout.postDelayed(motionLayout::transitionToEnd, 1000)
         motionLayout.postDelayed({
-            if(lifecycle.currentState == Lifecycle.State.STARTED) {
+            if (lifecycle.currentState == Lifecycle.State.STARTED) {
                 // because of scene with multiple transitions not working properly
                 // this also working bad
                 motionLayout.loadLayoutDescription(R.xml.scene_my_status_arc_chart_slide)
-                viewModel?.calculatePercents()
+                withNotNull(viewModel){
+                    isInitialized = true
+                    calculatePercents()
+                }
             }
         }, 2000 + MainApplicationContract.DEFAULT_UI_DELAY) //update after first scene completed
     }
@@ -184,15 +188,21 @@ class ArcCharItemViewModel : BaseRecyclerItemViewModel() {
     override val itemViewType: Int = MyStatusViewPagerAdapter.VIEW_TYPE_ARC_CHART_ITEM
 
     private val _somePercents = 0.0F.toMutableLiveData()
+    private val _animationProgress = 0.0F.toMutableLiveData()
 
     val somePercents: LiveData<Float>
         get() = _somePercents
 
     var maxPercents: Float = 0.8F
 
+    val animationProgress: LiveData<Float>
+        get() = _animationProgress
+
+    var isInitialized = false
+
     fun calculatePercents() {
 
-        GlobalScope.launch{
+        GlobalScope.launch {
             var percents = 0
             while (percents < maxPercents * 100) {
                 delay(1000)
@@ -201,4 +211,19 @@ class ArcCharItemViewModel : BaseRecyclerItemViewModel() {
             }
         }
     }
+
+    fun setAnimationProgress(value: Float) {
+        _animationProgress.value = if (isInitialized) 1.0F - value * 2F else value
+    }
+}
+
+class InfoItemHolder(itemView: View) : BaseRecyclerItemViewHolder<ItemMyStatusInfoBinding, InfoItemViewModel>(itemView) {
+
+    override fun bindModel(binding: ItemMyStatusInfoBinding?) {
+        binding?.let { it.viewModel = viewModel }
+    }
+}
+
+class InfoItemViewModel : BaseRecyclerItemViewModel() {
+    override val itemViewType: Int = MyStatusViewPagerAdapter.VIEW_TYPE_INFO_ITEM
 }

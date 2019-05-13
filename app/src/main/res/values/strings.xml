@@ -53,5 +53,10 @@
     <string name="acceleration__">acceleration (m/c²):</string>
     <string name="satellites__">satellites:</string>
 
+    // My Status
+    <string name="my_status_previous">PREVIOUS</string>
+    <string name="my_status_next">NEXT</string>
+    <string name="my_status_finish">FINISH</string>
+
 
 </resources>
