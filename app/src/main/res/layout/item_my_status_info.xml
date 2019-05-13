@@ -11,10 +11,61 @@
 
     </data>
 
-    <LinearLayout
+    <androidx.constraintlayout.motion.widget.MotionLayout
+        android:id="@+id/motionLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:progress='@{viewModel.animationProgress}'
+        app:layoutDescription="@xml/scene_my_status_info_in"
+        tools:showPaths="true">
 
-    </LinearLayout>
+        <!--<View-->
+            <!--android:id="@+id/vHeart"-->
+            <!--android:layout_width="@dimen/status_life_button_width"-->
+            <!--android:layout_height="@dimen/status_life_button_height"-->
+            <!--android:background="@drawable/circle"-->
+            <!--android:backgroundTint="@color/arch_chart_sector_2"-->
+            <!--android:foreground="@drawable/ic_heart_24dp" />-->
+
+        <!--<View-->
+            <!--android:id="@+id/vTime"-->
+            <!--android:layout_width="@dimen/status_life_button_width"-->
+            <!--android:layout_height="@dimen/status_life_button_height"-->
+            <!--android:background="@drawable/circle"-->
+            <!--android:backgroundTint="@color/arch_chart_sector_3"-->
+            <!--android:foreground="@drawable/ic_time_24dp" />-->
+
+        <!--<View-->
+            <!--android:id="@+id/vFire"-->
+            <!--android:layout_width="@dimen/status_life_button_width"-->
+            <!--android:layout_height="@dimen/status_life_button_height"-->
+            <!--android:background="@drawable/circle"-->
+            <!--android:backgroundTint="@color/arch_chart_sector_4"-->
+            <!--android:foreground="@drawable/ic_fire_24dp" />-->
+
+        <View
+            android:id="@+id/vWind"
+            android:layout_width="@dimen/status_life_button_width"
+            android:layout_height="@dimen/status_life_button_height"
+            android:background="@drawable/circle"
+            android:backgroundTint="@color/arch_chart_sector_1"
+            android:foreground="@drawable/ic_wind_24dp" />
+
+        <View
+            android:id="@+id/vEarth"
+            android:layout_width="@dimen/status_life_button_width"
+            android:layout_height="@dimen/status_life_button_height"
+            android:background="@drawable/circle"
+            android:backgroundTint="@color/arch_chart_sector_0"
+            android:foreground="@drawable/ic_earth_24dp" />
+
+        <View
+            android:id="@+id/vEat"
+            android:layout_width="@dimen/status_life_button_width"
+            android:layout_height="@dimen/status_life_button_height"
+            android:background="@drawable/circle"
+            android:backgroundTint="@color/arch_chart_sector_5"
+            android:foreground="@drawable/ic_eat_24dp" />
+
+    </androidx.constraintlayout.motion.widget.MotionLayout>
 </layout>

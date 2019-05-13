@@ -226,4 +226,13 @@ class InfoItemHolder(itemView: View) : BaseRecyclerItemViewHolder<ItemMyStatusIn
 
 class InfoItemViewModel : BaseRecyclerItemViewModel() {
     override val itemViewType: Int = MyStatusViewPagerAdapter.VIEW_TYPE_INFO_ITEM
+
+    private val _animationProgress = 0.0F.toMutableLiveData()
+
+    val animationProgress: LiveData<Float>
+        get() = _animationProgress
+
+    fun setAnimationProgress(value: Float) {
+        _animationProgress.value = if(value > 0.35) value else 0.0F
+    }
 }

@@ -14,7 +14,9 @@ class MyStatusFragmentVM : BaseViewModel<MyStatusFragmentVMEventStateChange>() {
             ArcCharItemViewModel().apply {
                 this@MyStatusFragmentVM.animationProgress.observeForever { this.setAnimationProgress(it) }
             },
-            InfoItemViewModel()
+            InfoItemViewModel().apply {
+                this@MyStatusFragmentVM.animationProgress.observeForever { this.setAnimationProgress(it) }
+            }
         )
     }
 
