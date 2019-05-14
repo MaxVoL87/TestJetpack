@@ -15,7 +15,7 @@
         android:id="@+id/motionLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:progress='@{viewModel.animationProgress}'
+        android:progress='@{safeUnbox(viewModel.animationProgress)}'
         app:layoutDescription="@xml/scene_my_status_arc_chart_in"
         tools:showPaths="true">
 
@@ -54,7 +54,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/activity_vertical_margin"
-            android:onClick='@{(v) -> viewModel.calculatePercents()}'
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">

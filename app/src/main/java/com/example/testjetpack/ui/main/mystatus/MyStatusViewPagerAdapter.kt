@@ -8,23 +8,18 @@ import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import androidx.databinding.ViewDataBinding
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
+import androidx.lifecycle.*
 import com.example.testjetpack.MainApplicationContract
 import com.example.testjetpack.R
 import com.example.testjetpack.databinding.ItemMyStatusArcChartBinding
 import com.example.testjetpack.databinding.ItemMyStatusInfoBinding
+import com.example.testjetpack.models.own.Profile
 import com.example.testjetpack.ui.base.BaseRecyclerAdapter
 import com.example.testjetpack.ui.base.BaseRecyclerItemViewHolder
 import com.example.testjetpack.ui.base.BaseRecyclerItemViewModel
+import com.example.testjetpack.utils.*
 import com.example.testjetpack.utils.livedata.toMutableLiveData
-import com.example.testjetpack.utils.withNotNull
 import com.neo.arcchartview.ArcChartView
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlin.random.Random
 import kotlin.reflect.KFunction1
 
 class MyStatusViewPagerAdapter : BaseRecyclerAdapter() {
@@ -46,14 +41,6 @@ class ArcChartItemHolder(itemView: View) : BaseRecyclerItemViewHolder<ItemMyStat
     private val acvStatus: ArcChartView = itemView.findViewById(R.id.acvStatus)
     private val cloud: FrameLayout = itemView.findViewById(R.id.cloud)
 
-    private val percentsObserver = Observer<Float> {
-        cloudAnimator.cancel()
-        cloudScaleAnimListener.setTo(it)
-        cloudAnimator.start()
-
-        setArcChartRandomValues()
-    }
-
     override fun bindModel(binding: ItemMyStatusArcChartBinding?) {
         binding?.let { it.viewModel = viewModel }
 
@@ -71,7 +58,19 @@ class ArcChartItemHolder(itemView: View) : BaseRecyclerItemViewHolder<ItemMyStat
         sector5ArcSectorValueSetuper = ArcChartSectorValueSetuper(acvStatus, 5)
 
         withNotNull(viewModel) {
-            somePercents.observe(this@ArcChartItemHolder, percentsObserver)
+            somePercents.observe(this@ArcChartItemHolder, Observer<Float> {
+                cloudAnimator.cancel()
+                cloudScaleAnimListener.setTo(it)
+                cloudAnimator.start()
+            })
+            profile.observe(this@ArcChartItemHolder, Observer {
+                sector0ArcSectorValueSetuper.setValue(it.restTime.getRestTimePV())
+                sector1ArcSectorValueSetuper.setValue(it.respiratoryRate.getRespiratoryRatePV())
+                sector2ArcSectorValueSetuper.setValue(it.heartRate.getHeartRatePV())
+                sector3ArcSectorValueSetuper.setValue(it.sleepTime.getSleepTimePV())
+                sector4ArcSectorValueSetuper.setValue(it.exercisesTime.getExercisesTimePV())
+                sector5ArcSectorValueSetuper.setValue(it.eatCalories.getEatCaloriesPV())
+            })
         }
 
         motionLayout.postDelayed(motionLayout::transitionToEnd, 1000)
@@ -82,7 +81,6 @@ class ArcChartItemHolder(itemView: View) : BaseRecyclerItemViewHolder<ItemMyStat
                 motionLayout.loadLayoutDescription(R.xml.scene_my_status_arc_chart_slide)
                 withNotNull(viewModel){
                     isInitialized = true
-                    calculatePercents()
                 }
             }
         }, 2000 + MainApplicationContract.DEFAULT_UI_DELAY) //update after first scene completed
@@ -99,15 +97,6 @@ class ArcChartItemHolder(itemView: View) : BaseRecyclerItemViewHolder<ItemMyStat
         sector5ArcSectorValueSetuper.cancel()
 
         cloudAnimator.cancel()
-    }
-
-    private fun setArcChartRandomValues() {
-        sector0ArcSectorValueSetuper.setValue(Random.nextFloat())
-        sector1ArcSectorValueSetuper.setValue(Random.nextFloat())
-        sector2ArcSectorValueSetuper.setValue(Random.nextFloat())
-        sector3ArcSectorValueSetuper.setValue(Random.nextFloat())
-        sector4ArcSectorValueSetuper.setValue(Random.nextFloat())
-        sector5ArcSectorValueSetuper.setValue(Random.nextFloat())
     }
 
     private val cloudScaleAnimListener = object : ValueAnimator.AnimatorUpdateListener {
@@ -184,33 +173,15 @@ class ArcChartItemHolder(itemView: View) : BaseRecyclerItemViewHolder<ItemMyStat
     }
 }
 
-class ArcCharItemViewModel : BaseRecyclerItemViewModel() {
+class ArcCharItemViewModel(val profile : MutableLiveData<Profile>, val somePercents: MutableLiveData<Float>) : BaseRecyclerItemViewModel() {
     override val itemViewType: Int = MyStatusViewPagerAdapter.VIEW_TYPE_ARC_CHART_ITEM
 
-    private val _somePercents = 0.0F.toMutableLiveData()
     private val _animationProgress = 0.0F.toMutableLiveData()
-
-    val somePercents: LiveData<Float>
-        get() = _somePercents
-
-    var maxPercents: Float = 0.8F
 
     val animationProgress: LiveData<Float>
         get() = _animationProgress
 
     var isInitialized = false
-
-    fun calculatePercents() {
-
-        GlobalScope.launch {
-            var percents = 0
-            while (percents < maxPercents * 100) {
-                delay(1000)
-                percents += 10
-                _somePercents.postValue(percents.div(100F))
-            }
-        }
-    }
 
     fun setAnimationProgress(value: Float) {
         _animationProgress.value = if (isInitialized) 1.0F - value * 2F else value
@@ -224,7 +195,7 @@ class InfoItemHolder(itemView: View) : BaseRecyclerItemViewHolder<ItemMyStatusIn
     }
 }
 
-class InfoItemViewModel : BaseRecyclerItemViewModel() {
+class InfoItemViewModel(val profile : MutableLiveData<Profile>) : BaseRecyclerItemViewModel() {
     override val itemViewType: Int = MyStatusViewPagerAdapter.VIEW_TYPE_INFO_ITEM
 
     private val _animationProgress = 0.0F.toMutableLiveData()
@@ -233,6 +204,6 @@ class InfoItemViewModel : BaseRecyclerItemViewModel() {
         get() = _animationProgress
 
     fun setAnimationProgress(value: Float) {
-        _animationProgress.value = if(value > 0.35) value else 0.0F
+        _animationProgress.value = value
     }
 }

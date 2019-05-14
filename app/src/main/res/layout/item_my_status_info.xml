@@ -5,6 +5,10 @@
 
     <data>
 
+        <import type="com.example.testjetpack.utils.MathExtKt" />
+
+        <import type="com.example.testjetpack.utils.SpecificExtKt" />
+
         <variable
             name="viewModel"
             type="com.example.testjetpack.ui.main.mystatus.InfoItemViewModel" />
@@ -15,33 +19,93 @@
         android:id="@+id/motionLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:progress='@{viewModel.animationProgress}'
+        android:progress='@{safeUnbox(viewModel.animationProgress)}'
         app:layoutDescription="@xml/scene_my_status_info_in"
         tools:showPaths="true">
 
-        <!--<View-->
-            <!--android:id="@+id/vHeart"-->
-            <!--android:layout_width="@dimen/status_life_button_width"-->
-            <!--android:layout_height="@dimen/status_life_button_height"-->
-            <!--android:background="@drawable/circle"-->
-            <!--android:backgroundTint="@color/arch_chart_sector_2"-->
-            <!--android:foreground="@drawable/ic_heart_24dp" />-->
+        <com.example.testjetpack.ui.custom.InfoItem
+            android:id="@+id/iHeart"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            app:layout_constraintBottom_toTopOf="@+id/iTime"
+            app:layout_constraintStart_toStartOf="parent"
+            app:text='@{"Knowing your heart rate can be useful when you exercise, because it will help you know whether your exercise is intense enough to provide health benefits."}'
+            app:value='@{Math.round(SpecificExtKt.getHeartRatePV(viewModel.profile.heartRate) * 100)}' />
 
-        <!--<View-->
-            <!--android:id="@+id/vTime"-->
-            <!--android:layout_width="@dimen/status_life_button_width"-->
-            <!--android:layout_height="@dimen/status_life_button_height"-->
-            <!--android:background="@drawable/circle"-->
-            <!--android:backgroundTint="@color/arch_chart_sector_3"-->
-            <!--android:foreground="@drawable/ic_time_24dp" />-->
+        <com.example.testjetpack.ui.custom.InfoItem
+            android:id="@+id/iTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            app:layout_constraintBottom_toTopOf="@+id/iFire"
+            app:layout_constraintStart_toStartOf="parent"
+            app:text='@{"Around 7 to 7.5 hours of actual sleep (not counting time falling asleep and getting out bed) appears to be optimal for most people."}'
+            app:value='@{Math.round(SpecificExtKt.getSleepTimePV(viewModel.profile.sleepTime) * 100)}' />
 
-        <!--<View-->
-            <!--android:id="@+id/vFire"-->
-            <!--android:layout_width="@dimen/status_life_button_width"-->
-            <!--android:layout_height="@dimen/status_life_button_height"-->
-            <!--android:background="@drawable/circle"-->
-            <!--android:backgroundTint="@color/arch_chart_sector_4"-->
-            <!--android:foreground="@drawable/ic_fire_24dp" />-->
+        <com.example.testjetpack.ui.custom.InfoItem
+            android:id="@+id/iFire"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            app:layout_constraintBottom_toTopOf="@+id/iWind"
+            app:layout_constraintStart_toStartOf="parent"
+            app:text='@{"Get at least 150 minutes of moderate aerobic activity or 75 minutes of vigorous aerobic activity a week, or a combination of moderate and vigorous activity."}'
+            app:value='@{Math.round(SpecificExtKt.getExercisesTimePV(viewModel.profile.exercisesTime) * 100)}' />
+
+        <com.example.testjetpack.ui.custom.InfoItem
+            android:id="@+id/iWind"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            app:layout_constraintBottom_toTopOf="@+id/iEarth"
+            app:layout_constraintStart_toStartOf="parent"
+            app:text='@{"A persons respiratory rate is the number of breaths you take per minute. Value under 12 or over 25 breaths per minute while resting is considered abnormal."}'
+            app:value='@{Math.round(SpecificExtKt.getRespiratoryRatePV(viewModel.profile.respiratoryRate) * 100)}' />
+
+        <com.example.testjetpack.ui.custom.InfoItem
+            android:id="@+id/iEarth"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            app:layout_constraintBottom_toTopOf="@+id/iEat"
+            app:layout_constraintStart_toStartOf="parent"
+            app:text='@{"To increase muscular endurance as quickly as possible, the best rest period is 45 seconds to 2 minutes between sets. "}'
+            app:value='@{Math.round(SpecificExtKt.getRestTimePV(viewModel.profile.restTime) * 100)}' />
+
+        <com.example.testjetpack.ui.custom.InfoItem
+            android:id="@+id/iEat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="45dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:text='@{"An average man needs 2500 calories to maintain, and 2000 to lose one pound of weight per week."}'
+            app:value='@{Math.round(SpecificExtKt.getEatCaloriesPV(viewModel.profile.eatCalories) * 100)}' />
+
+        <View
+            android:id="@+id/vHeart"
+            android:layout_width="@dimen/status_life_button_width"
+            android:layout_height="@dimen/status_life_button_height"
+            android:background="@drawable/circle"
+            android:backgroundTint="@color/arch_chart_sector_2"
+            android:foreground="@drawable/ic_heart_24dp" />
+
+        <View
+            android:id="@+id/vTime"
+            android:layout_width="@dimen/status_life_button_width"
+            android:layout_height="@dimen/status_life_button_height"
+            android:background="@drawable/circle"
+            android:backgroundTint="@color/arch_chart_sector_3"
+            android:foreground="@drawable/ic_time_24dp" />
+
+        <View
+            android:id="@+id/vFire"
+            android:layout_width="@dimen/status_life_button_width"
+            android:layout_height="@dimen/status_life_button_height"
+            android:background="@drawable/circle"
+            android:backgroundTint="@color/arch_chart_sector_4"
+            android:foreground="@drawable/ic_fire_24dp" />
 
         <View
             android:id="@+id/vWind"

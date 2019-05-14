@@ -83,6 +83,6 @@ val appModule = module {
     viewModel { MyProfileFragmentVM(get(), get()) }
     viewModel { MyTripFragmentVM(get()) }
     viewModel { GpsFragmentVM(get(), get(), get()) }
-    viewModel { MyStatusFragmentVM() }
+    viewModel { MyStatusFragmentVM(get()) }
     viewModel { NotificationsFragmentVM(get()) }
 }

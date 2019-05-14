@@ -7,8 +7,25 @@ import com.example.testjetpack.models.NetworkState
 import com.example.testjetpack.models.git.db.GitRepositoryView
 import com.example.testjetpack.ui.base.BaseRecyclerAdapter
 import com.example.testjetpack.ui.base.BaseRecyclerItemViewModel
+import com.example.testjetpack.ui.custom.InfoItem
 import com.example.testjetpack.ui.main.gitreposearch.GitRepoSearchAdapter
 import com.example.testjetpack.utils.withNotNull
+
+/**
+ * Set InfoItem value
+ */
+@BindingAdapter("value")
+fun InfoItem.setValue(value: Int) {
+    this.value = value
+}
+
+/**
+ * Set InfoItem text
+ */
+@BindingAdapter("text")
+fun InfoItem.setText(text: String) {
+    info = text
+}
 
 /**
  * Set PagedListAdapter data

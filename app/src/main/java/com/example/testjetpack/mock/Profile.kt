@@ -8,5 +8,11 @@ val profile = Profile(
     "Bankog",
     "11.07.1975",
     "MORGA753116SM9IJ",
-    "MQQ346789C"
+    "MQQ346789C",
+    60,
+    8,
+    2,
+    23,
+    2,
+    2000
 )

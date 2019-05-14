@@ -3,12 +3,75 @@
     xmlns:motion="http://schemas.android.com/apk/res-auto">
 
     <Transition
-        motion:constraintSetEnd="@+id/end_slide"
         motion:constraintSetStart="@id/start_slide"
+        motion:constraintSetEnd="@+id/end_slide"
         motion:duration="1000"
-        motion:motionInterpolator="">
+        motion:motionInterpolator="linear">
 
         <KeyFrameSet>
+
+            <KeyPosition
+                motion:framePosition="40"
+                motion:keyPositionType="parentRelative"
+                motion:motionTarget="@+id/vHeart"
+                motion:percentX="-0.073"
+                motion:percentY="0.078" />
+
+            <KeyPosition
+                motion:framePosition="55"
+                motion:keyPositionType="parentRelative"
+                motion:motionTarget="@+id/vHeart"
+                motion:percentX="0.05"
+                motion:percentY="0.078" />
+
+            <KeyAttribute
+                android:scaleX="0.88"
+                android:scaleY="0.88"
+                motion:framePosition="50"
+                motion:keyPositionType="parentRelative"
+                motion:motionTarget="@+id/vHeart" />
+
+            <KeyPosition
+                motion:framePosition="40"
+                motion:keyPositionType="parentRelative"
+                motion:motionTarget="@+id/vTime"
+                motion:percentX="-0.073"
+                motion:percentY="0.078" />
+
+            <KeyPosition
+                motion:framePosition="55"
+                motion:keyPositionType="parentRelative"
+                motion:motionTarget="@+id/vTime"
+                motion:percentX="0.05"
+                motion:percentY="0.078" />
+
+            <KeyAttribute
+                android:scaleX="0.88"
+                android:scaleY="0.88"
+                motion:framePosition="50"
+                motion:keyPositionType="parentRelative"
+                motion:motionTarget="@+id/vTime" />
+
+            <KeyPosition
+                motion:framePosition="40"
+                motion:keyPositionType="parentRelative"
+                motion:motionTarget="@+id/vFire"
+                motion:percentX="-0.073"
+                motion:percentY="0.078" />
+
+            <KeyPosition
+                motion:framePosition="55"
+                motion:keyPositionType="parentRelative"
+                motion:motionTarget="@+id/vFire"
+                motion:percentX="0.05"
+                motion:percentY="0.078" />
+
+            <KeyAttribute
+                android:scaleX="0.88"
+                android:scaleY="0.88"
+                motion:framePosition="50"
+                motion:keyPositionType="parentRelative"
+                motion:motionTarget="@+id/vFire" />
 
             <KeyPosition
                 motion:framePosition="40"
@@ -29,7 +92,7 @@
                 android:scaleY="0.88"
                 motion:framePosition="50"
                 motion:keyPositionType="parentRelative"
-                motion:motionTarget="@+id/vWind"/>
+                motion:motionTarget="@+id/vWind" />
 
             <KeyPosition
                 motion:framePosition="40"
@@ -50,7 +113,7 @@
                 android:scaleY="0.88"
                 motion:framePosition="50"
                 motion:keyPositionType="parentRelative"
-                motion:motionTarget="@+id/vEarth"/>
+                motion:motionTarget="@+id/vEarth" />
 
             <KeyPosition
                 motion:framePosition="40"
@@ -71,38 +134,38 @@
                 android:scaleY="0.88"
                 motion:framePosition="50"
                 motion:keyPositionType="parentRelative"
-                motion:motionTarget="@+id/vEat"/>
+                motion:motionTarget="@+id/vEat" />
         </KeyFrameSet>
     </Transition>
 
     <ConstraintSet android:id="@+id/start_slide">
 
-        <!--<Constraint-->
-        <!--android:id="@+id/vHeart"-->
-        <!--android:layout_width="@dimen/status_life_button_reduced_width"-->
-        <!--android:layout_height="@dimen/status_life_button_reduced_height"-->
-        <!--motion:layout_constraintBottom_toBottomOf="parent"-->
-        <!--motion:layout_constraintEnd_toStartOf="parent"-->
-        <!--motion:layout_constraintTop_toTopOf="parent"-->
-        <!--motion:layout_constraintVertical_bias="0.08" />-->
+        <Constraint
+            android:id="@+id/vHeart"
+            android:layout_width="@dimen/status_life_button_reduced_width"
+            android:layout_height="@dimen/status_life_button_reduced_height"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintEnd_toStartOf="parent"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintVertical_bias="0.08" />
 
-        <!--<Constraint-->
-        <!--android:id="@+id/vTime"-->
-        <!--android:layout_width="@dimen/status_life_button_reduced_width"-->
-        <!--android:layout_height="@dimen/status_life_button_reduced_height"-->
-        <!--motion:layout_constraintBottom_toBottomOf="parent"-->
-        <!--motion:layout_constraintEnd_toStartOf="parent"-->
-        <!--motion:layout_constraintTop_toTopOf="parent"-->
-        <!--motion:layout_constraintVertical_bias="0.08"/>-->
+        <Constraint
+            android:id="@+id/vTime"
+            android:layout_width="@dimen/status_life_button_reduced_width"
+            android:layout_height="@dimen/status_life_button_reduced_height"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintEnd_toStartOf="parent"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintVertical_bias="0.08" />
 
-        <!--<Constraint-->
-        <!--android:id="@+id/vFire"-->
-        <!--android:layout_width="@dimen/status_life_button_reduced_width"-->
-        <!--android:layout_height="@dimen/status_life_button_reduced_height"-->
-        <!--motion:layout_constraintBottom_toBottomOf="parent"-->
-        <!--motion:layout_constraintEnd_toStartOf="parent"-->
-        <!--motion:layout_constraintTop_toTopOf="parent"-->
-        <!--motion:layout_constraintVertical_bias="0.08"/>-->
+        <Constraint
+            android:id="@+id/vFire"
+            android:layout_width="@dimen/status_life_button_reduced_width"
+            android:layout_height="@dimen/status_life_button_reduced_height"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintEnd_toStartOf="parent"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintVertical_bias="0.08" />
 
         <Constraint
             android:id="@+id/vWind"
@@ -135,46 +198,40 @@
 
     <ConstraintSet android:id="@+id/end_slide">
 
-        <!--<Constraint-->
-        <!--android:id="@+id/vHeart"-->
-        <!--android:layout_width="@dimen/status_life_button_reduced_width"-->
-        <!--android:layout_height="@dimen/status_life_button_reduced_height"-->
-        <!--android:layout_marginStart="16dp"-->
-        <!--android:layout_marginBottom="8dp"-->
-        <!--motion:layout_constraintBottom_toBottomOf="parent"-->
-        <!--motion:layout_constraintStart_toStartOf="parent"-->
-        <!--motion:layout_constraintTop_toTopOf="parent"-->
-        <!--motion:layout_constraintVertical_bias="0.08" />-->
+        <Constraint
+            android:id="@+id/vHeart"
+            android:layout_width="@dimen/status_life_button_width"
+            android:layout_height="@dimen/status_life_button_width"
+            android:layout_marginStart="16dp"
+            motion:layout_constraintTop_toTopOf="@id/iHeart"
+            motion:layout_constraintBottom_toBottomOf="@id/iHeart"
+            motion:layout_constraintStart_toStartOf="parent" />
 
-        <!--<Constraint-->
-        <!--android:id="@+id/vTime"-->
-        <!--android:layout_width="@dimen/status_life_button_reduced_width"-->
-        <!--android:layout_height="@dimen/status_life_button_reduced_height"-->
-        <!--android:layout_marginStart="39dp"-->
-        <!--android:layout_marginBottom="8dp"-->
-        <!--motion:layout_constraintBottom_toBottomOf="parent"-->
-        <!--motion:layout_constraintStart_toEndOf="@id/vHeart"-->
-        <!--motion:layout_constraintTop_toTopOf="parent"-->
-        <!--motion:layout_constraintVertical_bias="0.08" />-->
+        <Constraint
+            android:id="@+id/vTime"
+            android:layout_width="@dimen/status_life_button_width"
+            android:layout_height="@dimen/status_life_button_width"
+            android:layout_marginStart="16dp"
+            motion:layout_constraintTop_toTopOf="@id/iTime"
+            motion:layout_constraintBottom_toBottomOf="@id/iTime"
+            motion:layout_constraintStart_toStartOf="parent" />
 
-        <!--<Constraint-->
-        <!--android:id="@+id/vFire"-->
-        <!--android:layout_width="@dimen/status_life_button_reduced_width"-->
-        <!--android:layout_height="@dimen/status_life_button_reduced_height"-->
-        <!--android:layout_marginStart="39dp"-->
-        <!--android:layout_marginBottom="8dp"-->
-        <!--motion:layout_constraintBottom_toBottomOf="parent"-->
-        <!--motion:layout_constraintStart_toEndOf="@id/vTime"-->
-        <!--motion:layout_constraintTop_toTopOf="parent"-->
-        <!--motion:layout_constraintVertical_bias="0.08" />-->
+        <Constraint
+            android:id="@+id/vFire"
+            android:layout_width="@dimen/status_life_button_width"
+            android:layout_height="@dimen/status_life_button_width"
+            android:layout_marginStart="16dp"
+            motion:layout_constraintTop_toTopOf="@id/iFire"
+            motion:layout_constraintBottom_toBottomOf="@id/iFire"
+            motion:layout_constraintStart_toStartOf="parent" />
 
         <Constraint
             android:id="@+id/vWind"
             android:layout_width="@dimen/status_life_button_width"
             android:layout_height="@dimen/status_life_button_width"
             android:layout_marginStart="16dp"
-            android:layout_marginBottom="70dp"
-            motion:layout_constraintBottom_toTopOf="@id/vEarth"
+            motion:layout_constraintTop_toTopOf="@id/iWind"
+            motion:layout_constraintBottom_toBottomOf="@id/iWind"
             motion:layout_constraintStart_toStartOf="parent" />
 
         <Constraint
@@ -182,8 +239,8 @@
             android:layout_width="@dimen/status_life_button_width"
             android:layout_height="@dimen/status_life_button_width"
             android:layout_marginStart="16dp"
-            android:layout_marginBottom="70dp"
-            motion:layout_constraintBottom_toTopOf="@id/vEat"
+            motion:layout_constraintTop_toTopOf="@id/iEarth"
+            motion:layout_constraintBottom_toBottomOf="@id/iEarth"
             motion:layout_constraintStart_toStartOf="parent" />
 
         <Constraint
@@ -191,8 +248,8 @@
             android:layout_width="@dimen/status_life_button_width"
             android:layout_height="@dimen/status_life_button_width"
             android:layout_marginStart="16dp"
-            android:layout_marginBottom="40dp"
-            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintTop_toTopOf="@id/iEat"
+            motion:layout_constraintBottom_toBottomOf="@id/iEat"
             motion:layout_constraintStart_toStartOf="parent" />
 
     </ConstraintSet>

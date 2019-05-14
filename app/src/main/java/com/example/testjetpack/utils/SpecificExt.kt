@@ -8,6 +8,14 @@ import com.example.testjetpack.models.git.License
 import com.example.testjetpack.models.git.User
 import com.example.testjetpack.models.git.network.request.GitPage
 import com.example.testjetpack.models.git.network.response.GitRepository
+import kotlin.math.min
+
+fun Int.getRestTimePV() = min(this.getPercentageValue(5), 1F)
+fun Int.getRespiratoryRatePV() = min(this.getPercentageValue(40), 1F)
+fun Int.getHeartRatePV() = min(this.getPercentageValue(120), 1F)
+fun Int.getSleepTimePV() = min(this.getPercentageValue(10), 1F)
+fun Int.getExercisesTimePV() = min(this.getPercentageValue(2), 1F)
+fun Int.getEatCaloriesPV() = min(this.getPercentageValue(2500), 1F)
 
 fun GitPage.reset(page: Int = 1) = this.copy(
     page = page,

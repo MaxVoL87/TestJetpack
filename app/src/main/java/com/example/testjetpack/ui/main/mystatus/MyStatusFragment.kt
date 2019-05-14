@@ -49,6 +49,7 @@ class MyStatusFragment :
     override fun onStart() {
         super.onStart()
         vpRoot.registerOnPageChangeCallback(onPageChangedCallback)
+        viewModel.getProfile()
     }
 
     override fun onStop() {
