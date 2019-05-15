@@ -27,7 +27,7 @@
             android:id="@+id/iHeart"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="@dimen/status_info_items_bottom_margin"
             app:layout_constraintBottom_toTopOf="@+id/iTime"
             app:layout_constraintStart_toStartOf="parent"
             app:text='@{"Knowing your heart rate can be useful when you exercise, because it will help you know whether your exercise is intense enough to provide health benefits."}'
@@ -37,7 +37,7 @@
             android:id="@+id/iTime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="@dimen/status_info_items_bottom_margin"
             app:layout_constraintBottom_toTopOf="@+id/iFire"
             app:layout_constraintStart_toStartOf="parent"
             app:text='@{"Around 7 to 7.5 hours of actual sleep (not counting time falling asleep and getting out bed) appears to be optimal for most people."}'
@@ -47,7 +47,7 @@
             android:id="@+id/iFire"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="@dimen/status_info_items_bottom_margin"
             app:layout_constraintBottom_toTopOf="@+id/iWind"
             app:layout_constraintStart_toStartOf="parent"
             app:text='@{"Get at least 150 minutes of moderate aerobic activity or 75 minutes of vigorous aerobic activity a week, or a combination of moderate and vigorous activity."}'
@@ -57,7 +57,7 @@
             android:id="@+id/iWind"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="@dimen/status_info_items_bottom_margin"
             app:layout_constraintBottom_toTopOf="@+id/iEarth"
             app:layout_constraintStart_toStartOf="parent"
             app:text='@{"A persons respiratory rate is the number of breaths you take per minute. Value under 12 or over 25 breaths per minute while resting is considered abnormal."}'
@@ -67,7 +67,7 @@
             android:id="@+id/iEarth"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="@dimen/status_info_items_bottom_margin"
             app:layout_constraintBottom_toTopOf="@+id/iEat"
             app:layout_constraintStart_toStartOf="parent"
             app:text='@{"To increase muscular endurance as quickly as possible, the best rest period is 45 seconds to 2 minutes between sets. "}'

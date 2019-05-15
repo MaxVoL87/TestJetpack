@@ -26,7 +26,11 @@
     <dimen name="status_cloud_height">180dp</dimen>
     <dimen name="status_life_button_width">32dp</dimen>
     <dimen name="status_life_button_height">32dp</dimen>
+    <dimen name="status_life_button_circle_radius">105dp</dimen>
 
     <dimen name="status_life_button_reduced_width">23dp</dimen>
     <dimen name="status_life_button_reduced_height">23dp</dimen>
+
+    <dimen name="status_info_items_bottom_margin">10dp</dimen>
+
 </resources>

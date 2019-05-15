@@ -188,22 +188,15 @@ class ArcCharItemViewModel(val profile : MutableLiveData<Profile>, val somePerce
     }
 }
 
-class InfoItemHolder(itemView: View) : BaseRecyclerItemViewHolder<ItemMyStatusInfoBinding, InfoItemViewModel>(itemView) {
+class InfoItemHolder(itemView: View)
+    : BaseRecyclerItemViewHolder<ItemMyStatusInfoBinding, InfoItemViewModel>(itemView) {
 
     override fun bindModel(binding: ItemMyStatusInfoBinding?) {
         binding?.let { it.viewModel = viewModel }
     }
 }
 
-class InfoItemViewModel(val profile : MutableLiveData<Profile>) : BaseRecyclerItemViewModel() {
+class InfoItemViewModel(val profile : MutableLiveData<Profile>, val animationProgress: MutableLiveData<Float>)
+    : BaseRecyclerItemViewModel() {
     override val itemViewType: Int = MyStatusViewPagerAdapter.VIEW_TYPE_INFO_ITEM
-
-    private val _animationProgress = 0.0F.toMutableLiveData()
-
-    val animationProgress: LiveData<Float>
-        get() = _animationProgress
-
-    fun setAnimationProgress(value: Float) {
-        _animationProgress.value = value
-    }
 }

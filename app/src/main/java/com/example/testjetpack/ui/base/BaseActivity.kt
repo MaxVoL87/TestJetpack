@@ -108,12 +108,14 @@ abstract class BaseActivity<B : ViewDataBinding, T : BaseViewModel<out EventStat
             setText(text)
             setPBVisible(true)
             setIsCancelable(false)
-            show(supportFragmentManager, ProgressDialogFragment::class.java.name)
+            if (!isVisible) show(supportFragmentManager, ProgressDialogFragment::class.java.name)
         }
     }
 
     override fun hideProgress() {
-        progressDialog?.dismiss()
+        withNotNull(progressDialog) {
+            if (isVisible) dismiss()
+        }
     }
 
     fun showAlert(text: String) {

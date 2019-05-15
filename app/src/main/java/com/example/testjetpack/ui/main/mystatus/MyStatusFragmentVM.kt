@@ -26,9 +26,7 @@ class MyStatusFragmentVM(private val _dataRepository: IDataRepository) : BaseVie
             ArcCharItemViewModel(_profile, _somePercents).apply {
                 this@MyStatusFragmentVM.animationProgress.observeForever { this.setAnimationProgress(it) }
             },
-            InfoItemViewModel(_profile).apply {
-                this@MyStatusFragmentVM.animationProgress.observeForever { this.setAnimationProgress(it) }
-            }
+            InfoItemViewModel(_profile, animationProgress)
         )
     }
 
