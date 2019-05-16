@@ -14,8 +14,6 @@ import androidx.fragment.app.FragmentManager
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import android.graphics.Bitmap
 import androidx.core.content.ContextCompat
-import android.graphics.drawable.Drawable
-import android.R
 import android.graphics.Canvas
 import androidx.annotation.DrawableRes
 import com.example.testjetpack.ui.base.NotImplementedInterfaceException

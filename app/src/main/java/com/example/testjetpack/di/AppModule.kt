@@ -8,6 +8,7 @@ import com.example.testjetpack.dataflow.repository.DataRepository
 import com.example.testjetpack.dataflow.repository.GitDataRepository
 import com.example.testjetpack.dataflow.repository.IDataRepository
 import com.example.testjetpack.dataflow.repository.IGitDataRepository
+import com.example.testjetpack.ui.dialog.message.MessageDialogFragmentVM
 import com.example.testjetpack.ui.dialog.progress.ProgressDialogFragmentVM
 import com.example.testjetpack.workers.NotificationDownloadWorker
 import com.example.testjetpack.ui.main.MainActivityVM
@@ -76,6 +77,7 @@ val appModule = module {
 
     // MyViewModel ViewModel
     viewModel { ProgressDialogFragmentVM() }
+    viewModel { MessageDialogFragmentVM() }
 
     viewModel { MainActivityVM(get()) }
 

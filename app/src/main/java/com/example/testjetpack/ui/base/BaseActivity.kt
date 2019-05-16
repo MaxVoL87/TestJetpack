@@ -16,12 +16,17 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.example.testjetpack.R
+import com.example.testjetpack.ui.dialog.message.IMessageDialogFragmentCallback
+import com.example.testjetpack.ui.dialog.message.MessageDialogFragment
+import com.example.testjetpack.ui.dialog.progress.IProgressDialogFragmentCallback
 import com.example.testjetpack.ui.dialog.progress.ProgressDialogFragment
 import com.example.testjetpack.utils.withNotNull
 import org.koin.android.viewmodel.ext.android.getViewModel
 
 
 abstract class BaseActivity<B : ViewDataBinding, T : BaseViewModel<out EventStateChange>> : AppCompatActivity(),
+    IMessageDialogFragmentCallback,
+    IProgressDialogFragmentCallback,
     ICallback {
     protected abstract val layoutId: Int
     protected abstract val navControllerId: Int
@@ -35,6 +40,11 @@ abstract class BaseActivity<B : ViewDataBinding, T : BaseViewModel<out EventStat
     private var progressDialog: ProgressDialogFragment? = null
         get() {
             if (field == null) field = ProgressDialogFragment()
+            return field
+        }
+    private var messageDialog: MessageDialogFragment? = null
+        get() {
+            if (field == null) field = MessageDialogFragment()
             return field
         }
 
@@ -63,6 +73,10 @@ abstract class BaseActivity<B : ViewDataBinding, T : BaseViewModel<out EventStat
         withNotNull(progressDialog) {
             dismiss()
             progressDialog = null
+        }
+        withNotNull(messageDialog) {
+            dismiss()
+            messageDialog = null
         }
         super.onDestroy()
     }
@@ -120,6 +134,15 @@ abstract class BaseActivity<B : ViewDataBinding, T : BaseViewModel<out EventStat
 
     fun showAlert(text: String) {
         Toast.makeText(this@BaseActivity, text, Toast.LENGTH_SHORT).show()
+    }
+
+    fun showMessage(text: String, header: String? = null, isCancelable: Boolean = true) {
+        withNotNull(messageDialog) {
+            setText(text)
+            setHeader(header)
+            setIsCancelable(isCancelable)
+            if (!isVisible) show(supportFragmentManager, MessageDialogFragment::class.java.name)
+        }
     }
 
     fun getCurFragment(@IdRes containerId: Int) = supportFragmentManager.findFragmentById(containerId)
