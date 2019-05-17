@@ -18,15 +18,15 @@ import org.koin.android.viewmodel.ext.android.getViewModel
 import kotlin.coroutines.CoroutineContext
 import kotlin.reflect.KClass
 
-abstract class BaseFragment<B : ViewDataBinding, T : BaseViewModel<out EventStateChange>> : Fragment(), CoroutineScope {
+abstract class BaseFragment<B : ViewDataBinding, M : BaseViewModel<out EventStateChange>> : Fragment(), CoroutineScope {
     companion object {
         private const val COROUTINE_DELAY = 1000L
     }
 
     protected abstract val layoutId: Int
-    protected abstract val viewModelClass: KClass<T>
+    protected abstract val viewModelClass: KClass<M>
     protected lateinit var binding: B
-    protected val viewModel: T by lazy(LazyThreadSafetyMode.NONE) { getViewModel(viewModelClass) }
+    protected val viewModel: M by lazy(LazyThreadSafetyMode.NONE) { getViewModel(viewModelClass) }
 
     var popupWindow: ListPopupWindow? = null
 
@@ -60,7 +60,7 @@ abstract class BaseFragment<B : ViewDataBinding, T : BaseViewModel<out EventStat
         observeLiveData()
     }
 
-    protected abstract val observeLiveData: T.() -> Unit
+    protected abstract val observeLiveData: M.() -> Unit
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

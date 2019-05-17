@@ -4,8 +4,8 @@ import android.content.Context
 import androidx.databinding.ViewDataBinding
 import kotlin.reflect.KClass
 
-abstract class BaseFragmentWithCallback<B : ViewDataBinding, T : BaseViewModel<out EventStateChange>, C : ICallback> :
-    BaseFragment<B, T>() {
+abstract class BaseFragmentWithCallback<B : ViewDataBinding, M : BaseViewModel<out EventStateChange>, C : ICallback> :
+    BaseFragment<B, M>() {
     protected abstract val callbackClass: KClass<C>
     protected var callback: C? = null
 

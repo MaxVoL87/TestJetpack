@@ -11,12 +11,12 @@ import com.example.testjetpack.utils.livedata.EventObserver
 import org.koin.android.viewmodel.ext.android.getViewModel
 import kotlin.reflect.KClass
 
-abstract class BaseDialogFragment<B : ViewDataBinding, T : BaseViewModel<out EventStateChange>> : DialogFragment() {
+abstract class BaseDialogFragment<B : ViewDataBinding, M : BaseViewModel<out EventStateChange>> : DialogFragment() {
 
     protected abstract val layoutId: Int
-    protected abstract val viewModelClass: KClass<T>
+    protected abstract val viewModelClass: KClass<M>
     protected lateinit var binding: B
-    protected val viewModel: T by lazy(LazyThreadSafetyMode.NONE) { getViewModel(viewModelClass) }
+    protected val viewModel: M by lazy(LazyThreadSafetyMode.NONE) { getViewModel(viewModelClass) }
 
     protected open fun observeBaseLiveData() = with(viewModel) {
         events.observe(this@BaseDialogFragment, EventObserver(this@BaseDialogFragment::render))
@@ -24,7 +24,7 @@ abstract class BaseDialogFragment<B : ViewDataBinding, T : BaseViewModel<out Eve
         observeLiveData()
     }
 
-    protected abstract val observeLiveData: T.() -> Unit
+    protected abstract val observeLiveData: M.() -> Unit
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

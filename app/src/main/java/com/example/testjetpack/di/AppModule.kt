@@ -18,6 +18,9 @@ import com.example.testjetpack.ui.main.myprofile.MyProfileFragmentVM
 import com.example.testjetpack.ui.main.mystatus.MyStatusFragmentVM
 import com.example.testjetpack.ui.main.mytrip.MyTripFragmentVM
 import com.example.testjetpack.ui.main.notifications.NotificationsFragmentVM
+import com.example.testjetpack.ui.signin.SignInActivityVM
+import com.example.testjetpack.ui.signin.signin.SignInFragmentVM
+import com.example.testjetpack.ui.splash.SplashActivityVM
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.squareup.picasso.OkHttp3Downloader
@@ -79,7 +82,11 @@ val appModule = module {
     viewModel { ProgressDialogFragmentVM() }
     viewModel { MessageDialogFragmentVM() }
 
+    viewModel { SplashActivityVM() }
+    viewModel { SignInActivityVM() }
     viewModel { MainActivityVM(get()) }
+
+    viewModel { SignInFragmentVM() }
 
     viewModel { GitRepoSearchFragmentVM(get()) }
     viewModel { MyProfileFragmentVM(get(), get()) }

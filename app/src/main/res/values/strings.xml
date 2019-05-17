@@ -6,11 +6,35 @@
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
 
-    // GitRepoSearch
+    <!-- Strings related to SingIn and SingUp -->
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="sign_in">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="error_terms_need_accept">Terms accept is required</string>
+    <string name="sign_in_with_facebook">Sign in with Facebook</string>
+    <string name="sign_in_with_twitter">Sign in with Twitter</string>
+    <string name="forgot_password_with_question_mark">Forgot password?</string>
+    <string name="new_here_sign_up">New here? Sign Up</string>
+    <string name="Register">Register</string>
+    <string name="ConfirmPassword">Confirm Password</string>
+    <string name="Name">Name</string>
+    <string name="IAcceptTheTermsWithStar">I accept the terms*</string>
+    <string name="SignUp">Sign Up</string>
+    <string name="ForgotPassword">Forgot password</string>
+    <string name="SendEmail">Send Email</string>
+    <string name="FacebookSignInCanceled">Facebook sign in canceled</string>
+    <string name="SingInWithThreeDots">Sing in…</string>
+    <string name="Alert">Alert</string>
+
+    <!--GitRepoSearch-->
     <string name="hint_repo_to_search">repo to search</string>
     <string name="search">Search</string>
 
-    // My Profile
+    <!--My Profile-->
     <string name="hint_email">Email Address</string>
     <string name="hint_phone">Phone Number</string>
     <string name="add">Add</string>
@@ -21,14 +45,14 @@
     <string name="credit_card_details">Credit Card Details</string>
     <string name="you_currently_have_no_credit_card">You currently have no credit card</string>
 
-    // Navigation Menu
+    <!--Navigation Menu-->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation menu</string>
 
-    // Gps
+    <!--Gps-->
     <string name="menu_item_gps_only">GPS Only</string>
     <string name="menu_item_diagnostic">Diagnostic</string>
     <string name="menu_item_clear_locations">Clear locations</string>
@@ -39,7 +63,7 @@
     <string name="gps_diagnostic_switch">diagnostic</string>
     <string name="no_value">none</string>
 
-    // My Trip
+    <!--My Trip-->
     <string name="title_activity_maps">Map</string>
     <string name="latitude__">latitude (°):</string>
     <string name="longitude__">longitude (°):</string>
@@ -55,7 +79,7 @@
     <string name="acceleration__">acceleration (m/c²):</string>
     <string name="satellites__">satellites:</string>
 
-    // My Status
+    <!--My Status-->
     <string name="my_status_previous">PREVIOUS</string>
     <string name="my_status_next">NEXT</string>
     <string name="my_status_finish">FINISH</string>

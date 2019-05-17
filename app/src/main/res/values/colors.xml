@@ -13,7 +13,12 @@
     <color name="colorButtonNotActive">#FFCB98</color>
     <color name="colorButtonText">#FFFFFF</color>
     <color name="colorSeparator">#DFDFDF</color>
+    <color name="colorWhiteText">#FFFFFF</color>
 
+    <color name="link">#576586</color>
+
+    <color name="facebookButton">#37589B</color>
+    <color name="twitterButton">#55ACEE</color>
 
     <color name="black_overlay">#66000000</color>
     <color name="colorBlack">#000000</color>

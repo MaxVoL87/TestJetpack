@@ -68,8 +68,9 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.0.2'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta1'
     implementation 'androidx.recyclerview:recyclerview:1.1.0-alpha05'
-    implementation 'androidx.fragment:fragment:1.1.0-alpha08'
+    implementation 'androidx.fragment:fragment:1.1.0-alpha09'
     implementation 'androidx.viewpager2:viewpager2:1.0.0-alpha04'
+    implementation 'com.google.android.material:material:1.1.0-alpha06'
 
     // Material
     implementation 'com.google.android.material:material:1.1.0-alpha06'
@@ -87,7 +88,7 @@ dependencies {
     kapt "androidx.lifecycle:lifecycle-compiler:$arch_version"
 
     // Navigation
-    def nav_version = "2.1.0-alpha03"
+    def nav_version = "2.1.0-alpha04"
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
 
@@ -156,5 +157,5 @@ dependencies {
     androidTestImplementation "androidx.test.espresso.idling:idling-concurrent:$espresso_version"
 
 
-    debugImplementation 'androidx.fragment:fragment-testing:1.1.0-alpha08'
+    debugImplementation 'androidx.fragment:fragment-testing:1.1.0-alpha09'
 }

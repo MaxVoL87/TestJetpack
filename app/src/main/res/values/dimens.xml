@@ -12,6 +12,12 @@
 
     <dimen name="min_text_margin">7dp</dimen>
 
+    <!-- Sign In -->
+    <dimen name="sign_in_width">300dp</dimen>
+    <dimen name="sign_in_logo_height">156dp</dimen>
+    <dimen name="sign_in_top_margins">6dp</dimen>
+    <dimen name="sign_in_button_height">30dp</dimen>
+
     <!-- My Profile -->
     <dimen name="profile_start_margin">36dp</dimen>
     <dimen name="profile_end_margin">36dp</dimen>

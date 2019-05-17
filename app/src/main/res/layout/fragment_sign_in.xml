@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ui.signin.signin.SignInFragment">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.example.testjetpack.ui.signin.signin.SignInFragmentVM" />
+
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <RelativeLayout
+            android:id="@+id/email_login_form"
+            android:layout_width="@dimen/sign_in_width"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/icon"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/sign_in_logo_height"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/ic_star" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/lEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/icon"
+                app:errorEnabled="true">
+
+                <AutoCompleteTextView
+                    android:id="@+id/actvEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/email"
+                    android:imeOptions="actionNext"
+                    android:inputType="textEmailAddress"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:text='@={viewModel.email}'/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/lPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/lEmail"
+                android:hint="@string/password"
+                app:errorEnabled="true">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeActionId="6"
+                    android:imeActionLabel="@string/sign_in"
+                    android:imeOptions="actionDone"
+                    android:inputType="textPassword"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:text='@={viewModel.password}'/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/bSingIn"
+                style="@style/ButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/lPassword"
+                android:layout_marginTop="@dimen/sign_in_top_margins"
+                android:text="@string/sign_in"
+                app:onClick='@{viewModel::signIn}'/>
+
+            <View
+                android:id="@+id/separator"
+                style="@style/SeparatorStyle"
+                android:layout_width="match_parent"
+                android:layout_below="@id/bSingIn"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="10dp" />
+
+            <Button
+                android:id="@+id/bSingInWithFacebook"
+                style="@style/FacebookButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/separator"
+                android:layout_marginTop="@dimen/sign_in_top_margins"
+                android:text="@string/sign_in_with_facebook"
+                app:onClick='@{viewModel::signInWithFacebook}' />
+
+            <Button
+                android:id="@+id/bSingInWithTwitter"
+                style="@style/TwitterButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/bSingInWithFacebook"
+                android:layout_marginTop="@dimen/sign_in_top_margins"
+                android:text="@string/sign_in_with_twitter"
+                app:onClick='@{viewModel::signInWithTwitter}' />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/bSingInWithTwitter"
+                android:layout_marginTop="@dimen/sign_in_top_margins">
+
+                <TextView
+                    android:id="@+id/tvPasswordForgot"
+                    style="@style/DefaultLinkText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:text="@string/forgot_password_with_question_mark" />
+
+                <TextView
+                    android:id="@+id/tvSignUp"
+                    style="@style/DefaultLinkText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:text="@string/new_here_sign_up" />
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+</layout>

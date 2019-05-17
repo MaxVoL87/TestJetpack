@@ -24,18 +24,18 @@ import com.example.testjetpack.utils.withNotNull
 import org.koin.android.viewmodel.ext.android.getViewModel
 
 
-abstract class BaseActivity<B : ViewDataBinding, T : BaseViewModel<out EventStateChange>> : AppCompatActivity(),
+abstract class BaseActivity<B : ViewDataBinding, M : BaseViewModel<out EventStateChange>> : AppCompatActivity(),
     IMessageDialogFragmentCallback,
     IProgressDialogFragmentCallback,
     ICallback {
     protected abstract val layoutId: Int
     protected abstract val navControllerId: Int
-    protected abstract val viewModelClass: KClass<T>
+    protected abstract val viewModelClass: KClass<M>
     protected lateinit var binding: B
     protected val navController: NavController
             by lazy(LazyThreadSafetyMode.NONE) { Navigation.findNavController(this, navControllerId) }
-    protected val viewModel: T by lazy(LazyThreadSafetyMode.NONE) { getViewModel(viewModelClass) }
-    protected abstract val observeLiveData: T.() -> Unit
+    protected val viewModel: M by lazy(LazyThreadSafetyMode.NONE) { getViewModel(viewModelClass) }
+    protected abstract val observeLiveData: M.() -> Unit
 
     private var progressDialog: ProgressDialogFragment? = null
         get() {
@@ -122,13 +122,13 @@ abstract class BaseActivity<B : ViewDataBinding, T : BaseViewModel<out EventStat
             setText(text)
             setPBVisible(true)
             setIsCancelable(false)
-            if (!isVisible) show(supportFragmentManager, ProgressDialogFragment::class.java.name)
+            if (!isAdded) show(supportFragmentManager, ProgressDialogFragment::class.java.name)
         }
     }
 
     override fun hideProgress() {
         withNotNull(progressDialog) {
-            if (isVisible) dismiss()
+            if (isAdded) dismiss()
         }
     }
 

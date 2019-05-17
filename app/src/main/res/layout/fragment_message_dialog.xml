@@ -52,7 +52,6 @@
                 android:id="@+id/separator"
                 style="@style/SeparatorStyle"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
                 android:layout_marginTop="4dp"
                 android:layout_marginBottom="4dp"
                 app:visibleOrGone='@{!TextUtils.isEmpty(viewModel.header)}' />
@@ -99,7 +98,7 @@
                 android:layout_weight="1"
                 android:text="@string/cancel"
                 app:onClick='@{viewModel::bAction2OnClick}'
-                app:visibleOrGone='@{viewModel.isCancelable}' />
+                app:visibleOrGone='@{safeUnbox(viewModel.isCancelable)}' />
 
 
         </LinearLayout>
