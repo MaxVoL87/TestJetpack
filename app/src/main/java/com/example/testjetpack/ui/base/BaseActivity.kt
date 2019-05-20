@@ -37,17 +37,12 @@ abstract class BaseActivity<B : ViewDataBinding, M : BaseViewModel<out EventStat
     protected val viewModel: M by lazy(LazyThreadSafetyMode.NONE) { getViewModel(viewModelClass) }
     protected abstract val observeLiveData: M.() -> Unit
 
-    private var progressDialog: ProgressDialogFragment? = null
+    private var _progressDialog: ProgressDialogFragment? = null
+    private var _progressDialogsCount: Int = 0
         get() {
-            if (field == null) field = ProgressDialogFragment()
+            if (field < 0) field = 0
             return field
         }
-    private var messageDialog: MessageDialogFragment? = null
-        get() {
-            if (field == null) field = MessageDialogFragment()
-            return field
-        }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
@@ -70,14 +65,8 @@ abstract class BaseActivity<B : ViewDataBinding, M : BaseViewModel<out EventStat
     }
 
     override fun onDestroy() {
-        withNotNull(progressDialog) {
-            dismiss()
-            progressDialog = null
-        }
-        withNotNull(messageDialog) {
-            dismiss()
-            messageDialog = null
-        }
+        _progressDialogsCount = 0
+        hideProgress()
         super.onDestroy()
     }
 
@@ -118,17 +107,24 @@ abstract class BaseActivity<B : ViewDataBinding, M : BaseViewModel<out EventStat
     }
 
     override fun showProgress(text: String?) {
-        withNotNull(progressDialog) {
+        _progressDialogsCount++
+        val inShow = _progressDialog != null
+        if (!inShow) _progressDialog = ProgressDialogFragment()
+        withNotNull(_progressDialog) {
             setText(text)
             setPBVisible(true)
             setIsCancelable(false)
-            if (!isAdded) show(supportFragmentManager, ProgressDialogFragment::class.java.name)
+            if (!isAdded && !inShow) show(supportFragmentManager, ProgressDialogFragment::class.java.name)
         }
     }
 
     override fun hideProgress() {
-        withNotNull(progressDialog) {
-            if (isAdded) dismiss()
+        _progressDialogsCount--
+        withNotNull(_progressDialog) {
+            if (_progressDialogsCount == 0) {
+                if (isAdded) dismiss()
+                _progressDialog = null
+            }
         }
     }
 
@@ -137,11 +133,11 @@ abstract class BaseActivity<B : ViewDataBinding, M : BaseViewModel<out EventStat
     }
 
     fun showMessage(text: String, header: String? = null, isCancelable: Boolean = true) {
-        withNotNull(messageDialog) {
+        withNotNull(MessageDialogFragment()) {
             setText(text)
             setHeader(header)
             setIsCancelable(isCancelable)
-            if (!isVisible) show(supportFragmentManager, MessageDialogFragment::class.java.name)
+            show(supportFragmentManager, MessageDialogFragment::class.java.name)
         }
     }
 

@@ -1,10 +1,13 @@
 package com.example.testjetpack.ui.splash
 
+import android.content.Intent
 import android.os.Bundle
 import com.example.testjetpack.R
 import com.example.testjetpack.databinding.ActivitySplashBinding
 import com.example.testjetpack.ui.base.BaseActivity
 import com.example.testjetpack.ui.base.EventStateChange
+import com.example.testjetpack.ui.main.MainActivity
+import com.example.testjetpack.ui.signin.SignInActivity
 import kotlin.reflect.KClass
 
 class SplashActivity : BaseActivity<ActivitySplashBinding, SplashActivityVM>() {
@@ -25,12 +28,16 @@ class SplashActivity : BaseActivity<ActivitySplashBinding, SplashActivityVM>() {
         viewModel.checkSingInState()
     }
 
-    private fun openSingIn(){
-        // todo: open
+    private fun openSingIn() {
+        startActivity(Intent(this, SignInActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        })
     }
 
-    private fun openMain(){
-        // todo: open
+    private fun openMain() {
+        startActivity(Intent(this, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        })
     }
 
     // region VM events renderer

@@ -18,10 +18,10 @@ class SplashActivityVM : BaseViewModel<SplashActivityVMEventStateChange>() {
                 }
             },
             onSuccess = {
-                _events.postValue(Event(SplashActivityVMEventStateChange.OpenMain))
+                _events.value = Event(SplashActivityVMEventStateChange.OpenMain)
             },
             onError = {
-                _events.postValue(Event(SplashActivityVMEventStateChange.OpenSingIn))
+                _events.value = Event(SplashActivityVMEventStateChange.OpenSingIn)
             }
         )
     }
