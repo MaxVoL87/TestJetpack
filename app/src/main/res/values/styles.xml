@@ -93,6 +93,8 @@
 
     <style name="DefaultLinkText">
         <item name="android:textColor">@color/link</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
     </style>
 
     <style name="FacebookButton" parent="Widget.AppCompat.Button.Colored">

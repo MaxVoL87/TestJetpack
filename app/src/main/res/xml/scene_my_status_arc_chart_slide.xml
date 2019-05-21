@@ -17,7 +17,7 @@
         <KeyFrameSet>
 
             <KeyPosition
-                motion:framePosition="11"
+                motion:framePosition="15"
                 motion:keyPositionType="parentRelative"
                 motion:motionTarget="@+id/vHeart"
                 motion:percentY="0.08" />

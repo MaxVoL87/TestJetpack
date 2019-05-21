@@ -83,5 +83,6 @@
     <string name="my_status_previous">PREVIOUS</string>
     <string name="my_status_next">NEXT</string>
     <string name="my_status_finish">FINISH</string>
+    <string name="dot">.</string>
 
 </resources>

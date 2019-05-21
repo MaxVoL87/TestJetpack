@@ -125,7 +125,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
-                    android:text="@string/forgot_password_with_question_mark" />
+                    android:text="@string/forgot_password_with_question_mark"
+                    app:onClick='@{viewModel::passwordRecovery}'/>
 
                 <TextView
                     android:id="@+id/tvSignUp"
@@ -133,7 +134,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
-                    android:text="@string/new_here_sign_up" />
+                    android:text="@string/new_here_sign_up"
+                    app:onClick='@{viewModel::register}'/>
 
             </RelativeLayout>
 

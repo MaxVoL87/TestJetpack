@@ -20,20 +20,26 @@
         app:layoutDescription="@xml/scene_my_status_slide"
         tools:showPaths="true">
 
-        <RelativeLayout
-            android:id="@+id/toolbarPlaceHolder"
+        <!--Can't set ViewPager2 margins and size on MotionLayout, so wrap it with LinearLayout-->
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/colorPrimary"
-            app:layout_constraintTop_toTopOf="parent"/>
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/vpRoot"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:adapter='@{viewModel.vpAdapter}'
-            app:layout_constraintTop_toBottomOf="@id/toolbarPlaceHolder"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            <RelativeLayout
+                android:id="@+id/toolbarPlaceHolder"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/colorPrimary" />
+
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/vpRoot"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:adapter='@{viewModel.vpAdapter}' />
+
+        </LinearLayout>
+
 
         <Button
             android:id="@+id/previousButton"

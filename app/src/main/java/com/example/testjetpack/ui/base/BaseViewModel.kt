@@ -41,7 +41,7 @@ abstract class BaseViewModel<S : EventStateChange> : ViewModel(), CoroutineScope
                 showProgressLiveData.value = true
             }
 
-            val jobResult = async(Dispatchers.IO) {
+            val jobResult = GlobalScope.async(Dispatchers.IO) {
                 call()
             }
 

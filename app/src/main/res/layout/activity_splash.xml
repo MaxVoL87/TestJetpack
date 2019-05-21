@@ -12,9 +12,63 @@
 
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.constraintlayout.motion.widget.MotionLayout
+        android:id="@+id/motionLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimary"
+        app:layoutDescription="@xml/scene_splash"
+        tools:showPaths="true">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/tvAction"
+            style="@style/HeaderText"
+            android:textColor="@color/colorWhiteText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text='@{viewModel.actionName}'
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Loading" />
+
+        <TextView
+            android:id="@+id/tvDot0"
+            style="@style/HeaderText"
+            android:textColor="@color/colorWhiteText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
+            android:text="@string/dot" />
+
+        <TextView
+            android:id="@+id/tvDot1"
+            style="@style/HeaderText"
+            android:textColor="@color/colorWhiteText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
+            android:text="@string/dot" />
+
+        <TextView
+            android:id="@+id/tvDot2"
+            style="@style/HeaderText"
+            android:textColor="@color/colorWhiteText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
+            android:text="@string/dot" />
+
+        <TextView
+            android:id="@+id/tvDot3"
+            style="@style/HeaderText"
+            android:textColor="@color/colorWhiteText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
+            android:text="@string/dot" />
+
+
+    </androidx.constraintlayout.motion.widget.MotionLayout>
 </layout>
