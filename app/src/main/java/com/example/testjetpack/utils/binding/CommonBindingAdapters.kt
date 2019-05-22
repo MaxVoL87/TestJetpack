@@ -7,6 +7,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
+import androidx.databinding.InverseBindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.testjetpack.utils.hideKeyboard
 import com.example.testjetpack.utils.picasso.CircleTransform
@@ -85,15 +86,27 @@ fun EditText.requestFocus(requestFocus: Boolean) {
 
 @BindingAdapter("visibleOrGone")
 fun View.setVisibleOrGone(show: Boolean) {
-    visibility = if (show) View.VISIBLE else View.GONE
+    val vsb = if (show) View.VISIBLE else View.GONE
+    if (visibility != vsb) visibility = vsb
 }
 
 @BindingAdapter("visibleOrInvisible")
 fun View.setVisibleOrInvisible(show: Boolean) {
-    visibility = if (show) View.VISIBLE else View.INVISIBLE
+    val vsb = if (show) View.VISIBLE else View.INVISIBLE
+    if (visibility != vsb) visibility = vsb
 }
 
 @BindingAdapter("onClick")
 fun View.onClick(function: Runnable) {
     setOnClickListener { function.run() }
+}
+
+@BindingAdapter("error")
+fun TextView.setError(error: CharSequence?) {
+    if (this.error != error) this.error = error
+}
+
+@InverseBindingAdapter(attribute = "error")
+fun TextView.getError(): CharSequence? {
+    return error
 }

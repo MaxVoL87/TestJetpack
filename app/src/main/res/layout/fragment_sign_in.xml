@@ -47,7 +47,8 @@
                     android:inputType="textEmailAddress"
                     android:maxLines="1"
                     android:singleLine="true"
-                    android:text='@={viewModel.email}'/>
+                    android:text='@={viewModel.email}'
+                    app:error='@{viewModel.emailError}'/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -69,7 +70,8 @@
                     android:inputType="textPassword"
                     android:maxLines="1"
                     android:singleLine="true"
-                    android:text='@={viewModel.password}'/>
+                    android:text='@={viewModel.password}'
+                    app:error='@{viewModel.passwordError}'/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
