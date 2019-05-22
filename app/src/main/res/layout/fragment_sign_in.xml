@@ -14,15 +14,15 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/colorBackgroundPrimary">
 
 
         <RelativeLayout
             android:id="@+id/email_login_form"
             android:layout_width="@dimen/sign_in_width"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:orientation="vertical">
+            android:layout_centerInParent="true">
 
             <ImageView
                 android:id="@+id/icon"

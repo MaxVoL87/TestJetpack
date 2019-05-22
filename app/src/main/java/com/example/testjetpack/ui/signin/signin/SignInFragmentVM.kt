@@ -1,7 +1,9 @@
 package com.example.testjetpack.ui.signin.signin
 
+import android.content.res.Resources
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.testjetpack.R
 import com.example.testjetpack.ui.base.BaseViewModel
 import com.example.testjetpack.ui.base.EventStateChange
 import com.example.testjetpack.utils.isValidEmail
@@ -10,7 +12,7 @@ import com.example.testjetpack.utils.livedata.Event
 import java.lang.Exception
 import kotlin.random.Random
 
-class SignInFragmentVM : BaseViewModel<SignInFragmentVMEventStateChange>() {
+class SignInFragmentVM(private val _resources: Resources) : BaseViewModel<SignInFragmentVMEventStateChange>() {
 
     private val _emailError = MutableLiveData<CharSequence>(null)
     private val _passwordError = MutableLiveData<CharSequence>(null)
@@ -25,8 +27,9 @@ class SignInFragmentVM : BaseViewModel<SignInFragmentVMEventStateChange>() {
         get() = _passwordError
 
     fun signIn() {
-        _emailError.value = if (email.value.isValidEmail()) null else "Email not valid"
-        _passwordError.value = if (password.value.isValidPassword()) null else "Password not valid"
+        _emailError.value = if (email.value.isValidEmail()) null else _resources.getString(R.string.error_invalid_email)
+        _passwordError.value =
+            if (password.value.isValidPassword()) null else _resources.getString(R.string.error_incorrect_password)
 
 // todo: uncommit and remove last login()
 //        if (_emailError.value == null && _passwordError.value == null) login()

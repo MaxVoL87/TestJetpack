@@ -28,8 +28,9 @@ abstract class BaseFragmentWithCallback<B : ViewDataBinding, M : BaseViewModel<o
     }
 
     @Suppress("UNCHECKED_CAST")
-    private fun bindInterfaceOrThrow(clazz: KClass<C>, vararg objects: Any?): C =
-        objects.mapNotNull { it as? C }.firstOrNull()
+    private fun bindInterfaceOrThrow(clazz: KClass<C>, vararg objects: Any?): C {
+        return objects.mapNotNull { it as? C }.firstOrNull()
             ?: throw NotImplementedInterfaceException(clazz.java)
+    }
 
 }

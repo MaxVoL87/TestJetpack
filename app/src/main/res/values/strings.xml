@@ -6,12 +6,11 @@
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
 
-    <!-- Strings related to SingIn and SingUp -->
+    <!-- Strings related to SingIn and SingUp and Password Recovery-->
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="sign_in">Sign in</string>
     <string name="error_invalid_email">This email address is invalid</string>
-    <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
     <string name="error_terms_need_accept">Terms accept is required</string>
@@ -19,16 +18,13 @@
     <string name="sign_in_with_twitter">Sign in with Twitter</string>
     <string name="forgot_password_with_question_mark">Forgot password?</string>
     <string name="new_here_sign_up">New here? Sign Up</string>
-    <string name="Register">Register</string>
-    <string name="ConfirmPassword">Confirm Password</string>
-    <string name="Name">Name</string>
-    <string name="IAcceptTheTermsWithStar">I accept the terms*</string>
-    <string name="SignUp">Sign Up</string>
-    <string name="ForgotPassword">Forgot password</string>
-    <string name="SendEmail">Send Email</string>
-    <string name="FacebookSignInCanceled">Facebook sign in canceled</string>
-    <string name="SingInWithThreeDots">Sing in…</string>
-    <string name="Alert">Alert</string>
+    <string name="register">Register</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="name">Name</string>
+    <string name="i_accept_the_terms_withstar">I accept the terms*</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="forgot_password">Forgot password</string>
+    <string name="send_email">Send Email</string>
 
     <!--GitRepoSearch-->
     <string name="hint_repo_to_search">repo to search</string>
@@ -84,5 +80,8 @@
     <string name="my_status_next">NEXT</string>
     <string name="my_status_finish">FINISH</string>
     <string name="dot">.</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

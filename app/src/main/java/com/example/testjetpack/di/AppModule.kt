@@ -1,5 +1,6 @@
 package com.example.testjetpack.di
 
+import android.content.res.Resources
 import android.os.Build
 import androidx.work.Constraints
 import androidx.work.PeriodicWorkRequest
@@ -19,7 +20,9 @@ import com.example.testjetpack.ui.main.mystatus.MyStatusFragmentVM
 import com.example.testjetpack.ui.main.mytrip.MyTripFragmentVM
 import com.example.testjetpack.ui.main.notifications.NotificationsFragmentVM
 import com.example.testjetpack.ui.signin.SignInActivityVM
+import com.example.testjetpack.ui.signin.passwordrecovery.PasswordRecoveryFragmentVM
 import com.example.testjetpack.ui.signin.signin.SignInFragmentVM
+import com.example.testjetpack.ui.signin.signup.SignUpFragmentVM
 import com.example.testjetpack.ui.splash.SplashActivityVM
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -34,6 +37,8 @@ import java.util.concurrent.TimeUnit
 
 // https://insert-koin.io/docs/2.0/documentation/reference/index.html
 val appModule = module {
+
+    single<Resources> { androidContext().resources }
 
     single<Gson> {
         GsonBuilder()
@@ -59,11 +64,16 @@ val appModule = module {
     single<IDataRepository> { DataRepository(get(), get()) }
 
     // Simple Presenter Factory
-    factory (named<NotificationDownloadWorker>()) {
+    factory(named<NotificationDownloadWorker>()) {
         val constraints = Constraints.Builder()
             .setRequiresDeviceIdle(false) // only when device Idle
             .setRequiresCharging(false) // only when device charging
-            .apply { if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) setTriggerContentMaxDelay(1, TimeUnit.MINUTES) }
+            .apply {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) setTriggerContentMaxDelay(
+                    1,
+                    TimeUnit.MINUTES
+                )
+            }
             .build()
 
         // 15 minutes is min interval
@@ -86,7 +96,9 @@ val appModule = module {
     viewModel { SignInActivityVM() }
     viewModel { MainActivityVM(get()) }
 
-    viewModel { SignInFragmentVM() }
+    viewModel { SignInFragmentVM(get()) }
+    viewModel { PasswordRecoveryFragmentVM(get()) }
+    viewModel { SignUpFragmentVM(get()) }
 
     viewModel { GitRepoSearchFragmentVM(get()) }
     viewModel { MyProfileFragmentVM(get(), get()) }
