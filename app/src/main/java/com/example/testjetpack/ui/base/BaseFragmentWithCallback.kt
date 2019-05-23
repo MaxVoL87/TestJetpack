@@ -2,6 +2,7 @@ package com.example.testjetpack.ui.base
 
 import android.content.Context
 import androidx.databinding.ViewDataBinding
+import com.google.gson.reflect.TypeToken
 import kotlin.reflect.KClass
 
 abstract class BaseFragmentWithCallback<B : ViewDataBinding, M : BaseViewModel<out EventStateChange>, C : ICallback> :
@@ -27,9 +28,9 @@ abstract class BaseFragmentWithCallback<B : ViewDataBinding, M : BaseViewModel<o
         callback?.hideProgress()
     }
 
-    @Suppress("UNCHECKED_CAST")
     private fun bindInterfaceOrThrow(clazz: KClass<C>, vararg objects: Any?): C {
-        return objects.mapNotNull { it as? C }.firstOrNull()
+        val typeToken = TypeToken.get(clazz.java) as TypeToken<C>
+        return objects.find { it != null && typeToken.isAssignableFrom(it::class.java) }?.let { it as C }
             ?: throw NotImplementedInterfaceException(clazz.java)
     }
 
