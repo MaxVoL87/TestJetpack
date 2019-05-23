@@ -33,12 +33,13 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/lEmail"
+                style="@style/TextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/icon"
                 app:errorEnabled="true">
 
-                <AutoCompleteTextView
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/actvEmail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -48,12 +49,13 @@
                     android:maxLines="1"
                     android:singleLine="true"
                     android:text='@={viewModel.email}'
-                    app:error='@{viewModel.emailError}'/>
+                    app:error='@{viewModel.emailError}' />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/lPassword"
+                style="@style/TextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/lEmail"
@@ -71,19 +73,19 @@
                     android:maxLines="1"
                     android:singleLine="true"
                     android:text='@={viewModel.password}'
-                    app:error='@{viewModel.passwordError}'/>
+                    app:error='@{viewModel.passwordError}' />
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/bSingIn"
-                style="@style/ButtonStyle"
+                style="@style/MaterialButton"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:layout_below="@id/lPassword"
                 android:layout_marginTop="@dimen/sign_in_top_margins"
                 android:text="@string/sign_in"
-                app:onClick='@{viewModel::signIn}'/>
+                app:cornerRadius="16dp"
+                app:onClick='@{viewModel::signIn}' />
 
             <View
                 android:id="@+id/separator"
@@ -95,24 +97,28 @@
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="10dp" />
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/bSingInWithFacebook"
-                style="@style/FacebookButton"
+                style="@style/MaterialButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/separator"
                 android:layout_marginTop="@dimen/sign_in_top_margins"
                 android:text="@string/sign_in_with_facebook"
+                app:backgroundTint="@color/facebookButton"
+                app:cornerRadius="16dp"
                 app:onClick='@{viewModel::signInWithFacebook}' />
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/bSingInWithTwitter"
-                style="@style/TwitterButton"
+                style="@style/MaterialButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/bSingInWithFacebook"
                 android:layout_marginTop="@dimen/sign_in_top_margins"
                 android:text="@string/sign_in_with_twitter"
+                app:backgroundTint="@color/twitterButton"
+                app:cornerRadius="16dp"
                 app:onClick='@{viewModel::signInWithTwitter}' />
 
             <RelativeLayout
@@ -128,7 +134,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:text="@string/forgot_password_with_question_mark"
-                    app:onClick='@{viewModel::passwordRecovery}'/>
+                    app:onClick='@{viewModel::passwordRecovery}' />
 
                 <TextView
                     android:id="@+id/tvSignUp"
@@ -137,7 +143,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:text="@string/new_here_sign_up"
-                    app:onClick='@{viewModel::register}'/>
+                    app:onClick='@{viewModel::register}' />
 
             </RelativeLayout>
 

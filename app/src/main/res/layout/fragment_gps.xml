@@ -411,7 +411,7 @@
 
         <Button
             android:id="@+id/bStartStopLocationListener"
-            style="@style/ButtonStyle"
+            style="@style/DefaultButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
