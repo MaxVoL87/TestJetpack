@@ -18,6 +18,7 @@ import com.example.testjetpack.utils.livedata.toLDString
 import com.example.testjetpack.utils.livedata.toMutableLiveData
 import com.example.testjetpack.utils.toDBEntity
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 class GpsFragmentVM(
     private val dataRepository: IDataRepository,
@@ -82,7 +83,7 @@ class GpsFragmentVM(
     val speedAccuracy: LiveData<String> = switchMap(_location) { it.speedAccuracyMetersPerSecond.toLDString() }
     val bearingAccuracy: LiveData<String> = switchMap(_location) { it.bearingAccuracyDegrees.toLDString() }
     val time: LiveData<String> = switchMap(_location) { it.time.toLDString() }
-    val elapsedRealTime: LiveData<String> = switchMap(_location) { it.elapsedRealtimeNanos.toLDString() }
+    val elapsedRealTime: LiveData<String> = switchMap(_location) { TimeUnit.NANOSECONDS.toMillis(it.elapsedRealtimeNanos).toLDString() }
 
     val acceleration: LiveData<String> = switchMap(_location) { it.acceleration.toLDString() }
     val satellites: LiveData<String> = switchMap(_location) { it.satellites.toLDString() }

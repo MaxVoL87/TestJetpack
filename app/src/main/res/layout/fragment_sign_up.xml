@@ -43,7 +43,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/lName"
-                style="@style/TextInputLayout"
+                style="@style/TextInputLayoutOutlined"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tvHeader">
@@ -64,7 +64,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/lEmail"
-                style="@style/TextInputLayout"
+                style="@style/TextInputLayoutOutlined"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/lName">
@@ -85,7 +85,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/lPassword"
-                style="@style/TextInputLayout"
+                style="@style/TextInputLayoutOutlined"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/lEmail"
@@ -108,7 +108,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/lConfirmPassword"
-                style="@style/TextInputLayout"
+                style="@style/TextInputLayoutOutlined"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/lPassword"
@@ -152,7 +152,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:translationX="22dp"
+                    android:translationX="20dp"
                     android:checked='@={viewModel.termsAccepted}'
                     app:useMaterialThemeColors="true" />
 
@@ -162,11 +162,9 @@
                 android:id="@+id/bRegister"
                 style="@style/MaterialButton"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:layout_below="@id/termContainer"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
                 android:text="@string/register"
-                app:cornerRadius="16dp"
                 app:onClick='@{viewModel::register}' />
 
         </RelativeLayout>

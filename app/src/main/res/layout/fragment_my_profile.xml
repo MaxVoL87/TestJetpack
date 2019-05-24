@@ -180,15 +180,14 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/input_layout_email"
+                    style="@style/TextInputLayoutFilled"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignTop="@id/ivEmailPicture"
                     android:layout_alignBottom="@id/ivEmailPicture"
                     android:layout_marginStart="10dp"
                     android:layout_toStartOf="@id/ibEmailAddEdit"
                     android:layout_toEndOf="@id/ivEmailPicture"
-                    android:hint="@string/hint_email"
-                    app:hintTextAppearance="@style/HintText">
+                    android:hint="@string/hint_email">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etEmailAddress"
@@ -207,12 +206,13 @@
                         app:requestFocus="@{safeUnbox(viewModel.emailOnEdit)}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <ImageButton
+                <androidx.appcompat.widget.AppCompatImageButton
                     android:id="@+id/ibEmailAddEdit"
+                    style="@style/TextInputLayoutOutlined"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
-                    android:layout_alignTop="@id/input_layout_email"
-                    android:layout_alignBottom="@id/input_layout_email"
+                    android:layout_alignTop="@id/ivEmailPicture"
+                    android:layout_alignBottom="@id/ivEmailPicture"
                     android:layout_alignParentEnd="true"
                     android:layout_marginEnd="@dimen/profile_end_margin"
                     android:background="@android:color/transparent"
@@ -234,15 +234,14 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/input_layout_phone"
+                    style="@style/TextInputLayoutFilled"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignTop="@id/ivPhonePicture"
                     android:layout_alignBottom="@id/ivPhonePicture"
                     android:layout_marginStart="10dp"
-                    android:layout_toStartOf="@id/ibEmailAddEdit"
-                    android:layout_toEndOf="@id/ivEmailPicture"
-                    android:hint="@string/hint_phone"
-                    app:hintTextAppearance="@style/HintText">
+                    android:layout_toStartOf="@id/ibPhoneAddEdit"
+                    android:layout_toEndOf="@id/ivPhonePicture"
+                    android:hint="@string/hint_phone">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etPhoneNumber"
@@ -261,12 +260,12 @@
                         app:requestFocus="@{safeUnbox(viewModel.phoneOnEdit)}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <ImageButton
+                <androidx.appcompat.widget.AppCompatImageButton
                     android:id="@+id/ibPhoneAddEdit"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
-                    android:layout_alignTop="@id/input_layout_phone"
-                    android:layout_alignBottom="@id/input_layout_phone"
+                    android:layout_alignTop="@id/ivPhonePicture"
+                    android:layout_alignBottom="@id/ivPhonePicture"
                     android:layout_alignParentEnd="true"
                     android:layout_marginEnd="@dimen/profile_end_margin"
                     android:background="@android:color/transparent"
@@ -339,12 +338,11 @@
                     tools:text="**** **** **** *111" />
             </RelativeLayout>
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/bCardAddEdit"
-                style="@style/DefaultButtonStyle"
+                style="@style/MaterialButton"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="48dp"
+                android:layout_marginTop="52dp"
                 android:layout_marginEnd="32dp"
                 android:text="@string/add"
                 app:layout_constraintEnd_toEndOf="parent"

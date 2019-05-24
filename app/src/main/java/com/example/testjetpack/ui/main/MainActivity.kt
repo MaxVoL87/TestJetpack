@@ -29,7 +29,7 @@ import com.example.testjetpack.utils.showNotImplemented
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
-import kotlinx.android.synthetic.main.custom_toolbar.*
+import kotlinx.android.synthetic.main.toolbar_main.*
 import org.koin.android.ext.android.inject
 import kotlin.reflect.KClass
 

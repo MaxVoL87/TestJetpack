@@ -36,7 +36,8 @@ class MyStatusViewPagerAdapter : BaseRecyclerAdapter() {
         )
 }
 
-class ArcChartItemHolder(itemView: View) : BaseRecyclerItemViewHolder<ItemMyStatusArcChartBinding, ArcCharItemViewModel>(itemView) {
+class ArcChartItemHolder(itemView: View) :
+    BaseRecyclerItemViewHolder<ItemMyStatusArcChartBinding, ArcCharItemViewModel>(itemView) {
     private val motionLayout: MotionLayout = itemView.findViewById(R.id.motionLayout)
     private val acvStatus: ArcChartView = itemView.findViewById(R.id.acvStatus)
     private val cloud: FrameLayout = itemView.findViewById(R.id.cloud)
@@ -59,17 +60,21 @@ class ArcChartItemHolder(itemView: View) : BaseRecyclerItemViewHolder<ItemMyStat
 
         withNotNull(viewModel) {
             somePercents.observe(this@ArcChartItemHolder, Observer<Float> {
-                cloudAnimator.cancel()
-                cloudScaleAnimListener.setTo(it)
-                cloudAnimator.start()
+                withNotNull(it) {
+                    cloudAnimator.cancel()
+                    cloudScaleAnimListener.setTo(this)
+                    cloudAnimator.start()
+                }
             })
             profile.observe(this@ArcChartItemHolder, Observer {
-                sector0ArcSectorValueSetuper.setValue(it.restTime.getRestTimePV())
-                sector1ArcSectorValueSetuper.setValue(it.respiratoryRate.getRespiratoryRatePV())
-                sector2ArcSectorValueSetuper.setValue(it.heartRate.getHeartRatePV())
-                sector3ArcSectorValueSetuper.setValue(it.sleepTime.getSleepTimePV())
-                sector4ArcSectorValueSetuper.setValue(it.exercisesTime.getExercisesTimePV())
-                sector5ArcSectorValueSetuper.setValue(it.eatCalories.getEatCaloriesPV())
+                withNotNull(it) {
+                    sector0ArcSectorValueSetuper.setValue(restTime.getRestTimePV())
+                    sector1ArcSectorValueSetuper.setValue(respiratoryRate.getRespiratoryRatePV())
+                    sector2ArcSectorValueSetuper.setValue(heartRate.getHeartRatePV())
+                    sector3ArcSectorValueSetuper.setValue(sleepTime.getSleepTimePV())
+                    sector4ArcSectorValueSetuper.setValue(exercisesTime.getExercisesTimePV())
+                    sector5ArcSectorValueSetuper.setValue(eatCalories.getEatCaloriesPV())
+                }
             })
         }
 
@@ -79,7 +84,7 @@ class ArcChartItemHolder(itemView: View) : BaseRecyclerItemViewHolder<ItemMyStat
                 // because of scene with multiple transitions not working properly
                 // this also working bad
                 motionLayout.loadLayoutDescription(R.xml.scene_my_status_arc_chart_slide)
-                withNotNull(viewModel){
+                withNotNull(viewModel) {
                     isInitialized = true
                 }
             }
@@ -173,7 +178,8 @@ class ArcChartItemHolder(itemView: View) : BaseRecyclerItemViewHolder<ItemMyStat
     }
 }
 
-class ArcCharItemViewModel(val profile : MutableLiveData<Profile>, val somePercents: MutableLiveData<Float>) : BaseRecyclerItemViewModel() {
+class ArcCharItemViewModel(val profile: MutableLiveData<Profile>, val somePercents: MutableLiveData<Float>) :
+    BaseRecyclerItemViewModel() {
     override val itemViewType: Int = MyStatusViewPagerAdapter.VIEW_TYPE_ARC_CHART_ITEM
 
     private val _animationProgress = 0.0F.toMutableLiveData()
@@ -188,15 +194,15 @@ class ArcCharItemViewModel(val profile : MutableLiveData<Profile>, val somePerce
     }
 }
 
-class InfoItemHolder(itemView: View)
-    : BaseRecyclerItemViewHolder<ItemMyStatusInfoBinding, InfoItemViewModel>(itemView) {
+class InfoItemHolder(itemView: View) :
+    BaseRecyclerItemViewHolder<ItemMyStatusInfoBinding, InfoItemViewModel>(itemView) {
 
     override fun bindModel(binding: ItemMyStatusInfoBinding?) {
         binding?.let { it.viewModel = viewModel }
     }
 }
 
-class InfoItemViewModel(val profile : MutableLiveData<Profile>, val animationProgress: MutableLiveData<Float>)
-    : BaseRecyclerItemViewModel() {
+class InfoItemViewModel(val profile: MutableLiveData<Profile>, val animationProgress: MutableLiveData<Float>) :
+    BaseRecyclerItemViewModel() {
     override val itemViewType: Int = MyStatusViewPagerAdapter.VIEW_TYPE_INFO_ITEM
 }

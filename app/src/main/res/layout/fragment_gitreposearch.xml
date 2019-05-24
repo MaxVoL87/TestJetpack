@@ -43,11 +43,10 @@
             android:text='@={viewModel.searchText}'
             app:onEditorActionListener='@{viewModel.onOk}' />
 
-        <androidx.appcompat.widget.AppCompatButton
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/bSearch"
-            style="@style/DefaultButtonStyle"
+            style="@style/MaterialButton"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:layout_below="@id/toolbarPlaceHolder"
             android:layout_alignParentEnd="true"
             android:layout_marginTop="@dimen/text_margin"

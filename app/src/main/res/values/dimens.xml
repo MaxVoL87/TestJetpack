@@ -39,4 +39,5 @@
 
     <dimen name="status_info_items_top_margin">10dp</dimen>
 
+    <dimen name="_140sdp">200dp</dimen>
 </resources>

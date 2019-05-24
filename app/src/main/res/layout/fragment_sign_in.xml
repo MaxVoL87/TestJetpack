@@ -22,7 +22,9 @@
             android:id="@+id/email_login_form"
             android:layout_width="@dimen/sign_in_width"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true">
+            android:layout_centerInParent="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true">
 
             <ImageView
                 android:id="@+id/icon"
@@ -33,7 +35,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/lEmail"
-                style="@style/TextInputLayout"
+                style="@style/TextInputLayoutOutlined"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/icon"
@@ -55,7 +57,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/lPassword"
-                style="@style/TextInputLayout"
+                style="@style/TextInputLayoutOutlined"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/lEmail"
@@ -84,7 +86,6 @@
                 android:layout_below="@id/lPassword"
                 android:layout_marginTop="@dimen/sign_in_top_margins"
                 android:text="@string/sign_in"
-                app:cornerRadius="16dp"
                 app:onClick='@{viewModel::signIn}' />
 
             <View
@@ -99,26 +100,20 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/bSingInWithFacebook"
-                style="@style/MaterialButton"
+                style="@style/MaterialFacebookButton"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:layout_below="@id/separator"
                 android:layout_marginTop="@dimen/sign_in_top_margins"
                 android:text="@string/sign_in_with_facebook"
-                app:backgroundTint="@color/facebookButton"
-                app:cornerRadius="16dp"
                 app:onClick='@{viewModel::signInWithFacebook}' />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/bSingInWithTwitter"
-                style="@style/MaterialButton"
+                style="@style/MaterialTwitterButton"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:layout_below="@id/bSingInWithFacebook"
                 android:layout_marginTop="@dimen/sign_in_top_margins"
                 android:text="@string/sign_in_with_twitter"
-                app:backgroundTint="@color/twitterButton"
-                app:cornerRadius="16dp"
                 app:onClick='@{viewModel::signInWithTwitter}' />
 
             <RelativeLayout

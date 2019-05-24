@@ -71,7 +71,7 @@
     <string name="speed_accuracy__">speed accuracy (m/c):</string>
     <string name="bearing_accuracy__">bearing accuracy (°):</string>
     <string name="time__millis__">time (millis):</string>
-    <string name="elapsed_real_time__">elapsed real-time (nanos):</string>
+    <string name="elapsed_real_time__">elapsed real-time (millis):</string>
     <string name="acceleration__">acceleration (m/c²):</string>
     <string name="satellites__">satellites:</string>
 

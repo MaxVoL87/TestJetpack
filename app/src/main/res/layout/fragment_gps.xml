@@ -12,35 +12,49 @@
 
     </data>
 
-    <RelativeLayout
-        android:id="@+id/fGPSRoot"
+    <androidx.constraintlayout.motion.widget.MotionLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:layoutDescription="@xml/scene_gps_slide"
+        tools:showPaths="true">
+
+        <LinearLayout
+            style="@style/Backdrop"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="?attr/actionBarSize"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <include layout="@layout/backdrop_gps" />
+        </LinearLayout>
 
         <RelativeLayout
             android:id="@+id/toolbarPlaceHolder"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:layout_alignParentTop="true"
             android:background="@color/colorPrimary" />
 
         <ImageView
             android:id="@+id/isListenerStarted"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignStart="@id/toolbarPlaceHolder"
-            android:layout_alignTop="@id/toolbarPlaceHolder"
-            android:layout_alignBottom="@id/toolbarPlaceHolder"
-            android:layout_marginStart="45dp"
+            android:layout_marginStart="42dp"
+            android:layout_marginTop="15dp"
             android:src='@{safeUnbox(viewModel.isLocationListenerStarted()) ? @drawable/ic_gps_fixed_red_48dp : @drawable/ic_gps_not_fixed_grey_48dp}'
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             tools:ignore="ContentDescription" />
 
+
         <ScrollView
+            android:id="@+id/fGPSRoot"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/toolbarPlaceHolder"
-            android:layout_alignParentBottom="true"
-            android:scrollbarAlwaysDrawVerticalTrack="true">
+            android:layout_height="0dp"
+            android:background="@drawable/gps_background_shape"
+            android:scrollbarAlwaysDrawVerticalTrack="true"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="56dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -409,15 +423,22 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
 
-        <Button
-            android:id="@+id/bStartStopLocationListener"
-            style="@style/DefaultButtonStyle"
-            android:layout_width="wrap_content"
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/slider"
+            android:layout_marginTop="10dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
+            android:layout_width="100dp"
+            android:src="@drawable/shape_slider"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/bStartStopLocationListener"
+            style="@style/MaterialButton"
+            android:layout_width="wrap_content"
             android:layout_margin="@dimen/text_margin"
             android:onClick='@{(v) -> viewModel.startStopLocationUpdates()}'
-            android:text='@{safeUnbox(viewModel.isLocationListenerStarted()) ? @string/location_listener_stop : @string/location_listener_start}' />
-    </RelativeLayout>
+            android:text='@{safeUnbox(viewModel.isLocationListenerStarted()) ? @string/location_listener_stop : @string/location_listener_start}'
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+    </androidx.constraintlayout.motion.widget.MotionLayout>
 </layout>

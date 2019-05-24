@@ -41,30 +41,27 @@
         </LinearLayout>
 
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/previousButton"
-            style="@style/Widget.AppCompat.Button.Borderless"
+            style="@style/MaterialTextButton"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:text="@string/my_status_previous"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/nextButton"
-            style="@style/Widget.AppCompat.Button.Borderless"
+            style="@style/MaterialTextButton"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:text="@string/my_status_next"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/finishButton"
-            style="@style/Widget.AppCompat.Button.Borderless"
+            style="@style/MaterialTextButton"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:text="@string/my_status_finish"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />

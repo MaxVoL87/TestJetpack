@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <com.google.android.material.button.MaterialButton
+        style="@style/MaterialTextButton"
+        android:layout_width="wrap_content"
+        android:textColor="@color/colorWhiteText"
+        android:text="Test1" />
+
+    <com.google.android.material.button.MaterialButton
+        style="@style/MaterialTextButton"
+        android:layout_width="wrap_content"
+        android:textColor="@color/colorWhiteText"
+        android:text="Test2" />
+
+    <View
+        android:layout_width="56dp"
+        android:layout_height="1dp"
+        android:layout_margin="16dp"
+        android:background="@color/colorWhiteText" />
+
+    <com.google.android.material.button.MaterialButton
+        style="@style/MaterialTextButton"
+        android:layout_width="wrap_content"
+        android:textColor="@color/colorWhiteText"
+        android:text="Test3" />
+</merge>

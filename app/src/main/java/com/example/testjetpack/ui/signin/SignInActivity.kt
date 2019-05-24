@@ -11,7 +11,7 @@ import com.example.testjetpack.ui.main.MainActivity
 import com.example.testjetpack.ui.signin.passwordrecovery.IPasswordRecoveryFragmentCallback
 import com.example.testjetpack.ui.signin.signin.ISignInFragmentCallback
 import com.example.testjetpack.ui.signin.signup.ISignUpFragmentCallback
-import kotlinx.android.synthetic.main.custom_toolbar.*
+import kotlinx.android.synthetic.main.toolbar_main.*
 import kotlin.reflect.KClass
 
 class SignInActivity : BaseActivity<ActivitySignInBinding, SignInActivityVM>(),

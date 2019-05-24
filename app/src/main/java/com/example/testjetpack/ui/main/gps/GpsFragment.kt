@@ -41,7 +41,6 @@ class GpsFragment : BaseFragmentWithCallback<FragmentGpsBinding, GpsFragmentVM, 
 
     private val _isGpsOnlyItemId = 1
     private val _isShowDiagnosticItemId = 2
-    private val _clearDBLocationsDataItemId = 3
     private val _menuItems = mutableMapOf<Int, MenuItem>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -60,15 +59,17 @@ class GpsFragment : BaseFragmentWithCallback<FragmentGpsBinding, GpsFragmentVM, 
 
     // region options menu
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        _menuItems[_isGpsOnlyItemId] = menu.add(Menu.NONE, _isGpsOnlyItemId, Menu.NONE, getString(R.string.menu_item_gps_only)).apply {
-            setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM or MenuItem.SHOW_AS_ACTION_WITH_TEXT)
-            isCheckable = true
-        }
-        _menuItems[_isShowDiagnosticItemId] = menu.add(Menu.NONE, _isShowDiagnosticItemId, Menu.NONE, getString(R.string.menu_item_diagnostic)).apply {
-            setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM or MenuItem.SHOW_AS_ACTION_WITH_TEXT)
-            isCheckable = true
-        }
-        _menuItems[_clearDBLocationsDataItemId] = menu.add(Menu.NONE, _clearDBLocationsDataItemId, Menu.NONE, getString(R.string.menu_item_clear_locations))
+        _menuItems[_isGpsOnlyItemId] =
+            menu.add(Menu.NONE, _isGpsOnlyItemId, Menu.NONE, getString(R.string.menu_item_gps_only)).apply {
+                setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM or MenuItem.SHOW_AS_ACTION_WITH_TEXT)
+                isCheckable = true
+            }
+        _menuItems[_isShowDiagnosticItemId] =
+            menu.add(Menu.NONE, _isShowDiagnosticItemId, Menu.NONE, getString(R.string.menu_item_diagnostic)).apply {
+                setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM or MenuItem.SHOW_AS_ACTION_WITH_TEXT)
+                isCheckable = true
+            }
+        //   _menuItems[_openOptionMenuItemId] = menu.add(Menu.NONE, _openOptionMenuItemId, Menu.NONE, getString(R.string.menu_item_clear_locations))
         super.onCreateOptionsMenu(menu, inflater)
     }
 
@@ -97,10 +98,12 @@ class GpsFragment : BaseFragmentWithCallback<FragmentGpsBinding, GpsFragmentVM, 
                 }
                 return true
             }
-            _clearDBLocationsDataItemId -> {
-                viewModel.clearDBData()
-                return true
-            }
+
+            //todo
+//            _openOptionMenuItemId -> {
+//                viewModel.clearDBData()
+//                return true
+//            }
         }
 
         return super.onOptionsItemSelected(item)
@@ -114,6 +117,7 @@ class GpsFragment : BaseFragmentWithCallback<FragmentGpsBinding, GpsFragmentVM, 
             }
         }
     }
+
 // endregion options menu
 
     // region VM events renderer
