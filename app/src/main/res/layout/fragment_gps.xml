@@ -19,6 +19,7 @@
         tools:showPaths="true">
 
         <LinearLayout
+            android:id="@+id/llBackDrop"
             style="@style/Backdrop"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

@@ -138,4 +138,5 @@
     <style name="MaterialTwitterButton" parent="MaterialButton">
         <item name="backgroundTint">@color/twitterButton</item>
     </style>
+
 </resources>

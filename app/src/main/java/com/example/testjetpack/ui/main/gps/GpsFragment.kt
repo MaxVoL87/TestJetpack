@@ -16,6 +16,8 @@ import com.example.testjetpack.utils.permissionsGranted
 import com.example.testjetpack.utils.withNotNull
 import androidx.lifecycle.Observer
 import com.example.testjetpack.ui.base.BaseFragmentWithCallback
+import com.example.testjetpack.utils.binding.onClick
+import kotlinx.android.synthetic.main.backdrop_gps.*
 import kotlin.reflect.KClass
 
 
@@ -26,16 +28,25 @@ class GpsFragment : BaseFragmentWithCallback<FragmentGpsBinding, GpsFragmentVM, 
     override val observeLiveData: GpsFragmentVM.() -> Unit
         get() = {
             isGPSOnly.observe(this@GpsFragment, Observer<Boolean> {
-                setChecked(_menuItems[_isGpsOnlyItemId], it)
-                invalidateOptionsMenu()
+                withNotNull(it) {
+                    chbIsGpsOnly.isChecked = this
+                    setChecked(_menuItems[_isGpsOnlyItemId], this)
+                    invalidateOptionsMenu()
+                }
             })
             isLocationListenerStarted.observe(this@GpsFragment, Observer<Boolean> {
-                _menuItems[_isGpsOnlyItemId]?.isEnabled != it
-                invalidateOptionsMenu()
+                withNotNull(it) {
+                    chbIsGpsOnly.isEnabled = !this
+                    _menuItems[_isGpsOnlyItemId]?.isEnabled = !this
+                    invalidateOptionsMenu()
+                }
             })
             isNeedToShowDiagnostic.observe(this@GpsFragment, Observer<Boolean> {
-                setChecked(_menuItems[_isShowDiagnosticItemId], it)
-                invalidateOptionsMenu()
+                withNotNull(it) {
+                    chbIsShowDiagnostic.isChecked = this
+                    setChecked(_menuItems[_isShowDiagnosticItemId], this)
+                    invalidateOptionsMenu()
+                }
             })
         }
 
@@ -49,6 +60,15 @@ class GpsFragment : BaseFragmentWithCallback<FragmentGpsBinding, GpsFragmentVM, 
         return view
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        chbIsGpsOnly.setOnCheckedChangeListener { _, isChecked -> viewModel.isGPSOnly.value = isChecked }
+        chbIsShowDiagnostic.setOnCheckedChangeListener { _, isChecked ->
+            viewModel.isNeedToShowDiagnostic.value = isChecked
+        }
+        bClearLocations.onClick(Runnable { viewModel.clearDBData { showAlert("DB Cleared") } })
+        super.onViewCreated(view, savedInstanceState)
+    }
+
     override fun onStart() {
         super.onStart()
         val locationManager = getSystemService(requireContext(), LocationManager::class.java) as LocationManager
@@ -60,16 +80,15 @@ class GpsFragment : BaseFragmentWithCallback<FragmentGpsBinding, GpsFragmentVM, 
     // region options menu
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         _menuItems[_isGpsOnlyItemId] =
-            menu.add(Menu.NONE, _isGpsOnlyItemId, Menu.NONE, getString(R.string.menu_item_gps_only)).apply {
+            menu.add(Menu.NONE, _isGpsOnlyItemId, Menu.NONE, chbIsGpsOnly.text).apply {
                 setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM or MenuItem.SHOW_AS_ACTION_WITH_TEXT)
                 isCheckable = true
             }
         _menuItems[_isShowDiagnosticItemId] =
-            menu.add(Menu.NONE, _isShowDiagnosticItemId, Menu.NONE, getString(R.string.menu_item_diagnostic)).apply {
+            menu.add(Menu.NONE, _isShowDiagnosticItemId, Menu.NONE, chbIsShowDiagnostic.text).apply {
                 setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM or MenuItem.SHOW_AS_ACTION_WITH_TEXT)
                 isCheckable = true
             }
-        //   _menuItems[_openOptionMenuItemId] = menu.add(Menu.NONE, _openOptionMenuItemId, Menu.NONE, getString(R.string.menu_item_clear_locations))
         super.onCreateOptionsMenu(menu, inflater)
     }
 
@@ -98,12 +117,6 @@ class GpsFragment : BaseFragmentWithCallback<FragmentGpsBinding, GpsFragmentVM, 
                 }
                 return true
             }
-
-            //todo
-//            _openOptionMenuItemId -> {
-//                viewModel.clearDBData()
-//                return true
-//            }
         }
 
         return super.onOptionsItemSelected(item)

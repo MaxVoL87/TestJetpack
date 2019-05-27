@@ -83,7 +83,8 @@ class GpsFragmentVM(
     val speedAccuracy: LiveData<String> = switchMap(_location) { it.speedAccuracyMetersPerSecond.toLDString() }
     val bearingAccuracy: LiveData<String> = switchMap(_location) { it.bearingAccuracyDegrees.toLDString() }
     val time: LiveData<String> = switchMap(_location) { it.time.toLDString() }
-    val elapsedRealTime: LiveData<String> = switchMap(_location) { TimeUnit.NANOSECONDS.toMillis(it.elapsedRealtimeNanos).toLDString() }
+    val elapsedRealTime: LiveData<String> =
+        switchMap(_location) { TimeUnit.NANOSECONDS.toMillis(it.elapsedRealtimeNanos).toLDString() }
 
     val acceleration: LiveData<String> = switchMap(_location) { it.acceleration.toLDString() }
     val satellites: LiveData<String> = switchMap(_location) { it.satellites.toLDString() }
@@ -119,10 +120,10 @@ class GpsFragmentVM(
         _isLocationListenerStarted.value = true
     }
 
-    fun clearDBData() {
+    fun clearDBData(onSuccess: () -> Unit) {
         processCallAsync(
             call = { dataRepository.removeAllLocationsFromDB() },
-            onSuccess = {},
+            onSuccess = { onSuccess },
             onError = {
                 onError(it)
             },

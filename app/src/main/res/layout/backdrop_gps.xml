@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <com.google.android.material.button.MaterialButton
-        style="@style/MaterialTextButton"
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/chbIsGpsOnly"
         android:layout_width="wrap_content"
-        android:textColor="@color/colorWhiteText"
-        android:text="Test1" />
+        android:layout_height="wrap_content"
+        android:buttonTint="@color/colorGrey"
+        android:text="@string/menu_item_gps_only"
+        android:textColor="@color/colorWhiteText" />
 
-    <com.google.android.material.button.MaterialButton
-        style="@style/MaterialTextButton"
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/chbIsShowDiagnostic"
         android:layout_width="wrap_content"
-        android:textColor="@color/colorWhiteText"
-        android:text="Test2" />
+        android:layout_height="wrap_content"
+        android:buttonTint="@color/colorGrey"
+        android:text="@string/menu_item_diagnostic"
+        android:textColor="@color/colorWhiteText" />
 
     <View
         android:layout_width="56dp"
@@ -20,8 +24,9 @@
         android:background="@color/colorWhiteText" />
 
     <com.google.android.material.button.MaterialButton
+        android:id="@+id/bClearLocations"
         style="@style/MaterialTextButton"
         android:layout_width="wrap_content"
-        android:textColor="@color/colorWhiteText"
-        android:text="Test3" />
+        android:text="@string/menu_item_clear_locations"
+        android:textColor="@color/colorWhiteText" />
 </merge>
