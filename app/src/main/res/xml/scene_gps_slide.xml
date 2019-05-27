@@ -9,6 +9,10 @@
         motion:duration="500"
         motion:motionInterpolator="easeInOut">
 
+        <OnSwipe
+            motion:dragDirection="dragDown"
+            motion:touchRegionId="@id/slider"/>
+
         <OnClick
             motion:clickAction="toggle"
             motion:targetId="@id/slider" />

@@ -6,7 +6,7 @@
     <Transition
         motion:constraintSetEnd="@+id/end_slide"
         motion:constraintSetStart="@id/start_slide"
-        motion:duration="1000"
+        motion:duration="500"
         motion:motionInterpolator="linear">
 
         <KeyFrameSet>

@@ -6,7 +6,7 @@
         android:id="@+id/tr_in"
         motion:constraintSetEnd="@+id/end"
         motion:constraintSetStart="@+id/start"
-        motion:duration="1000"
+        motion:duration="750"
         motion:motionInterpolator="linear">
 
 
