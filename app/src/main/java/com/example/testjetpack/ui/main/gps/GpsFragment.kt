@@ -30,21 +30,18 @@ class GpsFragment : BaseFragmentWithCallback<FragmentGpsBinding, GpsFragmentVM, 
             isGPSOnly.observe(this@GpsFragment, Observer<Boolean> {
                 withNotNull(it) {
                     chbIsGpsOnly.isChecked = this
-                    setChecked(_menuItems[_isGpsOnlyItemId], this)
                     invalidateOptionsMenu()
                 }
             })
             isLocationListenerStarted.observe(this@GpsFragment, Observer<Boolean> {
                 withNotNull(it) {
                     chbIsGpsOnly.isEnabled = !this
-                    _menuItems[_isGpsOnlyItemId]?.isEnabled = !this
                     invalidateOptionsMenu()
                 }
             })
             isNeedToShowDiagnostic.observe(this@GpsFragment, Observer<Boolean> {
                 withNotNull(it) {
                     chbIsShowDiagnostic.isChecked = this
-                    setChecked(_menuItems[_isShowDiagnosticItemId], this)
                     invalidateOptionsMenu()
                 }
             })
@@ -61,10 +58,9 @@ class GpsFragment : BaseFragmentWithCallback<FragmentGpsBinding, GpsFragmentVM, 
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        //Binding not working on <merge/>
         chbIsGpsOnly.setOnCheckedChangeListener { _, isChecked -> viewModel.isGPSOnly.value = isChecked }
-        chbIsShowDiagnostic.setOnCheckedChangeListener { _, isChecked ->
-            viewModel.isNeedToShowDiagnostic.value = isChecked
-        }
+        chbIsShowDiagnostic.setOnCheckedChangeListener { _, isChecked -> viewModel.isNeedToShowDiagnostic.value = isChecked }
         bClearLocations.onClick(Runnable { viewModel.clearDBData { showAlert("DB Cleared") } })
         super.onViewCreated(view, savedInstanceState)
     }
@@ -93,7 +89,6 @@ class GpsFragment : BaseFragmentWithCallback<FragmentGpsBinding, GpsFragmentVM, 
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
-        super.onPrepareOptionsMenu(menu)
         _menuItems[_isGpsOnlyItemId]?.apply {
             setChecked(this, viewModel.isGPSOnly.value == true)
             isEnabled = viewModel.isLocationListenerStarted.value != true
@@ -101,6 +96,7 @@ class GpsFragment : BaseFragmentWithCallback<FragmentGpsBinding, GpsFragmentVM, 
         _menuItems[_isShowDiagnosticItemId]?.apply {
             setChecked(this, viewModel.isNeedToShowDiagnostic.value == true)
         }
+        super.onPrepareOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -124,7 +120,7 @@ class GpsFragment : BaseFragmentWithCallback<FragmentGpsBinding, GpsFragmentVM, 
 
     private fun setChecked(item: MenuItem?, checked: Boolean) {
         withNotNull(item) {
-            isChecked = checked
+            if (isChecked != checked) isChecked = checked
             title = SpannableString(title).also {
                 it.setSpan(ForegroundColorSpan(if (checked) Color.BLACK else Color.LTGRAY), 0, it.length, 0)
             }

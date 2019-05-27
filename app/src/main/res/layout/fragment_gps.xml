@@ -426,9 +426,10 @@
 
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/slider"
-            android:layout_marginTop="10dp"
             android:layout_height="wrap_content"
-            android:layout_width="100dp"
+            android:layout_width="0dp"
+            android:padding="15dp"
+            android:backgroundTint="@android:color/transparent"
             android:src="@drawable/shape_slider"/>
 
         <com.google.android.material.button.MaterialButton
