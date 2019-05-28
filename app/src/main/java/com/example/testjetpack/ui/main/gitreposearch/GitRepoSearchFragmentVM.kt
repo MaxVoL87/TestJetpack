@@ -4,6 +4,7 @@ import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations.switchMap
+import androidx.navigation.fragment.FragmentNavigator
 import com.example.testjetpack.MainApplicationContract
 import com.example.testjetpack.dataflow.repository.IGitDataRepository
 import com.example.testjetpack.models.git.network.request.GitPage
@@ -15,24 +16,23 @@ import com.example.testjetpack.ui.base.EventStateChange
 import com.example.testjetpack.utils.OnEditorOk
 import com.example.testjetpack.utils.UiUtils.hideKeyboard
 import com.example.testjetpack.utils.livedata.Event
+import com.example.testjetpack.utils.livedata.toMutableLiveData
 import com.example.testjetpack.utils.reset
 
 class GitRepoSearchFragmentVM(
     private val gitDataRepository: IGitDataRepository
 ) : BaseViewModel<GitRepoSearchFragmentVMEventStateChange>() {
 
-    private val _page: MutableLiveData<GitPage> =
-        MutableLiveData(
-            GitPage(
-                page = 1,
-                q = "",
-                perPage = MainApplicationContract.DEFAULT_NETWORK_PAGE_SIZE
-            )
-        )
+    private val _page: MutableLiveData<GitPage> = GitPage(
+        page = 1,
+        q = "",
+        perPage = MainApplicationContract.DEFAULT_NETWORK_PAGE_SIZE
+    ).toMutableLiveData()
+
     private val _repoResult: MutableLiveData<Listing<GitRepositoryView>> = MutableLiveData()
     private val _scrollToPosition: MutableLiveData<Int> = MutableLiveData(-1)
 
-    val searchText: MutableLiveData<String?> = MutableLiveData<String?>().apply {
+    val searchText: MutableLiveData<String> = MutableLiveData<String>().apply {
         observeForever { text ->
             if (text != null) {
                 _page.value?.let {
@@ -48,11 +48,13 @@ class GitRepoSearchFragmentVM(
         }
     }
 
-    val adapter = GitRepoSearchAdapter { retry() }.apply {
+    val adapter = GitRepoSearchAdapter(::retry).apply {
+        setOnOpenRepositoryListener(::openGitRepository)
         setOnItemClickListener(object : GitRepoSearchAdapter.OnItemClickListener<BaseRecyclerItemViewModel> {
             override fun onItemClick(position: Int, item: BaseRecyclerItemViewModel) {
-                if (item is GitRepoSearchItemVM)
-                    _events.value = Event(GitRepoSearchFragmentVMEventStateChange.OpenGitRepository(item.repo))
+                if (item is GitRepoSearchItemVM) {
+                    _events.value = Event(GitRepoSearchFragmentVMEventStateChange.ShowGitRepository(item.repo, item.fragmentNavigatorExtras))
+                }
             }
         })
     }
@@ -95,8 +97,13 @@ class GitRepoSearchFragmentVM(
         val listing = _repoResult.value
         listing?.retry?.invoke()
     }
+
+    private fun openGitRepository(repoUrl: String) {
+        _events.value = Event(GitRepoSearchFragmentVMEventStateChange.OpenGitRepository(repoUrl))
+    }
 }
 
 sealed class GitRepoSearchFragmentVMEventStateChange : EventStateChange {
-    class OpenGitRepository(val repo: GitRepositoryView) : GitRepoSearchFragmentVMEventStateChange()
+    class OpenGitRepository(val repoUrl: String) : GitRepoSearchFragmentVMEventStateChange()
+    class ShowGitRepository(val gitRepository: GitRepositoryView, val fragmentNavigatorExtras: FragmentNavigator.Extras? = null) : GitRepoSearchFragmentVMEventStateChange()
 }

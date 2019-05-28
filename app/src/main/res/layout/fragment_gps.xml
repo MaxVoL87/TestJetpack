@@ -18,7 +18,7 @@
         app:layoutDescription="@xml/scene_gps_slide"
         tools:showPaths="true">
 
-        <LinearLayout
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:id="@+id/llBackDrop"
             style="@style/Backdrop"
             android:layout_width="match_parent"
@@ -28,7 +28,7 @@
             android:orientation="vertical">
 
             <include layout="@layout/backdrop_gps" />
-        </LinearLayout>
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
         <RelativeLayout
             android:id="@+id/toolbarPlaceHolder"

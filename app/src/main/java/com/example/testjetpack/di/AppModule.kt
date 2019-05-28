@@ -13,6 +13,7 @@ import com.example.testjetpack.ui.dialog.message.MessageDialogFragmentVM
 import com.example.testjetpack.ui.dialog.progress.ProgressDialogFragmentVM
 import com.example.testjetpack.workers.NotificationDownloadWorker
 import com.example.testjetpack.ui.main.MainActivityVM
+import com.example.testjetpack.ui.main.gitrepodetails.GitRepoDetailsFragmentVM
 import com.example.testjetpack.ui.main.gitreposearch.GitRepoSearchFragmentVM
 import com.example.testjetpack.ui.main.gps.GpsFragmentVM
 import com.example.testjetpack.ui.main.myprofile.MyProfileFragmentVM
@@ -101,6 +102,7 @@ val appModule = module {
     viewModel { SignUpFragmentVM(get()) }
 
     viewModel { GitRepoSearchFragmentVM(get()) }
+    viewModel { GitRepoDetailsFragmentVM(get()) }
     viewModel { MyProfileFragmentVM(get(), get()) }
     viewModel { MyTripFragmentVM(get()) }
     viewModel { GpsFragmentVM(get(), get(), get()) }

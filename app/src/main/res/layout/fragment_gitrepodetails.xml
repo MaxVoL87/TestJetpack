@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ui.main.gitrepodetails.GitRepoDetailsFragment">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.example.testjetpack.ui.main.gitrepodetails.GitRepoDetailsFragmentVM" />
+
+    </data>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivUserAvatar"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            app:imageUrl='@{viewModel.gitRepositoryView.avatarUrl}'
+            app:layout_collapseMode="parallax"
+            app:centerCrop='@{true}'
+            app:picasso='@{viewModel.picasso}' />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</layout>

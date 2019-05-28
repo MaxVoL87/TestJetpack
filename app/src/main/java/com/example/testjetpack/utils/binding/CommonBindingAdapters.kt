@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import androidx.databinding.InverseBindingAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.testjetpack.R
 import com.example.testjetpack.utils.hideKeyboard
 import com.example.testjetpack.utils.picasso.CircleTransform
 import com.example.testjetpack.utils.showKeyboard
@@ -39,8 +40,22 @@ fun TextView.setTextIfAvailable(text: String?, isAvailable: Boolean?, notAvailab
 fun ImageView.setCircleImageUrl(imageUrl: String?, picasso: Picasso?) {
     if (imageUrl == null || picasso == null) return
     picasso.load(Uri.parse(imageUrl))
+        .placeholder(R.color.colorPrimary)
         .fit()
         .transform(CircleTransform())
+        .into(this)
+}
+
+/**
+ * Load image
+ */
+@BindingAdapter("imageUrl", "picasso", "centerCrop", requireAll = false)
+fun ImageView.setImageUrl(imageUrl: String?, picasso: Picasso?, centerCrop: Boolean?) {
+    if (imageUrl == null || picasso == null) return
+    picasso.load(Uri.parse(imageUrl))
+        .placeholder(R.color.colorPrimary)
+        .fit()
+        .apply { if (centerCrop == true) centerCrop() }
         .into(this)
 }
 

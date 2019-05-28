@@ -4,6 +4,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.ViewDataBinding
+import androidx.navigation.fragment.FragmentNavigator
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import com.example.testjetpack.R
@@ -18,6 +20,9 @@ import com.example.testjetpack.ui.custom.NetworkStateItemVM
 import com.example.testjetpack.ui.custom.VIEW_TYPE_NETWORK_STATE_ITEM
 import com.example.testjetpack.utils.LRUIndexedCache
 import com.example.testjetpack.utils.withNotNull
+import com.squareup.picasso.Picasso
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 
 
 //todo: change
@@ -29,6 +34,7 @@ class GitRepoSearchAdapter(
     private val _vmCache = LRUIndexedCache<BaseRecyclerItemViewModel>(30)
     private var _networkState: NetworkState? = null
     private var _onItemClickListener: OnItemClickListener<BaseRecyclerItemViewModel>? = null
+    private var _onOpenRepository: (repoUrl: String) -> Unit = {}
 
     fun setOnItemClickListener(onItemClickListener: OnItemClickListener<BaseRecyclerItemViewModel>) {
         _onItemClickListener = onItemClickListener
@@ -36,6 +42,10 @@ class GitRepoSearchAdapter(
 
     interface OnItemClickListener<T : BaseRecyclerItemViewModel> {
         fun onItemClick(position: Int, item: T)
+    }
+
+    fun setOnOpenRepositoryListener(onOpenRepository: (repoUrl: String) -> Unit) {
+        _onOpenRepository = onOpenRepository
     }
 
     override fun onBindViewHolder(
@@ -128,7 +138,7 @@ class GitRepoSearchAdapter(
                 } else {
                     vmCached = null
                     withNotNull(item) {
-                        vm = GitRepoSearchItemVM(this)
+                        vm = GitRepoSearchItemVM(this, _onOpenRepository)
                     }
                 }
             }
@@ -158,15 +168,31 @@ class GitRepoSearchItemVH(view: View) :
     BaseRecyclerItemViewHolder<ItemGitreposearchBinding, GitRepoSearchItemVM>(view) {
 
     override fun bindModel(binding: ItemGitreposearchBinding?) {
+        withNotNull(itemView.findViewById<View>(R.id.ivUserAvatar), viewModel) { view, vm ->
+            view.transitionName = "transition${vm.repo.index}"
+            vm.fragmentNavigatorExtras = FragmentNavigatorExtras(
+                view to view.transitionName
+            )
+        }
         binding?.let { it.viewModel = viewModel }
     }
 
     override fun unbind() {
+        viewModel?.fragmentNavigatorExtras = null
+        super.unbind()
     }
 }
 
 class GitRepoSearchItemVM(
-    val repo: GitRepositoryView
-) : BaseRecyclerItemViewModel() {
+    val repo: GitRepositoryView,
+    private val _onOpenRepository: (repoUrl: String) -> Unit
+) : BaseRecyclerItemViewModel(), KoinComponent {
+    val picasso: Picasso by inject()
+    var fragmentNavigatorExtras: FragmentNavigator.Extras? = null
+
+    fun openRepo() {
+        _onOpenRepository(repo.htmlUrl ?: repo.url)
+    }
+
     override val itemViewType: Int = -1 //temp todo: change
 }

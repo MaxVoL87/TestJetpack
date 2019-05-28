@@ -5,6 +5,7 @@ import android.view.View
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
+import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.ui.NavigationUI.*
 import com.example.testjetpack.R
 import com.example.testjetpack.databinding.ActivityMainBinding
@@ -13,6 +14,8 @@ import com.example.testjetpack.models.git.db.GitRepositoryView
 import com.example.testjetpack.models.own.Notification
 import com.example.testjetpack.ui.base.BaseActivity
 import com.example.testjetpack.ui.base.EventStateChange
+import com.example.testjetpack.ui.main.gitrepodetails.IGitRepoDetailsFragmentCallback
+import com.example.testjetpack.ui.main.gitreposearch.GitRepoSearchFragmentDirections
 import com.example.testjetpack.ui.main.gitreposearch.IGitRepoSearchFragmentCallback
 import com.example.testjetpack.ui.main.gps.IGpsFragmentCallback
 import com.example.testjetpack.ui.main.gps.GpsFragment
@@ -36,6 +39,7 @@ import kotlin.reflect.KClass
 
 class MainActivity : BaseActivity<ActivityMainBinding, MainActivityVM>(),
     IGitRepoSearchFragmentCallback,
+    IGitRepoDetailsFragmentCallback,
     IMyProfileFragmentCallback,
     IMyTripFragmentCallback,
     IGpsFragmentCallback,
@@ -161,8 +165,16 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityVM>(),
         }
     }
 
-    override fun openGitRepository(repo: GitRepositoryView) {
-        this.browseWithoutCurrentApp(repo.htmlUrl ?: repo.url)
+    override fun openGitRepository(repoUrl: String) {
+        this.browseWithoutCurrentApp(repoUrl)
+    }
+
+    override fun showGitRepository(repo: GitRepositoryView, fragmentNavigatorExtras: FragmentNavigator.Extras?) {
+        val actionDetails = GitRepoSearchFragmentDirections.actionGitRepoSearchFragmentToGitRepoDetailsFragment(
+            repo,
+            fragmentNavigatorExtras!!.sharedElements.values.first()
+        )
+        navController.navigate(actionDetails, fragmentNavigatorExtras)
     }
 
     override fun openNotificationDetails(notification: Notification) {

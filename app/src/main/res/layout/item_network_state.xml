@@ -12,7 +12,7 @@
 
     </data>
 
-    <LinearLayout
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -44,5 +44,5 @@
             android:onClick='@{(v) -> viewModel.retryCallback.invoke()}'
             app:visibleOrGone='@{viewModel.networkState.status == Status.FAILED}' />
 
-    </LinearLayout>
+    </androidx.appcompat.widget.LinearLayoutCompat>
 </layout>

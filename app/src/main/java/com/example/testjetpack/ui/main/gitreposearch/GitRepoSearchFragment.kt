@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.transition.TransitionInflater
 import com.example.testjetpack.R
 import com.example.testjetpack.databinding.FragmentGitreposearchBinding
 import com.example.testjetpack.ui.base.BaseFragmentWithCallback
@@ -24,6 +25,14 @@ class GitRepoSearchFragment : BaseFragmentWithCallback<FragmentGitreposearchBind
         get() = {
         }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        sharedElementReturnTransition = TransitionInflater.from(context).inflateTransition(R.transition.transition_default).apply {
+            duration = 350
+            startDelay = 200
+        }
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = super.onCreateView(inflater, container, savedInstanceState)
         binding.viewModel = viewModel
@@ -42,11 +51,17 @@ class GitRepoSearchFragment : BaseFragmentWithCallback<FragmentGitreposearchBind
 
     private val openGitRepositoryRenderer: (Any) -> Unit = { event ->
         event as GitRepoSearchFragmentVMEventStateChange.OpenGitRepository
-        callback?.openGitRepository(event.repo)
+        callback?.openGitRepository(event.repoUrl)
+    }
+
+    private val showGitRepositoryRenderer: (Any) -> Unit = { event ->
+        event as GitRepoSearchFragmentVMEventStateChange.ShowGitRepository
+        callback?.showGitRepository(event.gitRepository, event.fragmentNavigatorExtras)
     }
 
     override val RENDERERS: Map<KClass<out EventStateChange>, Function1<Any, Unit>> = mapOf(
-        GitRepoSearchFragmentVMEventStateChange.OpenGitRepository::class to openGitRepositoryRenderer
+        GitRepoSearchFragmentVMEventStateChange.OpenGitRepository::class to openGitRepositoryRenderer,
+        GitRepoSearchFragmentVMEventStateChange.ShowGitRepository::class to showGitRepositoryRenderer
     )
     // endregion VM events renderer
 

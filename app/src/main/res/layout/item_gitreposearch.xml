@@ -17,19 +17,26 @@
         android:layout_marginTop="@dimen/min_text_margin"
         android:layout_marginBottom="@dimen/min_text_margin">
 
-        <TextView
-            android:id="@+id/tvUserName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivUserAvatar"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_marginStart="@dimen/min_text_margin"
             android:layout_marginTop="@dimen/min_text_margin"
-            android:layout_marginEnd="@dimen/min_text_margin"
-            android:drawableStart="@drawable/ic_link_24dp"
-            android:drawablePadding="@dimen/min_text_margin"
-            android:gravity="center_vertical|start"
-            android:text='@{viewModel.repo.ownerName}'
+            app:imageUrl='@{viewModel.repo.avatarUrl}'
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:picasso='@{viewModel.picasso}' />
+
+        <TextView
+            android:id="@+id/tvUserName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical|center"
+            android:text='@{viewModel.repo.ownerName}'
+            app:layout_constraintEnd_toEndOf="@id/ivUserAvatar"
+            app:layout_constraintStart_toStartOf="@id/ivUserAvatar"
+            app:layout_constraintTop_toBottomOf="@id/ivUserAvatar"
             tools:text="User Name" />
 
         <TextView
@@ -44,13 +51,13 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toEndOf="@+id/tvUserName"
+            app:layout_constraintStart_toEndOf="@id/ivUserAvatar"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Language" />
 
         <TextView
             android:id="@+id/tvRepoName"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/min_text_margin"
             android:layout_marginTop="@dimen/min_text_margin"
@@ -58,21 +65,25 @@
             android:gravity="center"
             android:text='@{viewModel.repo.name}'
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvUserName"
+            app:layout_constraintStart_toEndOf="@id/ivUserAvatar"
+            app:layout_constraintTop_toBottomOf="@id/tvLanguage"
             tools:text="Repo Name" />
 
         <TextView
             android:id="@+id/tvRepoUrl"
-            android:layout_width="match_parent"
+            style="@style/DefaultLinkText"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/min_text_margin"
             android:layout_marginTop="@dimen/min_text_margin"
             android:layout_marginEnd="@dimen/min_text_margin"
+            android:drawableStart="@drawable/ic_link_24dp"
+            android:drawablePadding="@dimen/min_text_margin"
             android:text='@{viewModel.repo.url}'
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@id/ivUserAvatar"
             app:layout_constraintTop_toBottomOf="@+id/tvRepoName"
+            app:onClick='@{viewModel::openRepo}'
             tools:text="Url:\\" />
 
         <TextView
@@ -82,18 +93,20 @@
             android:layout_marginTop="@dimen/min_text_margin"
             android:layout_marginEnd="@dimen/min_text_margin"
             android:text='@{String.format("%d.", viewModel.repo.index + 1)}'
+            app:layout_constraintBottom_toTopOf="@id/separator"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvRepoUrl"
+            app:layout_constraintVertical_bias="1.0"
             tools:text="1." />
 
         <View
+            android:id="@+id/separator"
+            style="@style/SeparatorStyle"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
             android:layout_marginTop="@dimen/min_text_margin"
-            android:background="@color/colorGrey"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvNumber" />
+            app:layout_constraintTop_toBottomOf="@id/tvUserName" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -9,7 +9,11 @@
         android:id="@+id/gitRepoSearchFragment"
         android:name="com.example.testjetpack.ui.main.gitreposearch.GitRepoSearchFragment"
         android:label="Git Repo Search"
-        tools:layout="@layout/fragment_gitreposearch" />
+        tools:layout="@layout/fragment_gitreposearch" >
+        <action
+            android:id="@+id/action_gitRepoSearchFragment_to_gitRepoDetailsFragment"
+            app:destination="@id/gitRepoDetailsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/myProfileFragment"
         android:name="com.example.testjetpack.ui.main.myprofile.MyProfileFragment"
@@ -35,6 +39,21 @@
         android:name="com.example.testjetpack.ui.main.notifications.NotificationsFragment"
         android:label="Notifications"
         tools:layout="@layout/fragment_notifications" />
+    <fragment
+        android:id="@+id/gitRepoDetailsFragment"
+        android:name="com.example.testjetpack.ui.main.gitrepodetails.GitRepoDetailsFragment"
+        android:label="Git Repo Details"
+        tools:layout="@layout/fragment_gitrepodetails" >
+        <argument
+            android:name="gitRepositoryView"
+            app:nullable="false"
+            app:argType="com.example.testjetpack.models.git.db.GitRepositoryView" />
+        <argument
+            android:name="transitionName"
+            android:defaultValue="null"
+            app:nullable="true"
+            app:argType="string" />
+    </fragment>
 
     <action
         android:id="@+id/action_global_myProfileFragment"
