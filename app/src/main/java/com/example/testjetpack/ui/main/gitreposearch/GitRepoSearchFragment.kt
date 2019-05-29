@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.transition.TransitionInflater
 import com.example.testjetpack.R
 import com.example.testjetpack.databinding.FragmentGitreposearchBinding
 import com.example.testjetpack.ui.base.BaseFragmentWithCallback
@@ -24,14 +23,6 @@ class GitRepoSearchFragment : BaseFragmentWithCallback<FragmentGitreposearchBind
     override val observeLiveData: GitRepoSearchFragmentVM.() -> Unit
         get() = {
         }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        sharedElementReturnTransition = TransitionInflater.from(context).inflateTransition(R.transition.transition_default).apply {
-            duration = 350
-            startDelay = 200
-        }
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = super.onCreateView(inflater, container, savedInstanceState)

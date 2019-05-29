@@ -4,14 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.graphics.drawable.toDrawable
 import androidx.transition.TransitionInflater
 
 import com.example.testjetpack.R
 import com.example.testjetpack.databinding.FragmentGitrepodetailsBinding
 import com.example.testjetpack.ui.base.BaseFragmentWithCallback
 import com.example.testjetpack.ui.base.EventStateChange
-import com.example.testjetpack.utils.withNotNull
 import kotlin.reflect.KClass
 
 class GitRepoDetailsFragment :
@@ -25,10 +23,11 @@ class GitRepoDetailsFragment :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(R.transition.transition_default).apply {
+        val transition =  TransitionInflater.from(context).inflateTransition(R.transition.transition_default).apply {
             duration = 350
-            startDelay = 200
         }
+        sharedElementEnterTransition = transition
+        sharedElementReturnTransition = transition
         arguments?.let {
             viewModel.gitRepoDetailsFragmentArgs.value = GitRepoDetailsFragmentArgs.fromBundle(it)
         }
