@@ -6,6 +6,8 @@
 
     <data>
 
+        <import type="com.example.testjetpack.utils.ObjectExtKt" />
+
         <variable
             name="viewModel"
             type="com.example.testjetpack.ui.main.gitrepodetails.GitRepoDetailsFragmentVM" />
@@ -20,11 +22,25 @@
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/ivUserAvatar"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            app:imageUrl='@{viewModel.gitRepositoryView.avatarUrl}'
-            app:layout_collapseMode="parallax"
+            android:layout_height="250dp"
+            android:transitionName='@{viewModel.transitionName}'
             app:centerCrop='@{true}'
-            app:picasso='@{viewModel.picasso}' />
+            app:imageUrl='@{viewModel.avatarUrl}'
+            app:layout_collapseMode="parallax"
+            app:picasso='@{viewModel.picasso}'
+            app:placeholder='@{viewModel.transitionDrawable}' />
+
+        <View
+            style="@style/SeparatorStyle"
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:layout_marginTop="0dp" />
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:map='@{ObjectExtKt.toMapOfStrings(viewModel.gitRepository)}'
+            tools:listitem="@android:layout/simple_expandable_list_item_2" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 </layout>

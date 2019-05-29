@@ -2,6 +2,8 @@ package com.example.testjetpack.ui.main
 
 import android.os.Bundle
 import android.view.View
+import android.widget.ImageView
+import androidx.core.graphics.drawable.toBitmap
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
@@ -170,9 +172,11 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityVM>(),
     }
 
     override fun showGitRepository(repo: GitRepositoryView, fragmentNavigatorExtras: FragmentNavigator.Extras?) {
+        val sElementImageViewMapEntry = fragmentNavigatorExtras!!.sharedElements.entries.first()
         val actionDetails = GitRepoSearchFragmentDirections.actionGitRepoSearchFragmentToGitRepoDetailsFragment(
             repo,
-            fragmentNavigatorExtras!!.sharedElements.values.first()
+            sElementImageViewMapEntry.value,
+            (sElementImageViewMapEntry.key as ImageView).drawable.toBitmap()
         )
         navController.navigate(actionDetails, fragmentNavigatorExtras)
     }

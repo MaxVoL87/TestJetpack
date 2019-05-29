@@ -1,11 +1,10 @@
 package com.example.testjetpack.utils.binding
 
 import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.view.View
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
 import androidx.databinding.BindingAdapter
 import androidx.databinding.InverseBindingAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -14,6 +13,7 @@ import com.example.testjetpack.utils.hideKeyboard
 import com.example.testjetpack.utils.picasso.CircleTransform
 import com.example.testjetpack.utils.showKeyboard
 import com.squareup.picasso.Picasso
+
 
 /**
  * Load and circle image
@@ -49,13 +49,18 @@ fun ImageView.setCircleImageUrl(imageUrl: String?, picasso: Picasso?) {
 /**
  * Load image
  */
-@BindingAdapter("imageUrl", "picasso", "centerCrop", requireAll = false)
-fun ImageView.setImageUrl(imageUrl: String?, picasso: Picasso?, centerCrop: Boolean?) {
+@BindingAdapter("picasso", "imageUrl", "placeholder", "centerCrop", requireAll = false)
+fun ImageView.setImageUrl(picasso: Picasso?, imageUrl: String?, placeholder: Drawable?, centerCrop: Boolean?) {
     if (imageUrl == null || picasso == null) return
     picasso.load(Uri.parse(imageUrl))
-        .placeholder(R.color.colorPrimary)
+        .apply { if (placeholder == null) placeholder(R.color.colorPrimary) else placeholder(placeholder) }
         .fit()
-        .apply { if (centerCrop == true) centerCrop() }
+        .apply {
+            if (centerCrop == true) {
+                noFade()
+                centerCrop()
+            }
+        }
         .into(this)
 }
 
@@ -79,6 +84,22 @@ fun RecyclerView.setPosition(position: Int) {
 //        is StaggeredGridLayoutManager -> mLayoutManager.scrollToPositionWithOffset(position, offset)
 //        else -> scrollToPosition(position)
 //    }
+}
+
+/**
+ * Invoke RecyclerView.scrollToPosition(position: Int) action
+ */
+@BindingAdapter("map")
+fun ListView.setMap(map: Map<String, String>?) {
+    if (map == null) return
+
+    val name = "name"
+    val value = "value"
+    val data = map.map { hashMapOf(name to it.key, value to it.value) }
+    val from = arrayOf(name, value)
+    val to = arrayOf(android.R.id.text1, android.R.id.text2).toIntArray()
+
+    adapter = SimpleAdapter(context, data, android.R.layout.simple_expandable_list_item_2, from, to)
 }
 
 /**

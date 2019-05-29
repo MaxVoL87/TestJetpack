@@ -53,6 +53,10 @@
             android:defaultValue="null"
             app:nullable="true"
             app:argType="string" />
+        <argument
+            android:name="transitionBitmap"
+            app:nullable="true"
+            app:argType="android.graphics.Bitmap" />
     </fragment>
 
     <action

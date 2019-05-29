@@ -102,7 +102,7 @@ val appModule = module {
     viewModel { SignUpFragmentVM(get()) }
 
     viewModel { GitRepoSearchFragmentVM(get()) }
-    viewModel { GitRepoDetailsFragmentVM(get()) }
+    viewModel { GitRepoDetailsFragmentVM(get(), get()) }
     viewModel { MyProfileFragmentVM(get(), get()) }
     viewModel { MyTripFragmentVM(get()) }
     viewModel { GpsFragmentVM(get(), get(), get()) }
