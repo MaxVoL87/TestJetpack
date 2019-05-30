@@ -4,6 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.doOnPreDraw
+import androidx.transition.TransitionInflater
+import com.example.testjetpack.MainApplicationContract.DEFAULT_UI_DELAY
 import com.example.testjetpack.R
 import com.example.testjetpack.databinding.FragmentGitreposearchBinding
 import com.example.testjetpack.ui.base.BaseFragmentWithCallback
@@ -16,7 +19,8 @@ import kotlin.reflect.KClass
  * Activities containing this fragment MUST implement the
  * [IGitRepoSearchFragmentCallback] interface.
  */
-class GitRepoSearchFragment : BaseFragmentWithCallback<FragmentGitreposearchBinding, GitRepoSearchFragmentVM, IGitRepoSearchFragmentCallback>() {
+class GitRepoSearchFragment :
+    BaseFragmentWithCallback<FragmentGitreposearchBinding, GitRepoSearchFragmentVM, IGitRepoSearchFragmentCallback>() {
     override val layoutId: Int = R.layout.fragment_gitreposearch
     override val viewModelClass: KClass<GitRepoSearchFragmentVM> = GitRepoSearchFragmentVM::class
     override val callbackClass: KClass<IGitRepoSearchFragmentCallback> = IGitRepoSearchFragmentCallback::class
@@ -24,10 +28,27 @@ class GitRepoSearchFragment : BaseFragmentWithCallback<FragmentGitreposearchBind
         get() = {
         }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        sharedElementReturnTransition = TransitionInflater.from(context)
+            .inflateTransition(R.transition.transition_default)
+            .apply {
+                duration = DEFAULT_UI_DELAY
+            }
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = super.onCreateView(inflater, container, savedInstanceState)
         binding.viewModel = viewModel
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // without this not working sharedElementReturnTransition & Navigation
+        postponeEnterTransition()
+        view.doOnPreDraw { startPostponedEnterTransition() }
     }
 
     override fun showProgress(text: String?) {

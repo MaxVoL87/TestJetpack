@@ -40,7 +40,6 @@ fun TextView.setTextIfAvailable(text: String?, isAvailable: Boolean?, notAvailab
 fun ImageView.setCircleImageUrl(imageUrl: String?, picasso: Picasso?) {
     if (imageUrl == null || picasso == null) return
     picasso.load(Uri.parse(imageUrl))
-        .placeholder(R.color.colorPrimary)
         .fit()
         .transform(CircleTransform())
         .into(this)
@@ -53,7 +52,7 @@ fun ImageView.setCircleImageUrl(imageUrl: String?, picasso: Picasso?) {
 fun ImageView.setImageUrl(picasso: Picasso?, imageUrl: String?, placeholder: Drawable?, centerCrop: Boolean?) {
     if (imageUrl == null || picasso == null) return
     picasso.load(Uri.parse(imageUrl))
-        .apply { if (placeholder == null) placeholder(R.color.colorPrimary) else placeholder(placeholder) }
+        .apply { if (placeholder == null) placeholder(R.color.colorBackgroundPrimary) else placeholder(placeholder) }
         .fit()
         .apply {
             if (centerCrop == true) {

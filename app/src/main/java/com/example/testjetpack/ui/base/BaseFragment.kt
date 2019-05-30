@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.example.testjetpack.MainApplicationContract
 import com.example.testjetpack.R
+import com.example.testjetpack.utils.autoCleared
 import com.example.testjetpack.utils.livedata.EventObserver
 import kotlinx.coroutines.*
 import org.koin.android.viewmodel.ext.android.getViewModel
@@ -25,7 +26,7 @@ abstract class BaseFragment<B : ViewDataBinding, M : BaseViewModel<out EventStat
 
     protected abstract val layoutId: Int
     protected abstract val viewModelClass: KClass<M>
-    protected lateinit var binding: B
+    protected var binding: B by autoCleared()
     protected val viewModel: M by lazy(LazyThreadSafetyMode.NONE) { getViewModel(viewModelClass) }
 
     var popupWindow: ListPopupWindow? = null

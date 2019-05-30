@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.DialogFragment
+import com.example.testjetpack.utils.autoCleared
 import com.example.testjetpack.utils.livedata.EventObserver
 import org.koin.android.viewmodel.ext.android.getViewModel
 import kotlin.reflect.KClass
@@ -15,12 +16,11 @@ abstract class BaseDialogFragment<B : ViewDataBinding, M : BaseViewModel<out Eve
 
     protected abstract val layoutId: Int
     protected abstract val viewModelClass: KClass<M>
-    protected lateinit var binding: B
+    protected var binding: B by autoCleared()
     protected val viewModel: M by lazy(LazyThreadSafetyMode.NONE) { getViewModel(viewModelClass) }
 
     protected open fun observeBaseLiveData() = with(viewModel) {
         events.observe(this@BaseDialogFragment, EventObserver(this@BaseDialogFragment::render))
-
         observeLiveData()
     }
 

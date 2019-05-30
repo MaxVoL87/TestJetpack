@@ -20,6 +20,7 @@ import com.example.testjetpack.ui.dialog.message.IMessageDialogFragmentCallback
 import com.example.testjetpack.ui.dialog.message.MessageDialogFragment
 import com.example.testjetpack.ui.dialog.progress.IProgressDialogFragmentCallback
 import com.example.testjetpack.ui.dialog.progress.ProgressDialogFragment
+import com.example.testjetpack.utils.autoCleared
 import com.example.testjetpack.utils.withNotNull
 import org.koin.android.viewmodel.ext.android.getViewModel
 
@@ -31,7 +32,7 @@ abstract class BaseActivity<B : ViewDataBinding, M : BaseViewModel<out EventStat
     protected abstract val layoutId: Int
     protected abstract val navControllerId: Int
     protected abstract val viewModelClass: KClass<M>
-    protected lateinit var binding: B
+    protected var binding: B by autoCleared()
     protected val navController: NavController
             by lazy(LazyThreadSafetyMode.NONE) { Navigation.findNavController(this, navControllerId) }
     protected val viewModel: M by lazy(LazyThreadSafetyMode.NONE) { getViewModel(viewModelClass) }

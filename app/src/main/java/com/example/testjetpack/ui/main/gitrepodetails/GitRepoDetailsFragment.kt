@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.navArgs
 import androidx.transition.TransitionInflater
+import com.example.testjetpack.MainApplicationContract.DEFAULT_UI_DELAY
 
 import com.example.testjetpack.R
 import com.example.testjetpack.databinding.FragmentGitrepodetailsBinding
@@ -21,16 +23,17 @@ class GitRepoDetailsFragment :
         get() = {
         }
 
+    private val navArgs by navArgs<GitRepoDetailsFragmentArgs>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val transition =  TransitionInflater.from(context).inflateTransition(R.transition.transition_default).apply {
-            duration = 350
-        }
-        sharedElementEnterTransition = transition
-        sharedElementReturnTransition = transition
-        arguments?.let {
-            viewModel.gitRepoDetailsFragmentArgs.value = GitRepoDetailsFragmentArgs.fromBundle(it)
-        }
+        sharedElementEnterTransition = TransitionInflater.from(context)
+            .inflateTransition(R.transition.transition_default)
+            .apply {
+                duration = DEFAULT_UI_DELAY
+            }
+
+        viewModel.gitRepoDetailsFragmentArgs.value = navArgs
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
