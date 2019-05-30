@@ -19,4 +19,7 @@ interface IGitRepositoryDao {
 
     @Query("SELECT MAX(index_in_response) + 1 FROM repository_table")
     fun getNextIndex(): Int
+
+    @Query("SELECT * FROM repository_table WHERE index_in_response = :indexInResponse")
+    fun getGitRepositoryByIndex(indexInResponse: Int): GitRepository
 }

@@ -6,8 +6,6 @@
 
     <data>
 
-        <import type="com.example.testjetpack.utils.ObjectExtKt" />
-
         <variable
             name="viewModel"
             type="com.example.testjetpack.ui.main.gitrepodetails.GitRepoDetailsFragmentVM" />
@@ -39,7 +37,7 @@
         <ListView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:map='@{ObjectExtKt.toMapOfStrings(viewModel.gitRepository)}'
+            app:map='@{viewModel.repoDetails}'
             tools:listitem="@android:layout/simple_expandable_list_item_2" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>

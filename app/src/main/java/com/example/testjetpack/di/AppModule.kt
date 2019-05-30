@@ -2,6 +2,7 @@ package com.example.testjetpack.di
 
 import android.content.res.Resources
 import android.os.Build
+import androidx.collection.LruCache
 import androidx.work.Constraints
 import androidx.work.PeriodicWorkRequest
 import com.example.testjetpack.BuildConfig
@@ -48,15 +49,17 @@ val appModule = module {
     }
 
     single<Picasso> {
-        val client = OkHttpClient.Builder().apply {
+        val builder = OkHttpClient.Builder().apply {
             if (BuildConfig.DEBUG) addNetworkInterceptor(get())
         }
-        val okHttp3Downloader = OkHttp3Downloader(client.build())
+        val okHttp3Downloader = OkHttp3Downloader(builder.build())
         Picasso.Builder(androidContext())
             .downloader(okHttp3Downloader)
             .loggingEnabled(BuildConfig.DEBUG)
             .build()
     }
+
+    single<LruCache<String, Any>> { LruCache(100)  }
 
     // single instance of IGitDataRepository
     single<IGitDataRepository> { GitDataRepository(get(), get()) }
@@ -102,7 +105,7 @@ val appModule = module {
     viewModel { SignUpFragmentVM(get()) }
 
     viewModel { GitRepoSearchFragmentVM(get()) }
-    viewModel { GitRepoDetailsFragmentVM(get(), get()) }
+    viewModel { GitRepoDetailsFragmentVM(get(), get(), get()) }
     viewModel { MyProfileFragmentVM(get(), get()) }
     viewModel { MyTripFragmentVM(get()) }
     viewModel { GpsFragmentVM(get(), get(), get()) }

@@ -34,6 +34,10 @@ class GitDataRepository(
     private val _gitLicenseDao: IGitLicenseDao by lazy { _appDatabase.getGitLicenseDao() }
     private val _gitGitUserDao: IGitUserDao by lazy { _appDatabase.getGitUserDao() }
 
+    override fun getGitRepositoryFromCache(indexInResponse: Int): com.example.testjetpack.models.git.db.GitRepository {
+        return _gitRepositoryDao.getGitRepositoryByIndex(indexInResponse)
+    }
+
     /**
      * Returns a Listing for the given page.
      */

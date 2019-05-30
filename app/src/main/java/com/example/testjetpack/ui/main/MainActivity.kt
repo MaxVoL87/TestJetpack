@@ -3,7 +3,7 @@ package com.example.testjetpack.ui.main
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
-import androidx.core.graphics.drawable.toBitmap
+import androidx.collection.LruCache
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
@@ -56,6 +56,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityVM>(),
         }
 
     private val _picasso: Picasso by inject()
+    private val _cache: LruCache<String, Any> by inject()
     private val _onDestinationChangedListener =
         NavController.OnDestinationChangedListener { controller, destination, _ ->
             // hide drawer if no parent fragment
@@ -175,9 +176,9 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityVM>(),
         val sElementImageViewMapEntry = fragmentNavigatorExtras!!.sharedElements.entries.first()
         val actionDetails = GitRepoSearchFragmentDirections.actionGitRepoSearchFragmentToGitRepoDetailsFragment(
             repo,
-            sElementImageViewMapEntry.value,
-            (sElementImageViewMapEntry.key as ImageView).drawable.toBitmap()
+            sElementImageViewMapEntry.value
         )
+        _cache.put(repo.avatarUrl!!, (sElementImageViewMapEntry.key as ImageView).drawable)
         navController.navigate(actionDetails, fragmentNavigatorExtras)
     }
 
