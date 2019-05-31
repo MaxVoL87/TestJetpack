@@ -43,6 +43,14 @@ class NotificationsFragmentVM(
             showProgress = true
         )
     }
+
+    fun addNotifications(){
+        //todo: implement
+    }
+
+    fun clearNotifications(){
+        //todo: implement
+    }
 }
 
 sealed class NotificationsFragmentVMEventStateChange : EventStateChange {

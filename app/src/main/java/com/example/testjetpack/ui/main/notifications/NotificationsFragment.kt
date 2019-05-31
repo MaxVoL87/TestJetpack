@@ -15,7 +15,8 @@ import kotlin.reflect.KClass
  * A fragment representing a list of Notification Items.
  * Activities containing this fragment MUST implement the [INotificationsFragmentCallback] interface.
  */
-class NotificationsFragment : BaseFragmentWithCallback<FragmentNotificationsBinding, NotificationsFragmentVM, INotificationsFragmentCallback>() {
+class NotificationsFragment :
+    BaseFragmentWithCallback<FragmentNotificationsBinding, NotificationsFragmentVM, INotificationsFragmentCallback>() {
     override val layoutId: Int = R.layout.fragment_notifications
     override val viewModelClass: KClass<NotificationsFragmentVM> = NotificationsFragmentVM::class
     override val callbackClass: KClass<INotificationsFragmentCallback> = INotificationsFragmentCallback::class
@@ -28,6 +29,24 @@ class NotificationsFragment : BaseFragmentWithCallback<FragmentNotificationsBind
         binding.viewModel = viewModel
         return view
     }
+
+//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+////        val mBottomSheetBehaviour = BottomSheetBehavior.from(bsView)
+////        mBottomSheetBehaviour.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback(){
+////            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+//////                if(slideOffset >= 1){
+//////                    ViewCompat.offsetLeftAndRight(bsView, 0)
+//////                } else {
+//////                    ViewCompat.offsetLeftAndRight(bsView, 1)
+//////                }
+////            }
+////
+////            override fun onStateChanged(bottomSheet: View, newState: Int) {
+////            }
+////
+////        })
+//        super.onViewCreated(view, savedInstanceState)
+//    }
 
     override fun onStart() {
         super.onStart()
