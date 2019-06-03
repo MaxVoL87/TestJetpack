@@ -1,5 +1,6 @@
 package com.example.testjetpack.ui.main.notifications
 
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,8 +9,17 @@ import com.example.testjetpack.R
 import com.example.testjetpack.databinding.FragmentNotificationsBinding
 import com.example.testjetpack.ui.base.BaseFragmentWithCallback
 import com.example.testjetpack.ui.base.EventStateChange
+import com.example.testjetpack.utils.interpolateColor
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import kotlinx.android.synthetic.main.fragment_notifications.*
 
 import kotlin.reflect.KClass
+import androidx.core.content.ContextCompat
+import android.graphics.Point
+import android.graphics.drawable.Drawable
+import androidx.constraintlayout.motion.widget.MotionLayout
+import com.example.testjetpack.utils.withNotNull
+
 
 /**
  * A fragment representing a list of Notification Items.
@@ -30,30 +40,32 @@ class NotificationsFragment :
         return view
     }
 
-//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-////        val mBottomSheetBehaviour = BottomSheetBehavior.from(bsView)
-////        mBottomSheetBehaviour.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback(){
-////            override fun onSlide(bottomSheet: View, slideOffset: Float) {
-//////                if(slideOffset >= 1){
-//////                    ViewCompat.offsetLeftAndRight(bsView, 0)
-//////                } else {
-//////                    ViewCompat.offsetLeftAndRight(bsView, 1)
-//////                }
-////            }
-////
-////            override fun onStateChanged(bottomSheet: View, newState: Int) {
-////            }
-////
-////        })
-//        super.onViewCreated(view, savedInstanceState)
-//    }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        bsView.progress
+        withNotNull(activity?.windowManager?.defaultDisplay) {
+            val point = Point()
+            getSize(point)
+            BottomSheetAnimator.init(
+                bsView,
+                point.x,
+                ContextCompat.getColor(requireContext(), R.color.colorPrimary),
+                ContextCompat.getColor(requireContext(), R.color.colorBackgroundPrimary),
+                ContextCompat.getDrawable(requireContext(), R.drawable.shape_with_left_rounded_corner)!!
+            )
+        }
+        BottomSheetBehavior.from(bsView).apply {
+            state = BottomSheetBehavior.STATE_COLLAPSED
+            setBottomSheetCallback(BottomSheetAnimator)
+        }
+        super.onViewCreated(view, savedInstanceState)
+    }
 
     override fun onStart() {
         super.onStart()
         viewModel.getNotifications()
     }
 
-    // region VM renderers
+// region VM renderers
 
     private val openNotificationRenderer: (Any) -> Unit = { event ->
         event as NotificationsFragmentVMEventStateChange.OpenNotifications
@@ -63,5 +75,44 @@ class NotificationsFragment :
     override val RENDERERS: Map<KClass<out EventStateChange>, Function1<Any, Unit>> = mapOf(
         NotificationsFragmentVMEventStateChange.OpenNotifications::class to openNotificationRenderer
     )
-    // endregion VM renderers
+// endregion VM renderers
+
+    object BottomSheetAnimator : BottomSheetBehavior.BottomSheetCallback() {
+        private var _initialyzed = false
+        private var _bsWidth = 0
+        private var _colorFrom = 0
+        private var _colorTo = 0
+        private lateinit var _shape: Drawable
+
+        private var _isExpanded = false
+
+
+        fun init(bsView: View, width: Int, colorFrom: Int, colorTo: Int, shape: Drawable) {
+            bsView.translationX = width * 0.66F
+            _bsWidth = width
+            _colorFrom = colorFrom
+            _colorTo = colorTo
+            _shape = shape
+            _initialyzed = true
+        }
+
+        override fun onSlide(bsView: View, slideOffset: Float) {
+            if(!_initialyzed) return
+            bsView.translationX = _bsWidth * (0.66F * (1 - slideOffset))
+            bsView.backgroundTintList = ColorStateList.valueOf(interpolateColor(slideOffset, _colorFrom, _colorTo))
+
+            if(bsView is MotionLayout){
+                bsView.progress = slideOffset
+            }
+            val isExpanded = slideOffset == 1.0F
+            if (isExpanded  != _isExpanded) {
+                _isExpanded = isExpanded
+                if(isExpanded) bsView.setBackgroundColor(_colorTo) else bsView.background = _shape
+            }
+        }
+
+        override fun onStateChanged(bottomSheet: View, newState: Int) {
+            if(!_initialyzed) return
+        }
+    }
 }

@@ -81,4 +81,8 @@
     <string name="my_status_finish">FINISH</string>
     <string name="dot">.</string>
 
+    <!--Notifications-->
+    <string name="notifications_bottomsheed_menu">Menu</string>
+    <string name="notifications_bottomsheet_add">add notifications to DB</string>
+    <string name="notifications_bottomsheet_clear">clear all notifications from DB</string>
 </resources>

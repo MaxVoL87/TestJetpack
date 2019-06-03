@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto">
+
+
+    <Transition
+        motion:constraintSetEnd="@+id/end_slide"
+        motion:constraintSetStart="@id/start_slide"
+        motion:duration="500"
+        motion:motionInterpolator="linear">
+
+    </Transition>
+
+    <ConstraintSet android:id="@+id/start_slide">
+
+        <Constraint
+            android:id="@id/tvBsHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:visibility="gone" />
+
+        <Constraint
+            android:id="@id/separator"
+            style="@style/SeparatorStyle"
+            android:visibility="gone" />
+
+        <Constraint
+            android:id="@id/bAdd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintTop_toTopOf="parent" />
+
+        <Constraint
+            android:id="@id/tvBAddDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            motion:layout_constraintEnd_toEndOf="parent"
+            android:visibility="invisible" />
+
+        <Constraint
+            android:id="@id/separator1"
+            style="@style/SeparatorStyle"
+            android:visibility="gone" />
+
+        <Constraint
+            android:id="@id/bClear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="10dp"
+            motion:layout_constraintStart_toEndOf="@id/bAdd"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:pathMotionArc="startVertical" />
+
+        <Constraint
+            android:id="@id/tvBClearDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            motion:layout_constraintEnd_toEndOf="parent"
+            android:visibility="invisible" />
+
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/end_slide">
+
+        <Constraint
+            android:id="@id/tvBsHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:visibility="visible" />
+
+        <Constraint
+            android:id="@id/separator"
+            style="@style/SeparatorStyle"
+            android:visibility="visible"
+            motion:layout_constraintTop_toBottomOf="@id/tvBsHeader" />
+
+        <Constraint
+            android:id="@id/bAdd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintTop_toBottomOf="@id/separator" />
+
+        <Constraint
+            android:id="@id/tvBAddDescription"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:visibility="visible"
+            motion:layout_constraintBottom_toBottomOf="@id/bAdd"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintHorizontal_bias="0.0"
+            motion:layout_constraintStart_toEndOf="@id/bAdd"
+            motion:layout_constraintTop_toTopOf="@id/bAdd" />
+
+        <Constraint
+            android:id="@id/separator1"
+            style="@style/SeparatorStyle"
+            android:visibility="visible"
+            motion:layout_constraintTop_toBottomOf="@id/bAdd" />
+
+        <Constraint
+            android:id="@id/bClear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintTop_toBottomOf="@id/separator1" />
+
+        <Constraint
+            android:id="@id/tvBClearDescription"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:visibility="visible"
+            motion:layout_constraintBottom_toBottomOf="@id/bClear"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintHorizontal_bias="0.0"
+            motion:layout_constraintStart_toEndOf="@id/bClear"
+            motion:layout_constraintTop_toTopOf="@id/bClear" />
+
+    </ConstraintSet>
+
+</MotionScene>

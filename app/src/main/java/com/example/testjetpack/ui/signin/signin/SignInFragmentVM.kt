@@ -57,7 +57,7 @@ class SignInFragmentVM(private val _resources: Resources) : BaseViewModel<SignIn
     private fun login() {
         processCallAsync(
             call = {
-                val toValue = Random.nextInt(2, 6)
+                val toValue = Random.nextInt(2, 5)
                 for (i in 0..toValue) {
                     Thread.sleep(1000)
                     if (i == toValue && i % 2 != 0) throw Exception("Login Failed")
