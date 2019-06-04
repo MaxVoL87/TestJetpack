@@ -14,14 +14,6 @@
     <ConstraintSet android:id="@+id/start_slide">
 
         <Constraint
-            android:id="@id/tvBsHeader"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
-            android:layout_marginEnd="30dp"
-            android:visibility="gone" />
-
-        <Constraint
             android:id="@id/separator"
             style="@style/SeparatorStyle"
             android:visibility="gone" />
@@ -39,8 +31,8 @@
             android:id="@id/tvBAddDescription"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            motion:layout_constraintEnd_toEndOf="parent"
-            android:visibility="invisible" />
+            android:visibility="invisible"
+            motion:layout_constraintEnd_toEndOf="parent" />
 
         <Constraint
             android:id="@id/separator1"
@@ -61,20 +53,12 @@
             android:id="@id/tvBClearDescription"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            motion:layout_constraintEnd_toEndOf="parent"
-            android:visibility="invisible" />
+            android:visibility="invisible"
+            motion:layout_constraintEnd_toEndOf="parent" />
 
     </ConstraintSet>
 
     <ConstraintSet android:id="@+id/end_slide">
-
-        <Constraint
-            android:id="@id/tvBsHeader"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
-            android:layout_marginEnd="30dp"
-            android:visibility="visible" />
 
         <Constraint
             android:id="@id/separator"

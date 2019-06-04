@@ -18,6 +18,7 @@ import androidx.core.content.ContextCompat
 import android.graphics.Point
 import android.graphics.drawable.Drawable
 import androidx.constraintlayout.motion.widget.MotionLayout
+import com.example.testjetpack.ui.base.IOnBackPressed
 import com.example.testjetpack.utils.withNotNull
 
 
@@ -26,7 +27,8 @@ import com.example.testjetpack.utils.withNotNull
  * Activities containing this fragment MUST implement the [INotificationsFragmentCallback] interface.
  */
 class NotificationsFragment :
-    BaseFragmentWithCallback<FragmentNotificationsBinding, NotificationsFragmentVM, INotificationsFragmentCallback>() {
+    BaseFragmentWithCallback<FragmentNotificationsBinding, NotificationsFragmentVM, INotificationsFragmentCallback>(),
+    IOnBackPressed {
     override val layoutId: Int = R.layout.fragment_notifications
     override val viewModelClass: KClass<NotificationsFragmentVM> = NotificationsFragmentVM::class
     override val callbackClass: KClass<INotificationsFragmentCallback> = INotificationsFragmentCallback::class
@@ -65,6 +67,16 @@ class NotificationsFragment :
         viewModel.getNotifications()
     }
 
+    override fun onBackPressed(): Boolean {
+        with(BottomSheetBehavior.from(bsView)) {
+            return if (state != BottomSheetBehavior.STATE_COLLAPSED) {
+                state = BottomSheetBehavior.STATE_COLLAPSED
+                true
+            } else false
+        }
+    }
+
+
 // region VM renderers
 
     private val openNotificationRenderer: (Any) -> Unit = { event ->
@@ -72,8 +84,20 @@ class NotificationsFragment :
         callback?.openNotificationDetails(event.notification)
     }
 
+    private val onNotificationsAddedRenderer: (Any) -> Unit = { event ->
+        event as NotificationsFragmentVMEventStateChange.OnNotificationsAdded
+        showAlert("Notifications added")
+    }
+
+    private val onNotificationsClearedRenderer: (Any) -> Unit = { event ->
+        event as NotificationsFragmentVMEventStateChange.OnNotificationsCleared
+        showAlert("Notifications cleared")
+    }
+
     override val RENDERERS: Map<KClass<out EventStateChange>, Function1<Any, Unit>> = mapOf(
-        NotificationsFragmentVMEventStateChange.OpenNotifications::class to openNotificationRenderer
+        NotificationsFragmentVMEventStateChange.OpenNotifications::class to openNotificationRenderer,
+        NotificationsFragmentVMEventStateChange.OnNotificationsAdded::class to onNotificationsAddedRenderer,
+        NotificationsFragmentVMEventStateChange.OnNotificationsCleared::class to onNotificationsClearedRenderer
     )
 // endregion VM renderers
 
@@ -88,7 +112,7 @@ class NotificationsFragment :
 
 
         fun init(bsView: View, width: Int, colorFrom: Int, colorTo: Int, shape: Drawable) {
-            bsView.translationX = width * 0.66F
+            bsView.translationX = width * 0.7F
             _bsWidth = width
             _colorFrom = colorFrom
             _colorTo = colorTo
@@ -97,22 +121,22 @@ class NotificationsFragment :
         }
 
         override fun onSlide(bsView: View, slideOffset: Float) {
-            if(!_initialyzed) return
+            if (!_initialyzed) return
             bsView.translationX = _bsWidth * (0.66F * (1 - slideOffset))
             bsView.backgroundTintList = ColorStateList.valueOf(interpolateColor(slideOffset, _colorFrom, _colorTo))
 
-            if(bsView is MotionLayout){
+            if (bsView is MotionLayout) {
                 bsView.progress = slideOffset
             }
             val isExpanded = slideOffset == 1.0F
-            if (isExpanded  != _isExpanded) {
+            if (isExpanded != _isExpanded) {
                 _isExpanded = isExpanded
-                if(isExpanded) bsView.setBackgroundColor(_colorTo) else bsView.background = _shape
+                if (isExpanded) bsView.setBackgroundColor(_colorTo) else bsView.background = _shape
             }
         }
 
         override fun onStateChanged(bottomSheet: View, newState: Int) {
-            if(!_initialyzed) return
+            if (!_initialyzed) return
         }
     }
 }

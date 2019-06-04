@@ -61,9 +61,12 @@
                 style="@style/HeaderText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
                 android:background="@color/colorPrimary"
                 android:text="@string/notifications_bottomsheed_menu"
-                android:textColor="@color/colorWhiteText" />
+                android:textColor="@color/colorWhiteText"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <View
                 android:id="@+id/separator"
@@ -84,7 +87,8 @@
                 android:id="@+id/tvBAddDescription"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/notifications_bottomsheet_add" />
+                android:text="@string/notifications_bottomsheet_add"
+                app:onClick='@{viewModel::addNotifications}' />
 
             <View
                 android:id="@+id/separator1"
@@ -106,7 +110,9 @@
                 android:id="@+id/tvBClearDescription"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/notifications_bottomsheet_clear" />
+                android:text="@string/notifications_bottomsheet_clear"
+                app:onClick='@{viewModel::clearNotifications}' />
+
         </androidx.constraintlayout.motion.widget.MotionLayout>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

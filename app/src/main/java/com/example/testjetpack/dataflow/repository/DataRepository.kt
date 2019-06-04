@@ -26,19 +26,18 @@ class DataRepository(
         return profile // init with mock data
     }
 
-    override fun getNotifications(): List<Notification> {
-        return _notificationDao.loadAllByID()
-    }
-
     override fun insertNotificationsIntoDB(notifications: List<Notification>) {
         _notificationDao.insert(*notifications.toTypedArray())
     }
 
-    override fun getTrip(): Trip {
-        var tripLocations = _locationDao.getLastTrip()
-        if (tripLocations.isEmpty()) tripLocations = locations // init with mock data
-        return Trip(tripLocations)
+    override fun removeAllNotificationsFromDB() {
+        _notificationDao.clearAll()
     }
+
+    override fun getNotifications(): List<Notification> {
+        return _notificationDao.loadAllByID()
+    }
+
 
     override fun insertLocationsIntoDB(locations: List<Location>) {
         _locationDao.insert(*locations.toTypedArray())
@@ -46,5 +45,11 @@ class DataRepository(
 
     override fun removeAllLocationsFromDB() {
         _locationDao.clearAll()
+    }
+
+    override fun getTrip(): Trip {
+        var tripLocations = _locationDao.getLastTrip()
+        if (tripLocations.isEmpty()) tripLocations = locations // init with mock data
+        return Trip(tripLocations)
     }
 }

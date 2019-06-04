@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.NavHostFragment
 import com.example.testjetpack.R
 import com.example.testjetpack.ui.dialog.message.IMessageDialogFragmentCallback
 import com.example.testjetpack.ui.dialog.message.MessageDialogFragment
@@ -69,6 +70,12 @@ abstract class BaseActivity<B : ViewDataBinding, M : BaseViewModel<out EventStat
         _progressDialogsCount = 0
         hideProgress()
         super.onDestroy()
+    }
+
+    override fun onBackPressed() {
+        if ((getCurFragment(navControllerId) as? IOnBackPressed)?.onBackPressed() != true) {
+            super.onBackPressed()
+        }
     }
 
     private fun parseError(it: Throwable) {
@@ -142,7 +149,8 @@ abstract class BaseActivity<B : ViewDataBinding, M : BaseViewModel<out EventStat
         }
     }
 
-    fun getCurFragment(@IdRes containerId: Int) = supportFragmentManager.findFragmentById(containerId)
+    fun getCurFragment(@IdRes containerId: Int) = supportFragmentManager.findFragmentById(containerId)?.let { getCurFragment(it) }
+
     fun getCurFragment(navHostFragment: Fragment): Fragment = navHostFragment.childFragmentManager.fragments[0]
 
     private fun render(stateChangeEvent: EventStateChange) {

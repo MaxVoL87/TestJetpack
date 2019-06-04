@@ -147,8 +147,6 @@ abstract class BaseFragment<B : ViewDataBinding, M : BaseViewModel<out EventStat
 
     protected fun getActionBar() = (activity as? BaseActivity<*, *>)?.supportActionBar
 
-    protected fun onBackPressed() = invokeIfCanAccepted { activity?.onBackPressed() }
-
     open fun onViewPagerSelect() {
         // override it if you want use BaseViewPagerAdapter
     }

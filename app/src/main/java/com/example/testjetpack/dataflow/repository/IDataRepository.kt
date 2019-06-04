@@ -9,13 +9,17 @@ interface IDataRepository {
 
     fun getProfile(): Profile
 
-    fun getNotifications(): List<Notification>
 
     fun insertNotificationsIntoDB(notifications: List<Notification>)
 
-    fun getTrip(): Trip
+    fun removeAllNotificationsFromDB()
+
+    fun getNotifications(): List<Notification>
+
 
     fun insertLocationsIntoDB(locations: List<Location>)
 
     fun removeAllLocationsFromDB()
+
+    fun getTrip(): Trip
 }
