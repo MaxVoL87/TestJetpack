@@ -37,7 +37,8 @@ class MyStatusFragmentVM(private val _dataRepository: IDataRepository) : BaseVie
             while (!_profileLoaded) {
                 delay(1000)
                 percents += Random.nextInt(20, 40)
-                _somePercents.postValue(percents.div(100F))
+                val perc = percents.div(100F)
+                _somePercents.postValue(if(perc > 1F) 1F else perc)
             }
             delay(1000)
             _somePercents.postValue(1.0F)

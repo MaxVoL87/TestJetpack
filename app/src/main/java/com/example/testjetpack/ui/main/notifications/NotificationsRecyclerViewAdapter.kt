@@ -36,7 +36,13 @@ class NotificationItemHolder(itemView: View) : BaseRecyclerItemViewHolder<ItemNo
 }
 
 class NotificationItemViewModel(
-    val notification: Notification
+    val notification: Notification,
+    private val _onOpenNotification: (notification: Notification) -> Unit
 ) : BaseRecyclerItemViewModel() {
+
+    public fun openNotification(){
+        _onOpenNotification(notification)
+    }
+
     override val itemViewType: Int = VIEW_TYPE_NOTIFICATION_ITEM
 }

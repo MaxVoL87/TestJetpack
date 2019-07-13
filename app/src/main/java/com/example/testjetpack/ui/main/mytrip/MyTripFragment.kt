@@ -77,6 +77,11 @@ class MyTripFragment : BaseFragmentWithCallback<FragmentMyTripBinding, MyTripFra
         _mapFragment.onAttach(context)
     }
 
+    override fun onAttach(activity: Activity) {
+        super.onAttach(activity)
+        _mapFragment.onAttach(activity)
+    }
+
     override fun onDetach() {
         _mapFragment.onDetach()
         super.onDetach()
@@ -96,7 +101,7 @@ class MyTripFragment : BaseFragmentWithCallback<FragmentMyTripBinding, MyTripFra
         val view = super.onCreateView(inflater, container, savedInstanceState)
 
         _mapFragment.onCreateView(inflater, container, savedInstanceState)
-        fragmentManager?.beginTransaction()?.add(R.id.fMap, _mapFragment)?.commit()
+        childFragmentManager.beginTransaction().add(R.id.fMap, _mapFragment).commit()
 
         binding.viewModel = viewModel
         return view
@@ -131,7 +136,7 @@ class MyTripFragment : BaseFragmentWithCallback<FragmentMyTripBinding, MyTripFra
     }
 
     override fun onDestroyView() {
-        fragmentManager?.beginTransaction()?.remove(_mapFragment)?.commitAllowingStateLoss()
+        childFragmentManager.beginTransaction().remove(_mapFragment).commitAllowingStateLoss()
         _mapFragment.onDestroyView()
         super.onDestroyView()
     }

@@ -18,15 +18,6 @@ abstract class BaseRecyclerAdapter : RecyclerView.Adapter<BaseRecyclerItemViewHo
             field = value
             notifyDataSetChanged()
         }
-    private var onItemClickListener: OnItemClickListener<BaseRecyclerItemViewModel>? = null
-
-    fun setOnItemClickListener(onItemClickListener: OnItemClickListener<BaseRecyclerItemViewModel>) {
-        this.onItemClickListener = onItemClickListener
-    }
-
-    interface OnItemClickListener<T: BaseRecyclerItemViewModel> {
-        fun onItemClick(position: Int, item: T)
-    }
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -37,10 +28,7 @@ abstract class BaseRecyclerAdapter : RecyclerView.Adapter<BaseRecyclerItemViewHo
     }
 
     override fun onBindViewHolder(holder: BaseRecyclerItemViewHolder<ViewDataBinding, BaseRecyclerItemViewModel>, position: Int) {
-        val model = itemViewModels[position]
-        holder.bind(model)?.root?.setOnClickListener {
-            onItemClickListener?.onItemClick(position, model)
-        }
+        holder.bind(itemViewModels[position])
     }
 
     override fun onViewRecycled(holder: BaseRecyclerItemViewHolder<ViewDataBinding, BaseRecyclerItemViewModel>) {

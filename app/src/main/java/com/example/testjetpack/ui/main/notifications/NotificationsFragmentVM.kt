@@ -7,7 +7,6 @@ import com.example.testjetpack.dataflow.repository.IDataRepository
 import com.example.testjetpack.mock.notifications
 import com.example.testjetpack.models.own.Notification
 import com.example.testjetpack.ui.base.BaseRecyclerItemViewModel
-import com.example.testjetpack.ui.base.BaseRecyclerAdapter
 import com.example.testjetpack.ui.base.BaseViewModel
 import com.example.testjetpack.ui.base.EventStateChange
 import com.example.testjetpack.utils.livedata.Event
@@ -20,18 +19,13 @@ class NotificationsFragmentVM(
     private val _notificationsResponse = MutableLiveData<List<Notification>>()
 
     val adapter = NotificationsRecyclerViewAdapter()
-        .apply {
-            setOnItemClickListener(object : BaseRecyclerAdapter.OnItemClickListener<BaseRecyclerItemViewModel> {
-                override fun onItemClick(position: Int, item: BaseRecyclerItemViewModel) {
-                    if (item is NotificationItemViewModel)
-                        _events.value =
-                            Event(NotificationsFragmentVMEventStateChange.OpenNotifications(item.notification))
-                }
-            })
-        }
 
     val adapterItems: LiveData<List<BaseRecyclerItemViewModel>> = switchMap(_notificationsResponse) { notifs ->
-        MutableLiveData<List<BaseRecyclerItemViewModel>>(notifs.map { NotificationItemViewModel(it) })
+        MutableLiveData<List<BaseRecyclerItemViewModel>>(notifs.map {
+            NotificationItemViewModel(it) { notification ->
+                _events.value = Event(NotificationsFragmentVMEventStateChange.OpenNotifications(notification))
+            }
+        })
     }
 
     fun getNotifications() {

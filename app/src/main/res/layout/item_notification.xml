@@ -15,7 +15,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background='@{notificationItemViewModel.notification.dateOfRead == null ? @color/colorNotActive : @color/colorBackgroundPrimary}'
-        tools:ignore="ContentDescription">
+        tools:ignore="ContentDescription"
+        app:onClick='@{notificationItemViewModel::openNotification}'>
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/ivItemImage"
