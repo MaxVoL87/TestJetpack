@@ -5,10 +5,8 @@ import android.Manifest
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,6 +23,7 @@ import com.example.testjetpack.utils.*
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.*
 import java.util.*
+import kotlin.math.atan
 import kotlin.reflect.KClass
 
 
@@ -72,88 +71,32 @@ class MyTripFragment : BaseFragmentWithCallback<FragmentMyTripBinding, MyTripFra
     }
 
     // region Lifecycle
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        _mapFragment.onAttach(context)
-    }
-
-    override fun onAttach(activity: Activity) {
-        super.onAttach(activity)
-        _mapFragment.onAttach(activity)
-    }
-
-    override fun onDetach() {
-        _mapFragment.onDetach()
-        super.onDetach()
-    }
-
-    override fun onInflate(activity: Activity, attrs: AttributeSet, savedInstanceState: Bundle?) {
-        super.onInflate(activity, attrs, savedInstanceState)
-        _mapFragment.onInflate(activity, attrs, savedInstanceState)
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        _mapFragment.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = super.onCreateView(inflater, container, savedInstanceState)
-
-        _mapFragment.onCreateView(inflater, container, savedInstanceState)
         childFragmentManager.beginTransaction().add(R.id.fMap, _mapFragment).commit()
-
         binding.viewModel = viewModel
         return view
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        _mapFragment.onActivityCreated(savedInstanceState)
         _mapFragment.getMapAsync(this)
     }
 
     override fun onStart() {
         super.onStart()
-        _mapFragment.onStart()
         viewModel.getTrip()
     }
 
-    override fun onResume() {
-        super.onResume()
-        _mapFragment.onResume()
-    }
-
-    override fun onPause() {
-        _mapFragment.onPause()
-        super.onPause()
-    }
-
     override fun onStop() {
-        _mapFragment.onStop()
         super.onStop()
         _positionPropeller?.stop()
     }
 
     override fun onDestroyView() {
         childFragmentManager.beginTransaction().remove(_mapFragment).commitAllowingStateLoss()
-        _mapFragment.onDestroyView()
         super.onDestroyView()
-    }
-
-    override fun onDestroy() {
-        _mapFragment.onDestroy()
-        super.onDestroy()
-    }
-
-    override fun onLowMemory() {
-        _mapFragment.onLowMemory()
-        super.onLowMemory()
-    }
-
-    override fun onSaveInstanceState(savedInstanceState: Bundle) {
-        super.onSaveInstanceState(savedInstanceState)
-        _mapFragment.onSaveInstanceState(savedInstanceState)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -240,7 +183,7 @@ class MyTripFragment : BaseFragmentWithCallback<FragmentMyTripBinding, MyTripFra
     private fun getRotationAngle(from: LatLng, to: LatLng): Float {
         val a = to.latitude - from.latitude
         val b = to.longitude - from.longitude
-        var angle = Math.toDegrees(Math.atan(b / a)).toFloat()
+        var angle = Math.toDegrees(atan(b / a)).toFloat()
         if (a < 0) angle += 180
         return angle + DEF_POS_IMAGE_TILT
     }
@@ -284,11 +227,11 @@ class MyTripFragment : BaseFragmentWithCallback<FragmentMyTripBinding, MyTripFra
     }
 
     inner class PositionMarkerPropeller(
-        private val map: GoogleMap,
-        private val markerOptions: MarkerOptions
+        private val _map: GoogleMap,
+        private val _markerOptions: MarkerOptions
     ) {
-        private var marker: Marker? = null
-        private var animatorUpdateListener = object : ValueAnimator.AnimatorUpdateListener {
+        private var _marker: Marker? = null
+        private var _animatorUpdateListener = object : ValueAnimator.AnimatorUpdateListener {
             private var from: Location? = null
             private var to: Location? = null
 
@@ -299,7 +242,7 @@ class MyTripFragment : BaseFragmentWithCallback<FragmentMyTripBinding, MyTripFra
             }
 
             override fun onAnimationUpdate(v: ValueAnimator) {
-                withNotNull(marker, from, to) { m, f, t ->
+                withNotNull(_marker, from, to) { m, f, t ->
                     val fromPos = f.latLng
                     val toPos = t.latLng
 
@@ -310,54 +253,66 @@ class MyTripFragment : BaseFragmentWithCallback<FragmentMyTripBinding, MyTripFra
                 }
             }
         }
-        private val valueAnimator: ValueAnimator = ValueAnimator.ofFloat(0F, 1F).apply {
+        private val _valueAnimator: ValueAnimator = ValueAnimator.ofFloat(0F, 1F).apply {
             interpolator = LinearInterpolator()
-            addUpdateListener(animatorUpdateListener)
+            addUpdateListener(_animatorUpdateListener)
         }
-        private var isStopped: Boolean = false
-        private var lastPositionTime: Long = 0
+        private var _isStopped: Boolean = false
+        private var _lastPositionTime: Long = 0
 
         fun setPosition(location: Location) {
-            animatorUpdateListener.setTo(location)
+            _animatorUpdateListener.setTo(location)
 
             if (isMarkerInit()) {
                 initMarker(location)
             }
             else {
-                moveMarker(location)
+                if(_isStopped) moveMarkerImmediately(location)
+                else moveMarker(location)
             }
 
-            isStopped = false
+            _isStopped = false
         }
 
         fun stop() {
-            valueAnimator.cancel()
-            isStopped = true
+            _valueAnimator.cancel()
+            _isStopped = true
         }
 
         private fun isMarkerInit(): Boolean {
-            with(marker) {
+            with(_marker) {
                 return this == null || !_markers.contains(this)
             }
         }
 
         private fun initMarker(location: Location) {
-            markerOptions.position(location.latLng)
-            marker = map.addMarker(markerOptions)
-            _markers.add(marker!!)
+            _markerOptions.position(location.latLng)
+            _marker = _map.addMarker(_markerOptions)
+            _markers.add(_marker!!)
         }
 
-        private fun moveMarker(to: Location) = with(marker) {
+        private fun moveMarker(to: Location) = with(_marker) {
             if (this == null || position == to.latLng) return
-            valueAnimator.cancel()
+            _valueAnimator.cancel()
 
             val time = Calendar.getInstance().timeInMillis
-            valueAnimator.duration = if (lastPositionTime in 1 until time) time - lastPositionTime else MOVING_SPEED_MILLIS
-            lastPositionTime = time
+            _valueAnimator.duration = if (_lastPositionTime in 1 until time) time - _lastPositionTime else MOVING_SPEED_MILLIS
+            _lastPositionTime = time
 
             rotation = getRotationAngle(position, to.latLng)
 
-            valueAnimator.start()
+            _valueAnimator.start()
         }
+
+        private fun moveMarkerImmediately(to: Location) = with(_marker) {
+            if (this == null || position == to.latLng) return
+            _valueAnimator.cancel()
+
+            _lastPositionTime = Calendar.getInstance().timeInMillis
+            rotation = getRotationAngle(position, to.latLng)
+
+            position = to.latLng
+        }
+
     }
 }
