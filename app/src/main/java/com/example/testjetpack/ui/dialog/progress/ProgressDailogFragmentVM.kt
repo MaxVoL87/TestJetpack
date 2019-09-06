@@ -10,6 +10,7 @@ class ProgressDialogFragmentVM : BaseViewModel<ProgressDialogFragmentVMEventStat
     val text = MutableLiveData<String>()
     val isProgressBarVisible = true.toMutableLiveData()
     val isCancelable = true.toMutableLiveData()
+    val cancel = false.toMutableLiveData()
 }
 
 sealed class ProgressDialogFragmentVMEventStateChange : EventStateChange {

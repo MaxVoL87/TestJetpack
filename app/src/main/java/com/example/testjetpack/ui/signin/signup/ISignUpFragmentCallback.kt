@@ -1,7 +1,7 @@
 package com.example.testjetpack.ui.signin.signup
 
-import com.example.testjetpack.ui.base.ICallback
+import com.example.testjetpack.ui.base.IBaseCallback
 
-interface ISignUpFragmentCallback : ICallback {
+interface ISignUpFragmentCallback : IBaseCallback {
     fun openSignIn()
 }

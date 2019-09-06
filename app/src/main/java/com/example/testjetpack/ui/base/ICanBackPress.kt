@@ -1,5 +1,5 @@
 package com.example.testjetpack.ui.base
 
-interface IOnBackPressed {
+interface ICanBackPress {
     fun onBackPressed(): Boolean
 }

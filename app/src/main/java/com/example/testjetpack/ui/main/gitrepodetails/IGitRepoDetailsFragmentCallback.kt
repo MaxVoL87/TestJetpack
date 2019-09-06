@@ -1,6 +1,6 @@
 package com.example.testjetpack.ui.main.gitrepodetails
 
-import com.example.testjetpack.ui.base.ICallback
+import com.example.testjetpack.ui.base.IBaseCallback
 
-interface IGitRepoDetailsFragmentCallback : ICallback {
+interface IGitRepoDetailsFragmentCallback : IBaseCallback {
 }

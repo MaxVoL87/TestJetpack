@@ -5,7 +5,7 @@ import androidx.databinding.ViewDataBinding
 import com.google.gson.reflect.TypeToken
 import kotlin.reflect.KClass
 
-abstract class BaseFragmentWithCallback<B : ViewDataBinding, M : BaseViewModel<out EventStateChange>, C : ICallback> :
+abstract class BaseFragmentWithCallback<B : ViewDataBinding, M : BaseViewModel<out EventStateChange>, C : IBaseCallback> :
     BaseFragment<B, M>() {
     protected abstract val callbackClass: KClass<C>
     protected var callback: C? = null
@@ -21,11 +21,11 @@ abstract class BaseFragmentWithCallback<B : ViewDataBinding, M : BaseViewModel<o
     }
 
     override fun showProgress(text: String?) {
-        callback?.showProgress(text)
+        processActionWithDelay { callback?.showProgress(text) }
     }
 
     override fun hideProgress() {
-        callback?.hideProgress()
+        processActionWithDelay { callback?.hideProgress() }
     }
 
     private fun bindInterfaceOrThrow(clazz: KClass<C>, vararg objects: Any?): C {

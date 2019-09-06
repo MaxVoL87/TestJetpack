@@ -18,7 +18,7 @@ import androidx.core.content.ContextCompat
 import android.graphics.Point
 import android.graphics.drawable.Drawable
 import androidx.constraintlayout.motion.widget.MotionLayout
-import com.example.testjetpack.ui.base.IOnBackPressed
+import com.example.testjetpack.ui.base.ICanBackPress
 import com.example.testjetpack.utils.withNotNull
 
 
@@ -28,7 +28,7 @@ import com.example.testjetpack.utils.withNotNull
  */
 class NotificationsFragment :
     BaseFragmentWithCallback<FragmentNotificationsBinding, NotificationsFragmentVM, INotificationsFragmentCallback>(),
-    IOnBackPressed {
+    ICanBackPress {
     override val layoutId: Int = R.layout.fragment_notifications
     override val viewModelClass: KClass<NotificationsFragmentVM> = NotificationsFragmentVM::class
     override val callbackClass: KClass<INotificationsFragmentCallback> = INotificationsFragmentCallback::class

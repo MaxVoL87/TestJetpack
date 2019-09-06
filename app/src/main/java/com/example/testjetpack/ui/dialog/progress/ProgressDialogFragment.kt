@@ -22,6 +22,7 @@ class ProgressDialogFragment : BaseDialogFragment<FragmentProgressDialogBinding,
     override val observeLiveData: ProgressDialogFragmentVM.() -> Unit
         get() = {
             isCancelable.observe(this@ProgressDialogFragment, Observer { this@ProgressDialogFragment.isCancelable = it })
+            cancel.observe(this@ProgressDialogFragment, Observer { if (it) this@ProgressDialogFragment.dismiss() })
         }
 
     private var _callback: IProgressDialogFragmentCallback? = null
@@ -67,6 +68,10 @@ class ProgressDialogFragment : BaseDialogFragment<FragmentProgressDialogBinding,
         arguments?.putBoolean(EXTRA_IS_CANCELABLE, isCancelable)
         initState()
         return this
+    }
+
+    fun cancel() {
+        viewModel.cancel.value = true
     }
 
     private fun initState(){

@@ -15,7 +15,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
-import androidx.navigation.fragment.NavHostFragment
 import com.example.testjetpack.R
 import com.example.testjetpack.ui.dialog.message.IMessageDialogFragmentCallback
 import com.example.testjetpack.ui.dialog.message.MessageDialogFragment
@@ -29,7 +28,7 @@ import org.koin.android.viewmodel.ext.android.getViewModel
 abstract class BaseActivity<B : ViewDataBinding, M : BaseViewModel<out EventStateChange>> : AppCompatActivity(),
     IMessageDialogFragmentCallback,
     IProgressDialogFragmentCallback,
-    ICallback {
+    IBaseCallback {
     protected abstract val layoutId: Int
     protected abstract val navControllerId: Int
     protected abstract val viewModelClass: KClass<M>
@@ -73,7 +72,7 @@ abstract class BaseActivity<B : ViewDataBinding, M : BaseViewModel<out EventStat
     }
 
     override fun onBackPressed() {
-        if ((getCurFragment(navControllerId) as? IOnBackPressed)?.onBackPressed() != true) {
+        if ((getCurFragment(navControllerId) as? ICanBackPress)?.onBackPressed() != true) {
             super.onBackPressed()
         }
     }
@@ -130,7 +129,7 @@ abstract class BaseActivity<B : ViewDataBinding, M : BaseViewModel<out EventStat
         _progressDialogsCount--
         withNotNull(_progressDialog) {
             if (_progressDialogsCount == 0) {
-                if (isAdded) dismiss()
+                cancel()
                 _progressDialog = null
             }
         }

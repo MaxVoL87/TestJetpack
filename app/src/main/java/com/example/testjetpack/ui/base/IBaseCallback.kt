@@ -1,6 +1,6 @@
 package com.example.testjetpack.ui.base
 
-interface ICallback {
+interface IBaseCallback {
 
     fun showProgress(text: String?)
 
