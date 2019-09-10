@@ -20,18 +20,9 @@ abstract class BaseFragmentWithCallback<B : ViewDataBinding, M : BaseViewModel<o
         super.onDetach()
     }
 
-    override fun showProgress(text: String?) {
-        processActionWithDelay { callback?.showProgress(text) }
-    }
-
-    override fun hideProgress() {
-        processActionWithDelay { callback?.hideProgress() }
-    }
-
     private fun bindInterfaceOrThrow(clazz: KClass<C>, vararg objects: Any?): C {
         val typeToken = TypeToken.get(clazz.java) as TypeToken<C>
         return objects.find { it != null && typeToken.isAssignableFrom(it::class.java) }?.let { it as C }
             ?: throw NotImplementedInterfaceException(clazz.java)
     }
-
 }

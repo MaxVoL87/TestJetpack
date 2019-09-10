@@ -12,8 +12,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.example.testjetpack.MainApplicationContract
 import com.example.testjetpack.R
+import com.example.testjetpack.ui.dialog.progress.ProgressDialogFragment
 import com.example.testjetpack.utils.autoCleared
 import com.example.testjetpack.utils.livedata.EventObserver
+import com.example.testjetpack.utils.withNotNull
 import kotlinx.coroutines.*
 import org.koin.android.viewmodel.ext.android.getViewModel
 import kotlin.coroutines.CoroutineContext
@@ -37,6 +39,9 @@ abstract class BaseFragment<B : ViewDataBinding, M : BaseViewModel<out EventStat
         get() = Dispatchers.Main + job
 
     private lateinit var job: Job
+
+    private var _progressDialog: ProgressDialogFragment? = null
+    private var _progressDialogsCount: Int = 0
 
 
     protected open fun observeBaseLiveData() = with(viewModel) {
@@ -83,6 +88,8 @@ abstract class BaseFragment<B : ViewDataBinding, M : BaseViewModel<out EventStat
 
     override fun onDestroy() {
         job.cancel()
+        _progressDialogsCount = 0
+        _progressDialog = null
         super.onDestroy()
     }
 
@@ -101,12 +108,29 @@ abstract class BaseFragment<B : ViewDataBinding, M : BaseViewModel<out EventStat
         Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
     }
 
-    open fun showProgress(text: String?) {
-        //todo
+    fun showProgress(text: String?) {
+        _progressDialogsCount++
+        val inShow = _progressDialog != null
+        if (!inShow) _progressDialog = ProgressDialogFragment()
+        withNotNull(_progressDialog) {
+            setText(text)
+            setPBVisible(true)
+            setIsCancelable(false)
+            if (!isAdded && !inShow) show(
+                this@BaseFragment.childFragmentManager,
+                ProgressDialogFragment::class.java.name
+            )
+        }
     }
 
-    open fun hideProgress() {
-        //todo
+    fun hideProgress() {
+        _progressDialogsCount--
+        withNotNull(_progressDialog) {
+            if (_progressDialogsCount == 0) {
+                cancel()
+                _progressDialog = null
+            }
+        }
     }
 
     protected fun processActionWithDelay(

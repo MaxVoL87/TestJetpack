@@ -27,8 +27,7 @@ import org.koin.android.viewmodel.ext.android.getViewModel
 
 abstract class BaseActivity<B : ViewDataBinding, M : BaseViewModel<out EventStateChange>> : AppCompatActivity(),
     IMessageDialogFragmentCallback,
-    IProgressDialogFragmentCallback,
-    IBaseCallback {
+    IProgressDialogFragmentCallback {
     protected abstract val layoutId: Int
     protected abstract val navControllerId: Int
     protected abstract val viewModelClass: KClass<M>
@@ -40,10 +39,6 @@ abstract class BaseActivity<B : ViewDataBinding, M : BaseViewModel<out EventStat
 
     private var _progressDialog: ProgressDialogFragment? = null
     private var _progressDialogsCount: Int = 0
-        get() {
-            if (field < 0) field = 0
-            return field
-        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
@@ -67,7 +62,7 @@ abstract class BaseActivity<B : ViewDataBinding, M : BaseViewModel<out EventStat
 
     override fun onDestroy() {
         _progressDialogsCount = 0
-        hideProgress()
+        _progressDialog = null
         super.onDestroy()
     }
 
@@ -113,7 +108,7 @@ abstract class BaseActivity<B : ViewDataBinding, M : BaseViewModel<out EventStat
         observeLiveData()
     }
 
-    override fun showProgress(text: String?) {
+    fun showProgress(text: String?) {
         _progressDialogsCount++
         val inShow = _progressDialog != null
         if (!inShow) _progressDialog = ProgressDialogFragment()
@@ -125,7 +120,7 @@ abstract class BaseActivity<B : ViewDataBinding, M : BaseViewModel<out EventStat
         }
     }
 
-    override fun hideProgress() {
+    fun hideProgress() {
         _progressDialogsCount--
         withNotNull(_progressDialog) {
             if (_progressDialogsCount == 0) {

@@ -51,14 +51,6 @@ class GitRepoSearchFragment :
         view.doOnPreDraw { startPostponedEnterTransition() }
     }
 
-    override fun showProgress(text: String?) {
-        //do nothing
-    }
-
-    override fun hideProgress() {
-        //do nothing
-    }
-
     // region VM events renderer
 
     private val openGitRepositoryRenderer: (Any) -> Unit = { event ->

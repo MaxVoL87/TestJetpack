@@ -84,7 +84,7 @@ class GitRepoSearchFragmentVM(
             onError = {
                 onError(it)
             },
-            showProgress = true
+            showProgress = false
         )
     }
 
